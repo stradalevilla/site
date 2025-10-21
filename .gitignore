@@ -13,6 +13,9 @@ dist-ssr
 *.local
 .vercel
 
+# Cursor MCP configuration (contains sensitive tokens)
+.cursor/mcp.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

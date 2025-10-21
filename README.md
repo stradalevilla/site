@@ -45,7 +45,14 @@ VITE_SUPABASE_URL=sua_url_do_supabase
 VITE_SUPABASE_ANON_KEY=sua_chave_anonima
 ```
 
-### 3. Executar o Projeto
+### 3. Configurar MCP do Cursor (Opcional)
+
+Para ter assistência da IA com contexto do Supabase:
+
+1. Configure o token no arquivo `.cursor/mcp.json`
+2. Veja instruções completas em `.cursor/README.md`
+
+### 4. Executar o Projeto
 
 ```bash
 npm run dev
