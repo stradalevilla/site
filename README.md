@@ -1,85 +1,99 @@
-# Projeto React + TypeScript + Supabase
+# Villa Stradale - Next.js
 
-Este projeto foi criado com Vite e inclui uma stack moderna para desenvolvimento web.
+Projeto Next.js otimizado para SEO com React Server Components.
 
-## 🚀 Stack
+## 🚀 Stack Tecnológica
 
-- **React 18** com TypeScript
-- **Vite** - Build tool e dev server
-- **Supabase** - Backend (Auth, Database, Storage)
-- **TailwindCSS** - Estilização
-- **Shadcn/ui** - Componentes UI
-- **React Query** - Gestão de estado servidor
-- **React Router** - Roteamento
+### Frontend
+- **Next.js 15** - Framework React com SSR/SSG
+- **React 19** - Biblioteca UI
+- **TypeScript** - Tipagem estática
+- **Tailwind CSS** - Framework CSS utilitário
+- **shadcn/ui** - Componentes UI baseados em Radix UI
 
-## 📦 Estrutura de Pastas
+### Bibliotecas
+- **TanStack Query** - Gerenciamento de estado e cache
+- **Framer Motion** - Animações
+- **Lucide React** - Ícones
+- **Supabase** - Backend (quando necessário)
 
-```
-src/
-├── components/       # Componentes reutilizáveis
-│   └── ui/          # Componentes Shadcn
-├── pages/           # Páginas da aplicação
-├── hooks/           # Custom hooks
-├── contexts/        # Context providers (Auth, Theme)
-├── services/        # Serviços de API
-├── integrations/    # Integrações externas
-│   └── supabase/    # Cliente e types do Supabase
-├── lib/             # Utilitários
-└── types/           # TypeScript types
-```
+### SEO & Performance
+- Server-Side Rendering (SSR)
+- Static Site Generation (SSG)
+- Metadata API do Next.js
+- Sitemap automático (`/sitemap.xml`)
+- Robots.txt automático (`/robots.txt`)
+- Otimização de imagens com next/image
+- Otimização de fontes com next/font
 
-## 🛠️ Configuração
-
-### 1. Instalar Dependências
+## 📦 Instalação
 
 ```bash
 npm install
 ```
 
-### 2. Configurar Variáveis de Ambiente
-
-Copie o arquivo `.env.example` para `.env.local` e adicione suas credenciais do Supabase:
-
-```bash
-VITE_SUPABASE_URL=sua_url_do_supabase
-VITE_SUPABASE_ANON_KEY=sua_chave_anonima
-```
-
-### 3. Executar o Projeto
+## 🔧 Desenvolvimento
 
 ```bash
 npm run dev
 ```
 
-## 🔑 Funcionalidades
+Acesse: [http://localhost:3000](http://localhost:3000)
 
-- ✅ Autenticação com Supabase (Login/Signup)
-- ✅ Rotas protegidas
-- ✅ Tema claro/escuro
-- ✅ React Query configurado
-- ✅ TypeScript configurado
-- ✅ Aliases de importação (@/)
+## 🏗️ Build
 
-## 📝 Scripts Disponíveis
+```bash
+npm run build
+npm start
+```
 
-- `npm run dev` - Inicia o servidor de desenvolvimento
-- `npm run build` - Cria build de produção
-- `npm run preview` - Preview do build de produção
-- `npm run lint` - Executa o linter
+## 📁 Estrutura do Projeto
 
-## 🚢 Deploy
+```
+├── app/
+│   ├── layout.tsx       # Layout raiz com metadata
+│   ├── page.tsx         # Homepage
+│   ├── globals.css      # Estilos globais
+│   ├── sitemap.ts       # Sitemap para SEO
+│   └── robots.ts        # Robots.txt
+├── components/
+│   ├── ui/              # Componentes shadcn/ui
+│   └── providers.tsx    # React Query Provider
+├── lib/
+│   └── utils.ts         # Utilitários (cn, etc)
+├── hooks/               # Custom hooks
+└── public/              # Arquivos estáticos
+```
 
-Este projeto está pronto para deploy na Vercel:
+## 🎨 Componentes UI
 
-1. Conecte seu repositório GitHub à Vercel
-2. Configure as variáveis de ambiente no painel da Vercel
-3. Deploy automático a cada push
+Este projeto usa [shadcn/ui](https://ui.shadcn.com/). Para adicionar componentes:
 
-## 📚 Documentação
+```bash
+npx shadcn@latest add button
+npx shadcn@latest add card
+```
 
-- [Vite](https://vitejs.dev/)
-- [React](https://react.dev/)
-- [Supabase](https://supabase.com/docs)
-- [TailwindCSS](https://tailwindcss.com/)
-- [Shadcn/ui](https://ui.shadcn.com/)
-- [React Query](https://tanstack.com/query/)
+## 🌐 Deploy
+
+### Vercel (Recomendado)
+
+1. Push o código para GitHub/GitLab
+2. Conecte o repositório na [Vercel](https://vercel.com)
+3. Deploy automático configurado
+
+## 📝 Notas de Desenvolvimento
+
+- Use **Server Components** por padrão (melhor performance e SEO)
+- Use **Client Components** (`'use client'`) apenas quando necessário:
+  - Hooks do React (useState, useEffect, etc)
+  - Event handlers (onClick, onChange, etc)
+  - Browser APIs
+  - Framer Motion
+
+## 🔗 Links Úteis
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [shadcn/ui Documentation](https://ui.shadcn.com/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [TanStack Query Documentation](https://tanstack.com/query/latest)

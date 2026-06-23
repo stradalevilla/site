@@ -1,18 +1,28 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   darkMode: ["class"],
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+      fontFamily: {
+        heading: ['"ivypresto-display"', 'serif'],
+        body: ['"swiss-721-bt"', 'sans-serif'],
+        condensed: ['"swiss-721-bt-condensed"', 'sans-serif'],
       },
       colors: {
+        gold: {
+          DEFAULT: '#F2A06A',
+          light: '#f5b589',
+          dark: '#D07748',
+        },
+        navy: {
+          DEFAULT: '#0a1929',
+          light: '#1a2940',
+          dark: '#050c14',
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -54,8 +64,12 @@ export default {
           "5": "hsl(var(--chart-5))",
         },
       },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
     },
   },
   plugins: [],
-}
-
+};
