@@ -32,6 +32,9 @@ yarn-error.log*
 .env*.local
 .env
 
+# cursor mcp (contém token sensível)
+.cursor/mcp.json
+
 # vercel
 .vercel
 

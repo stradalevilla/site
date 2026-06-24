@@ -88,7 +88,7 @@ export function EmbaixadoresSection() {
                   type="button"
                   onClick={next}
                   aria-label="Próximo embaixador"
-                  className="flex items-center justify-center w-16 h-10 rounded-full border border-white/70 text-white transition-colors hover:bg-white/10"
+                  className="group flex items-center justify-center w-16 h-10 rounded-full border border-white/70 text-white transition-all duration-300 ease-out hover:border-white hover:bg-white hover:text-navy"
                 >
                   <svg
                     width="22"
@@ -99,6 +99,7 @@ export function EmbaixadoresSection() {
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    className="transition-transform duration-300 ease-out delay-150 group-hover:translate-x-1"
                   >
                     <line x1="5" y1="12" x2="19" y2="12" />
                     <polyline points="12 5 19 12 12 19" />

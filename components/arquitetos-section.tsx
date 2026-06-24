@@ -97,9 +97,9 @@ export function ArquitetosSection() {
         </div>
 
         {/* Veja mais */}
-        <div className="mt-12 md:mt-16 flex items-center gap-4">
+        <div className="group mt-12 md:mt-16 flex items-center gap-4 cursor-pointer">
           <span className="font-body text-sm md:text-base text-navy">veja mais</span>
-          <span className="flex items-center justify-center w-10 h-10 rounded-full border border-navy/60 text-navy">
+          <span className="flex items-center justify-center w-16 h-10 rounded-full border border-navy/60 text-navy transition-all duration-300 ease-out group-hover:border-navy group-hover:bg-navy group-hover:text-white">
             <svg
               width="20"
               height="20"
@@ -109,6 +109,7 @@ export function ArquitetosSection() {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
+              className="transition-transform duration-300 ease-out delay-150 group-hover:translate-x-1"
             >
               <line x1="5" y1="12" x2="19" y2="12" />
               <polyline points="12 5 19 12 12 19" />

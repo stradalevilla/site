@@ -205,11 +205,11 @@ export function IntroSection() {
                   represa como cenário.
                 </p>
 
-                <div className="flex items-center justify-start lg:justify-end gap-4">
+                <div className="group flex items-center justify-start lg:justify-end gap-4 cursor-pointer">
                   <span className="font-body text-sm md:text-base text-gray-700">
                     Abrir galeria de imagens
                   </span>
-                  <span className="flex items-center justify-center w-10 h-10 rounded-full border border-[#D07748]/60 text-[#D07748]">
+                  <span className="flex items-center justify-center w-16 h-10 rounded-full border border-[#D07748]/60 text-[#D07748] transition-all duration-300 ease-out group-hover:border-[#D07748] group-hover:bg-[#D07748] group-hover:text-white">
                     <svg
                       width="20"
                       height="20"
@@ -219,6 +219,7 @@ export function IntroSection() {
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      className="transition-transform duration-300 ease-out delay-150 group-hover:translate-x-1"
                     >
                       <line x1="5" y1="12" x2="19" y2="12" />
                       <polyline points="12 5 19 12 12 19" />
@@ -312,7 +313,7 @@ export function IntroSection() {
                     Esportes aquáticos
                   </span>
                   <h3 className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-navy italic uppercase mb-6">
-                    Marina Stradale
+                    Garagem Náutica
                   </h3>
                   <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed max-w-md">
                     O acesso do Villa Stradale à represa. Garagem náutica com capacidade para até 30
