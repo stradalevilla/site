@@ -36,6 +36,10 @@ export function LoteVistas({ vistas, numero }: { vistas: LoteImage[]; numero: st
     setState(([i]) => [(i + d + total) % total, d]);
   };
 
+  const goTo = (target: number) => {
+    setState(([i]) => [target, target >= i ? 1 : -1]);
+  };
+
   if (total === 0) return null;
 
   return (
@@ -84,6 +88,24 @@ export function LoteVistas({ vistas, numero }: { vistas: LoteImage[]; numero: st
           </>
         )}
       </div>
+
+      {/* Bullets de navegação */}
+      {total > 1 && (
+        <div className="mt-5 flex items-center justify-center gap-2.5">
+          {vistas.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => goTo(i)}
+              aria-label={`Ir para imagem ${i + 1}`}
+              aria-current={i === index}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                i === index ? 'w-6 bg-gold-dark' : 'w-2 bg-navy/25 hover:bg-navy/40'
+              }`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

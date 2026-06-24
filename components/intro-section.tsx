@@ -29,6 +29,28 @@ export function IntroSection() {
                 />
               </div>
 
+              {/* Placeholder de vídeo (simulação - vídeo futuro) */}
+              <div className="flex justify-center mb-12 md:mb-16">
+                <div className="group relative w-full max-w-md aspect-video cursor-pointer overflow-hidden bg-navy">
+                  {/* Brilho sutil */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-navy-light to-navy" />
+                  {/* Moldura dourada fina */}
+                  <div className="pointer-events-none absolute inset-0 border border-gold/30" />
+                  {/* Botão play */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="flex h-14 w-14 items-center justify-center rounded-full border border-white/70 bg-white/10 backdrop-blur-sm transition-all duration-300 ease-out group-hover:scale-105 group-hover:border-[#D07748] group-hover:bg-[#D07748]">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="ml-0.5 text-white">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </span>
+                  </div>
+                  {/* Legenda */}
+                  <span className="absolute bottom-3 left-0 right-0 text-center font-body text-[10px] uppercase tracking-[0.3em] text-white/60">
+                    Vídeo em breve
+                  </span>
+                </div>
+              </div>
+
               {/* Título Principal */}
               <div className="text-center mb-12 md:mb-16 space-y-2">
                 <h2 className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-[#D07748] italic leading-relaxed uppercase">
