@@ -6,13 +6,15 @@ import { Navbar } from '@/components/navbar';
 import { MobileNav } from '@/components/mobile-nav';
 import { Footer } from '@/components/footer';
 import { LoteVistas } from '@/components/lote-vistas';
+import { LoteVisualizacao } from '@/components/lote-visualizacao';
 import { ContatoInteresse } from '@/components/contato-interesse';
-import { getLote, TOTAL_LOTES } from '@/lib/lotes';
+import { getLote, LOTES_INDISPONIVEIS, TOTAL_LOTES } from '@/lib/lotes';
 
 function parseLote(numero: string): number | null {
   if (!/^\d+$/.test(numero)) return null;
   const n = Number(numero);
   if (n < 1 || n > TOTAL_LOTES) return null;
+  if (LOTES_INDISPONIVEIS.includes(n)) return null;
   return n;
 }
 
@@ -42,8 +44,8 @@ const emblemMaskStyle = {
 function SectionLabel({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div className="mb-5">
-      <p className="font-body text-sm font-semibold uppercase tracking-wide text-navy">{title}</p>
-      <p className="font-body text-xs uppercase tracking-wide text-gray-500">{subtitle}</p>
+      <p className="font-heading text-2xl uppercase tracking-wide text-navy md:text-4xl">{title}</p>
+      <p className="font-body text-[11px] uppercase tracking-wide text-gray-500">{subtitle}</p>
     </div>
   );
 }
@@ -79,9 +81,9 @@ export default async function LotePage({
               <div className="relative z-10 px-6 py-12 md:px-14 md:py-16">
                 {/* Cabeçalho: emblema + título do lote */}
                 <div className="flex items-center justify-between gap-4 border-b border-[#D07748]/40 pb-6">
-                  <span aria-hidden className="block h-14 w-28 bg-gold-dark md:h-16 md:w-32" style={emblemMaskStyle} />
+                  <span aria-hidden className="block h-16 w-32 bg-gold-dark md:h-24 md:w-48" style={emblemMaskStyle} />
                   <h1 className="font-heading text-xl italic uppercase text-gold-dark md:text-3xl">
-                    Lote {pad} {data ? `- ${data.area}M²` : ''}
+                    Lote {pad} {data?.area ? `- ${data.area}M²` : ''}
                   </h1>
                 </div>
 
@@ -101,24 +103,25 @@ export default async function LotePage({
                       />
                     </section>
 
-                    {/* Seção 2 - Detalhe do lote */}
-                    <section className="mt-10 border-t border-[#D07748]/40 pt-10 md:mt-14 md:pt-14">
-                      <SectionLabel title={`Lote ${pad}`} subtitle={`${data.area}M²`} />
-                      <Image
-                        src={data.detalhe.src}
-                        width={data.detalhe.width}
-                        height={data.detalhe.height}
-                        alt={`Detalhe e medidas do lote ${pad}`}
-                        className="h-auto w-full"
-                        sizes="(max-width: 1024px) 100vw, 900px"
-                      />
-                    </section>
+                    {/* Seção 2 - Detalhe do lote (metragem / área construtiva) */}
+                    {data.detalhe && (
+                      <section className="mt-10 border-t border-[#D07748]/40 pt-10 md:mt-14 md:pt-14">
+                        <LoteVisualizacao
+                          numero={pad}
+                          area={data.area}
+                          detalhe={data.detalhe}
+                          areaConstrutiva={data.areaConstrutiva}
+                        />
+                      </section>
+                    )}
 
                     {/* Seção 3 - Vistas */}
-                    <section className="mt-10 border-t border-[#D07748]/40 pt-10 md:mt-14 md:pt-14">
-                      <SectionLabel title="Vistas" subtitle="Imagens do local" />
-                      <LoteVistas vistas={data.vistas} numero={pad} />
-                    </section>
+                    {data.vistas && data.vistas.length > 0 && (
+                      <section className="mt-10 border-t border-[#D07748]/40 pt-10 md:mt-14 md:pt-14">
+                        <SectionLabel title="Vistas" subtitle="Imagens do local" />
+                        <LoteVistas vistas={data.vistas} numero={pad} />
+                      </section>
+                    )}
                   </>
                 ) : (
                   <div className="py-16 text-center md:py-24">

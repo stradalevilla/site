@@ -32,6 +32,9 @@ yarn-error.log*
 .env*.local
 .env
 
+# claude code (config local da maquina)
+.claude/settings.local.json
+
 # cursor mcp (contém token sensível)
 .cursor/mcp.json
 

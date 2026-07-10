@@ -2,14 +2,14 @@
 
 import { useCallback, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { lotesDisponiveis } from '@/lib/lotes';
 
-const TOTAL_LOTES = 54;
 const ITEM_H = 60; // altura de cada número na roda vertical (px)
 const WHEEL_H = ITEM_H * 5; // mostra 5 itens
 const SPACER = (WHEEL_H - ITEM_H) / 2; // centraliza o primeiro/último
 
 const pad = (n: number) => String(n).padStart(2, '0');
-const lotes = Array.from({ length: TOTAL_LOTES }, (_, i) => i + 1);
+const lotes = lotesDisponiveis;
 
 export function LoteSelector() {
   const router = useRouter();
@@ -32,15 +32,15 @@ export function LoteSelector() {
       const el = scrollRef.current;
       if (!el) return;
       const index = Math.round(el.scrollTop / ITEM_H);
-      const clamped = Math.min(TOTAL_LOTES - 1, Math.max(0, index));
-      setSelected(clamped + 1);
+      const clamped = Math.min(lotes.length - 1, Math.max(0, index));
+      setSelected(lotes[clamped]);
     });
   }, []);
 
   const handlePick = (n: number) => {
     setSelected(n);
     isTapScrolling.current = true;
-    scrollToIndex(n - 1);
+    scrollToIndex(lotes.indexOf(n));
     window.setTimeout(() => {
       isTapScrolling.current = false;
     }, 450);
@@ -54,7 +54,7 @@ export function LoteSelector() {
   // Estilo de cada número da roda conforme a distância do selecionado
   const wheelItemClass = (n: number) => {
     if (selected === null) return 'text-2xl text-navy/25';
-    const d = Math.abs(n - selected);
+    const d = Math.abs(lotes.indexOf(n) - lotes.indexOf(selected));
     if (d === 0) return 'text-4xl text-gold-dark';
     if (d === 1) return 'text-2xl text-navy/45';
     if (d === 2) return 'text-xl text-navy/25';
