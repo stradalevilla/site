@@ -104,16 +104,25 @@ export default async function LotePage({
                     </section>
 
                     {/* Seção 2 - Detalhe do lote (metragem / área construtiva) */}
-                    {data.detalhe && (
-                      <section className="mt-10 border-t border-[#D07748]/40 pt-10 md:mt-14 md:pt-14">
+                    <section className="mt-10 border-t border-[#D07748]/40 pt-10 md:mt-14 md:pt-14">
+                      {data.detalhe ? (
                         <LoteVisualizacao
                           numero={pad}
                           area={data.area}
                           detalhe={data.detalhe}
                           areaConstrutiva={data.areaConstrutiva}
                         />
-                      </section>
-                    )}
+                      ) : (
+                        <>
+                          <SectionLabel title={`Lote ${pad}`} subtitle="Metragem e área construtiva" />
+                          <p className="py-10 text-center font-body text-sm leading-relaxed text-gray-500 md:py-16">
+                            As plantas com a metragem e a área construtiva deste lote
+                            <br className="hidden sm:block" /> estão sendo preparadas e
+                            estarão disponíveis em breve.
+                          </p>
+                        </>
+                      )}
+                    </section>
 
                     {/* Seção 3 - Vistas */}
                     {data.vistas && data.vistas.length > 0 && (

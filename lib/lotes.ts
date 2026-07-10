@@ -89,8 +89,12 @@ const areas: Record<number, string> = {
   52: '3.524,00',
 };
 
-/** Lotes sem arte própria (detalhe / área construtiva) usam a do lote 07 como placeholder */
-const LOTES_SEM_ARTE = [53, 54];
+/**
+ * Lotes cujas artes de detalhe e área construtiva o arquiteto ainda não
+ * exportou. Não usar a arte de outro lote como placeholder: elas trazem o
+ * número e a metragem impressos, o que passaria informação errada.
+ */
+export const LOTES_SEM_ARTE = [53, 54];
 
 /** Vistas padrão (fotos do lote 07) exibidas enquanto o lote não tem fotos próprias */
 const vistasPadrao: LoteImage[] = [
@@ -102,7 +106,7 @@ const vistasPadrao: LoteImage[] = [
 export const lotesData: Record<number, LoteData> = Object.fromEntries(
   lotesDisponiveis.map((n) => {
     const pad = String(n).padStart(2, '0');
-    const artePad = LOTES_SEM_ARTE.includes(n) ? '07' : pad;
+    const temArte = !LOTES_SEM_ARTE.includes(n);
     return [
       n,
       {
@@ -113,16 +117,18 @@ export const lotesData: Record<number, LoteData> = Object.fromEntries(
           width: 2200,
           height: 1228,
         },
-        detalhe: {
-          src: `${DETALHES}/lote-${artePad}.jpg`,
-          width: 2200,
-          height: 1238,
-        },
-        areaConstrutiva: {
-          src: `${AREA_CONSTRUTIVA}/lote-${artePad}.jpg`,
-          width: 2200,
-          height: 1238,
-        },
+        ...(temArte && {
+          detalhe: {
+            src: `${DETALHES}/lote-${pad}.jpg`,
+            width: 2200,
+            height: 1238,
+          },
+          areaConstrutiva: {
+            src: `${AREA_CONSTRUTIVA}/lote-${pad}.jpg`,
+            width: 2200,
+            height: 1238,
+          },
+        }),
         vistas: vistasPadrao,
       },
     ];
