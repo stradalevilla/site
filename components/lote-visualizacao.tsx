@@ -63,13 +63,11 @@ export function LoteVisualizacao({
                   onClick={() => setVista(id)}
                   className="group relative pb-2 font-body text-[11px] uppercase tracking-[0.2em] transition-colors duration-300"
                 >
-                  <span className={ativo ? 'text-navy' : 'text-gray-400 group-hover:text-navy/70'}>
-                    {label}
-                  </span>
+                  <span className="text-navy">{label}</span>
                   <span
                     aria-hidden
                     className={`absolute inset-x-0 bottom-0 h-px origin-left bg-gold-dark transition-transform duration-300 ease-out ${
-                      ativo ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                      ativo ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100 group-hover:opacity-40'
                     }`}
                   />
                 </button>
