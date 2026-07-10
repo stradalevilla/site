@@ -91,7 +91,7 @@ export default async function LotePage({
                   <>
                     {/* Seção 1 - Masterplan */}
                     <section className="pt-8 md:pt-10">
-                      <SectionLabel title="Masterplan" subtitle="54 lotes de 2.000 a 4.554 m²" />
+                      <SectionLabel title="Masterplan" subtitle="52 lotes de 2.000 a 4.554 m²" />
                       <Image
                         src={data.masterplan.src}
                         width={data.masterplan.width}

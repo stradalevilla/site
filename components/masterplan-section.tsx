@@ -48,7 +48,7 @@ export function MasterplanSection() {
               de 275.951 m²
             </h2>
             <p className="font-body text-xs md:text-sm text-white/80 leading-relaxed max-w-[240px]">
-              São 54 lotes residenciais voltados à água, com casa-clube, marina, heliponto, quadras
+              São 52 lotes residenciais voltados à água, com casa-clube, marina, heliponto, quadras
               esportivas e infraestrutura subterrânea, em um território protegido por segurança 24h
               por terra e por água.
             </p>

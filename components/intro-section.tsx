@@ -65,7 +65,7 @@ export function IntroSection() {
               <div className="max-w-4xl mx-auto space-y-6 text-center">
                 <p className="font-body text-base md:text-lg text-gray-700 leading-relaxed">
                   O Villa Stradale pertence a essa segunda linhagem. Um refúgio pé na água, irreplicável. 
-                  54 famílias, uma península cercada por 270 graus de represa e a escolha de guardar o que 
+                  52 famílias, uma península cercada por 270 graus de represa e a escolha de guardar o que
                   realmente importa: o tempo, a água, as pessoas certas ao lado.
                 </p>
                 
@@ -82,7 +82,7 @@ export function IntroSection() {
                 </p>
                 
                 <h3 className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-navy italic uppercase">
-                  54 Lotes de 2.000 a 4.554 m²
+                  52 Lotes de 2.000 a 4.554 m²
                 </h3>
                 
                 <p className="font-body text-sm md:text-base text-gray-600">
