@@ -111,6 +111,7 @@ export default async function LotePage({
                           area={data.area}
                           detalhe={data.detalhe}
                           areaConstrutiva={data.areaConstrutiva}
+                          parametros={data.parametros}
                         />
                       ) : (
                         <>
