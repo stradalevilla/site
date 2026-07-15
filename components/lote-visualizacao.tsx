@@ -2,9 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import * as Dialog from '@radix-ui/react-dialog';
-import { AnimatePresence, motion } from 'framer-motion';
-import type { LoteImage } from '@/lib/lotes';
+import { parseParametros, type LoteImage } from '@/lib/lotes';
 
 type Vista = 'metragem' | 'construtiva';
 
@@ -13,11 +11,12 @@ const opcoes: { id: Vista; label: string }[] = [
   { id: 'construtiva', label: 'Área construtiva' },
 ];
 
-/** Textos iguais em todos os lotes (fonte: _TEXTOS_LOTES_SITE.md) */
+/**
+ * Rodapé do box: condensa em uma frase a nota e o título do material
+ * original (_TEXTOS_LOTES_SITE.md), igual em todos os lotes.
+ */
 const NOTA =
-  'A área construtiva indicada no masterplan é apenas uma sugestão de implantação, para ilustrar o potencial de construção do lote.';
-const MODAL_TITULO =
-  'O projeto pode ser implantado livremente, desde que respeitados os parâmetros urbanísticos do empreendimento.';
+  'A área construtiva indicada é apenas uma sugestão de implantação: o projeto pode ser implantado livremente, desde que respeitados os parâmetros urbanísticos do empreendimento.';
 
 const emblemaStyle = {
   WebkitMaskImage: "url('/logos/Icone-VillaStradale escuro.svg')",
@@ -44,7 +43,6 @@ export function LoteVisualizacao({
   parametros?: string;
 }) {
   const [vista, setVista] = useState<Vista>('metragem');
-  const [modalAberto, setModalAberto] = useState(false);
 
   const camadas: { id: Vista; img: LoteImage; alt: string }[] = [
     { id: 'metragem', img: detalhe, alt: `Medidas do terreno do lote ${numero}` },
@@ -59,7 +57,7 @@ export function LoteVisualizacao({
       : []),
   ];
 
-  const mostrarNota = vista === 'construtiva' && !!parametros;
+  const mostrarBox = vista === 'construtiva' && !!parametros;
 
   return (
     <>
@@ -101,145 +99,75 @@ export function LoteVisualizacao({
         )}
       </div>
 
-      {/* As duas imagens ficam empilhadas; só a opacidade muda, então o
-          crossfade acontece entre elas, sem passar pelo fundo branco. */}
       <div className="relative">
-        {camadas.map(({ id, img, alt }) => {
-          const ativo = id === vista;
-          return (
-            <Image
-              key={id}
-              src={img.src}
-              width={img.width}
-              height={img.height}
-              alt={ativo ? alt : ''}
-              aria-hidden={!ativo}
-              priority={id === 'metragem'}
-              className={`h-auto w-full transition-opacity duration-500 ease-out ${
-                ativo ? 'relative opacity-100' : 'absolute inset-0 opacity-0'
-              }`}
-              sizes="(max-width: 1024px) 100vw, 900px"
-            />
-          );
-        })}
-
-        {/* Nota + botão sobre a imagem, no canto inferior esquerdo,
-            apenas na visualização de área construtiva. */}
-        <div
-          className={`pointer-events-none absolute inset-x-0 bottom-0 transition-opacity duration-500 ${
-            mostrarNota ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          <div className="bg-gradient-to-t from-black/70 via-black/30 to-transparent px-4 pb-5 pt-24 md:px-8 md:pb-8 md:pt-32">
-            <div className={`w-3/5 md:w-1/5 ${mostrarNota ? 'pointer-events-auto' : ''}`}>
-              {/* Título (a frase) */}
-              <p className="font-body text-xs font-medium leading-snug text-white md:text-sm">
-                {NOTA}
-              </p>
-
-              {/* Botão discreto */}
-              <button
-                type="button"
-                onClick={() => setModalAberto(true)}
-                tabIndex={mostrarNota ? 0 : -1}
-                aria-hidden={!mostrarNota}
-                className="group mt-4 inline-flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.15em] text-white/70 transition-colors duration-300 hover:text-white"
-              >
-                <span className="relative pb-0.5">
-                  ver parâmetros
-                  <span className="absolute inset-x-0 bottom-0 h-px bg-white/30 transition-colors duration-300 group-hover:bg-gold" />
-                </span>
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="transition-transform duration-300 ease-out group-hover:translate-x-0.5"
-                >
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </button>
-            </div>
-          </div>
+        {/* Foto sempre em largura total; o box azul se sobrepõe a ela */}
+        <div className="relative w-full">
+          {/* As duas imagens ficam empilhadas; só a opacidade muda, então o
+              crossfade acontece entre elas, sem passar pelo fundo branco. */}
+          {camadas.map(({ id, img, alt }) => {
+            const ativo = id === vista;
+            return (
+              <Image
+                key={id}
+                src={img.src}
+                width={img.width}
+                height={img.height}
+                alt={ativo ? alt : ''}
+                aria-hidden={!ativo}
+                priority={id === 'metragem'}
+                className={`h-auto w-full transition-opacity duration-500 ease-out ${
+                  ativo ? 'relative opacity-100' : 'absolute inset-0 opacity-0'
+                }`}
+                sizes="(max-width: 1024px) 100vw, 900px"
+              />
+            );
+          })}
         </div>
-      </div>
 
-      {/* Modal com os parâmetros urbanísticos */}
-      <Dialog.Root open={modalAberto} onOpenChange={setModalAberto}>
-        <AnimatePresence>
-          {modalAberto && (
-            <Dialog.Portal forceMount>
-              <Dialog.Overlay asChild forceMount>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="fixed inset-0 z-[100] bg-navy/85"
-                />
-              </Dialog.Overlay>
+        {/* Box com os parâmetros urbanísticos — sobreposto à foto, encostado
+            à direita e com a altura dela (desktop); abaixo da foto no mobile */}
+        {parametros && (
+          <aside
+            aria-hidden={!mostrarBox}
+            className={`z-10 mt-6 flex-col bg-navy p-6 transition-opacity duration-500 md:absolute md:inset-y-0 md:right-0 md:mt-0 md:w-[25.5%] md:p-7 ${
+              mostrarBox ? 'flex opacity-100' : 'hidden opacity-0'
+            }`}
+          >
+            <span
+              aria-hidden
+              className="block h-7 w-16 shrink-0 bg-gold"
+              style={emblemaStyle}
+            />
+            {/* O número do lote é o título do box */}
+            <p className="mt-2 shrink-0 font-heading text-lg uppercase tracking-[0.14em] text-gold md:text-xl">
+              Lote {numero}
+            </p>
 
-              {/* Container flex centraliza; o framer-motion cuida só do
-                  fade/slide (o transform dele sobrescreveria um translate
-                  de centralização feito via classe). */}
-              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                <Dialog.Content asChild forceMount>
-                  <motion.div
-                    initial={{ opacity: 0, y: 14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 14 }}
-                    transition={{ duration: 0.3, ease: 'easeOut' }}
-                    className="relative w-full max-w-lg bg-white p-8 shadow-2xl md:p-10"
+            <div className="mt-3 min-h-0 flex-1 overflow-y-auto pr-1">
+              <ul className="space-y-1">
+                {parseParametros(parametros).map(({ label, valor }) => (
+                  <li
+                    key={`${label}-${valor}`}
+                    className="flex gap-2 font-body text-[11px] leading-snug text-white/75"
                   >
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 border-2 border-[#D07748]/50"
-                    />
+                    <span aria-hidden className="text-gold">
+                      •
+                    </span>
+                    <span>
+                      {label && <span className="font-semibold text-white">{label}: </span>}
+                      {valor}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                    <Dialog.Close
-                      aria-label="Fechar"
-                      className="absolute right-4 top-4 text-navy/50 transition-colors duration-200 hover:text-navy"
-                    >
-                      <svg
-                        width="22"
-                        height="22"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      >
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                      </svg>
-                    </Dialog.Close>
-
-                    <span
-                      aria-hidden
-                      className="mb-3 block h-8 w-20 bg-navy md:h-10 md:w-24"
-                      style={emblemaStyle}
-                    />
-                    <p className="font-body text-[11px] uppercase tracking-[0.22em] text-gold-dark">
-                      Lote {numero}
-                    </p>
-                    <Dialog.Title className="mt-3 font-heading text-lg leading-snug text-navy md:text-2xl">
-                      {MODAL_TITULO}
-                    </Dialog.Title>
-                    <Dialog.Description className="mt-5 font-body text-sm leading-relaxed text-gray-600">
-                      {parametros}
-                    </Dialog.Description>
-                  </motion.div>
-                </Dialog.Content>
-              </div>
-            </Dialog.Portal>
-          )}
-        </AnimatePresence>
-      </Dialog.Root>
+            <p className="mt-3 shrink-0 border-t border-white/15 pt-2.5 font-body text-[9px] leading-snug text-white/50">
+              {NOTA}
+            </p>
+          </aside>
+        )}
+      </div>
     </>
   );
 }

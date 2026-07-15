@@ -95,4 +95,27 @@
   .animate-slide-in {
     animation: slide-in 0.8s ease-out forwards;
   }
+
+  /* Varredura da seção Implantação: cada lote acende e apaga uma vez */
+  @keyframes lote-acende {
+    0% {
+      fill: transparent;
+    }
+    35% {
+      fill: rgba(6, 82, 138, 0.82);
+    }
+    100% {
+      fill: transparent;
+    }
+  }
+
+  .lote-acende {
+    animation: lote-acende 0.9s ease-in-out both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lote-acende {
+      animation: none;
+    }
+  }
 }

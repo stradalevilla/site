@@ -195,3 +195,45 @@ export const lotesData: Record<number, LoteData> = Object.fromEntries(
 export function getLote(numero: number): LoteData | null {
   return lotesData[numero] ?? null;
 }
+
+export interface ParametroItem {
+  label: string;
+  valor: string;
+}
+
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+/**
+ * Converte o descritivo em prosa dos parâmetros (formato fixo do
+ * _TEXTOS_LOTES_SITE.md) em itens de lista para exibição em bullets.
+ */
+export function parseParametros(texto: string): ParametroItem[] {
+  const itens: ParametroItem[] = [];
+
+  const corpo = texto.slice(texto.indexOf('): ') + 3).replace(/\.$/, '');
+
+  for (const seg of corpo.split(';').map((s) => s.trim())) {
+    if (seg.startsWith('recuo frontal')) {
+      // "recuo frontal de 10 m, recuos laterais de 5 m e recuo de fundos de 18 m"
+      for (const parte of seg.split(/, | e (?=recuo)/)) {
+        const m = parte.match(/^(recuos? (?:frontal|laterais|de fundos)) de (.+)$/);
+        if (m) itens.push({ label: cap(m[1]), valor: m[2] });
+      }
+    } else if (seg.startsWith('taxa de ocupação de ')) {
+      itens.push({ label: 'Taxa de ocupação', valor: seg.slice(20) });
+    } else if (seg.startsWith('coeficiente de aproveitamento de ')) {
+      itens.push({ label: 'Coeficiente de aproveitamento', valor: seg.slice(33) });
+    } else if (/^até \d+ pavimentos$/.test(seg)) {
+      itens.push({ label: 'Pavimentos', valor: cap(seg.replace(' pavimentos', '')) });
+    } else if (seg.startsWith('altura máxima de ')) {
+      itens.push({ label: 'Altura máxima', valor: seg.slice(17) });
+    } else if (seg.startsWith('cota de implantação de ')) {
+      itens.push({ label: 'Cota de implantação', valor: cap(seg.slice(23)) });
+    } else if (seg) {
+      // Segmento fora do padrão: exibe como veio, para nada se perder
+      itens.push({ label: '', valor: cap(seg) });
+    }
+  }
+
+  return itens;
+}
