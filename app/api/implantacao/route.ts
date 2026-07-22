@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { LoteContorno } from '@/lib/implantacao';
+import { criarSupabaseServidor } from '@/lib/supabase/server';
+import { criarSupabaseAdmin } from '@/lib/supabase/admin';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,17 +39,14 @@ function valido(c: unknown): c is LoteContorno[] {
   );
 }
 
-/** Salva as marcações. Exige a senha de admin; escreve com a chave de serviço. */
+/** Salva as marcações. Exige usuário logado; escreve com a chave de serviço. */
 export async function POST(req: Request) {
-  const senha = req.headers.get('x-admin-password');
-  if (!process.env.ADMIN_PASSWORD || senha !== process.env.ADMIN_PASSWORD) {
-    return NextResponse.json({ ok: false, error: 'senha incorreta' }, { status: 401 });
-  }
-
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const service = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !service) {
-    return NextResponse.json({ ok: false, error: 'supabase nao configurado' }, { status: 500 });
+  const supabase = await criarSupabaseServidor();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ ok: false, error: 'nao autenticado' }, { status: 401 });
   }
 
   let body: { contornos?: unknown };
@@ -60,19 +59,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: 'formato de contornos invalido' }, { status: 400 });
   }
 
-  const res = await fetch(`${url}/rest/v1/implantacao_marcacoes?on_conflict=id`, {
-    method: 'POST',
-    headers: {
-      apikey: service,
-      Authorization: `Bearer ${service}`,
-      'Content-Type': 'application/json',
-      Prefer: 'resolution=merge-duplicates,return=minimal',
-    },
-    body: JSON.stringify({ id: 1, contornos: body.contornos, atualizado_em: new Date().toISOString() }),
-  });
+  const admin = criarSupabaseAdmin();
+  const { error } = await admin
+    .from('implantacao_marcacoes')
+    .upsert({ id: 1, contornos: body.contornos, atualizado_em: new Date().toISOString() });
 
-  if (!res.ok) {
-    return NextResponse.json({ ok: false, error: 'falha ao salvar', detalhe: await res.text() }, { status: 500 });
+  if (error) {
+    return NextResponse.json({ ok: false, error: 'falha ao salvar', detalhe: error.message }, { status: 500 });
   }
   return NextResponse.json({ ok: true, total: body.contornos.length });
 }

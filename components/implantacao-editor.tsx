@@ -116,19 +116,17 @@ export function ImplantacaoEditor({ iniciais }: { iniciais: LoteContorno[] }) {
   };
 
   const salvar = async () => {
-    const senha = window.prompt('Senha de admin para salvar:');
-    if (!senha) return;
     setSalvando(true);
     setStatus('salvando…');
     try {
       const res = await fetch('/api/implantacao', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-admin-password': senha },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contornos: paraContornos(lotes) }),
       });
       const j = await res.json();
       setStatus(res.ok ? `salvo! ${j.total} lotes gravados` : `erro: ${j.error}`);
-    } catch (e) {
+    } catch {
       setStatus('erro de conexão');
     } finally {
       setSalvando(false);
