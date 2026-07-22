@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { contornosLotes, IMPLANTACAO_CANVAS, type LoteContorno } from '@/lib/implantacao';
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -19,6 +20,7 @@ export function ImplantacaoSection({
 }: {
   contornos?: LoteContorno[];
 }) {
+  const router = useRouter();
   const secaoRef = useRef<HTMLElement>(null);
   const [varrer, setVarrer] = useState(false);
   const [interagiu, setInteragiu] = useState(false);
@@ -68,43 +70,58 @@ export function ImplantacaoSection({
             sizes="(max-width: 1024px) 100vw, 1200px"
           />
 
-          {/* Overlay interativo: um polígono por lote */}
+          {/* Overlay interativo: cada lote é um link para a sua página */}
           <svg
             viewBox={`0 0 ${IMPLANTACAO_CANVAS.width} ${IMPLANTACAO_CANVAS.height}`}
             className="absolute inset-0 h-full w-full"
-            role="list"
+            role="group"
             aria-label="Lotes no masterplan"
           >
-            {contornos.map(({ numero, pontos, centroide }, i) => (
-              <g key={numero} role="listitem" aria-label={`Lote ${pad(numero)}`} className="group">
-                {/* Polígono decorativo da varredura de entrada — separado do
-                    interativo para a animação nunca interferir no hover.
-                    Some assim que o usuário passa o mouse por um lote. */}
-                {varrendo && (
-                  <polygon
-                    aria-hidden
-                    points={pontos}
-                    className="lote-acende pointer-events-none fill-transparent"
-                    style={{ animationDelay: `${i * INTERVALO_VARREDURA}ms` }}
-                  />
-                )}
-                <polygon
-                  points={pontos}
-                  onPointerEnter={() => setInteragiu(true)}
-                  className="cursor-pointer fill-transparent transition-[fill] duration-300 ease-out group-hover:fill-[rgba(6,82,138,0.82)]"
-                />
-                <text
-                  x={centroide[0]}
-                  y={centroide[1]}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  className="pointer-events-none select-none fill-white font-body opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                  style={{ fontSize: 22, letterSpacing: 1.5 }}
+            {contornos.map(({ numero, pontos, centroide }, i) => {
+              const destino = `/lotes/${pad(numero)}`;
+              return (
+                // <a> de verdade (permite abrir em nova aba), mas o clique é
+                // interceptado para navegar sem recarregar a página.
+                <a
+                  key={numero}
+                  href={destino}
+                  aria-label={`Ver o lote ${pad(numero)}`}
+                  className="group"
+                  onClick={(e) => {
+                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+                    e.preventDefault();
+                    router.push(destino);
+                  }}
                 >
-                  {pad(numero)}
-                </text>
-              </g>
-            ))}
+                  {/* Polígono decorativo da varredura de entrada — separado do
+                      interativo para a animação nunca interferir no hover.
+                      Some assim que o usuário passa o mouse por um lote. */}
+                  {varrendo && (
+                    <polygon
+                      aria-hidden
+                      points={pontos}
+                      className="lote-acende pointer-events-none fill-transparent"
+                      style={{ animationDelay: `${i * INTERVALO_VARREDURA}ms` }}
+                    />
+                  )}
+                  <polygon
+                    points={pontos}
+                    onPointerEnter={() => setInteragiu(true)}
+                    className="cursor-pointer fill-transparent transition-[fill] duration-300 ease-out group-hover:fill-[rgba(6,82,138,0.82)]"
+                  />
+                  <text
+                    x={centroide[0]}
+                    y={centroide[1]}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    className="pointer-events-none select-none fill-white font-body opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    style={{ fontSize: 22, letterSpacing: 1.5 }}
+                  >
+                    {pad(numero)}
+                  </text>
+                </a>
+              );
+            })}
           </svg>
         </div>
       </div>
