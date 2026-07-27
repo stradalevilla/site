@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { IconBrandInstagram, IconBrandLinkedin } from '@tabler/icons-react';
+import Link from 'next/link';
+import { IconBrandInstagram, IconBrandLinkedin, IconLock } from '@tabler/icons-react';
 
 export function Footer() {
   return (
@@ -67,7 +68,18 @@ export function Footer() {
           <a href="#" className="font-body text-xs text-white/60 hover:text-white transition-colors">
             Política de Privacidade
           </a>
-          <span className="font-body text-xs text-white/60">Desenvolvido por rfill.co</span>
+          <div className="flex items-center gap-5">
+            <span className="font-body text-xs text-white/60">Desenvolvido por rfill.co</span>
+            {/* Acesso discreto ao painel de gestão */}
+            <Link
+              href="/admin"
+              aria-label="Área restrita"
+              title="Área restrita"
+              className="text-white/25 transition-colors hover:text-white/70"
+            >
+              <IconLock size={16} stroke={1.5} />
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

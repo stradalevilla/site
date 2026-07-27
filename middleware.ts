@@ -7,6 +7,11 @@ import { NextResponse, type NextRequest } from 'next/server';
  * login fica liberada.
  */
 export async function middleware(request: NextRequest) {
+  // O ícone do admin é público (aparece na aba mesmo deslogado).
+  if (request.nextUrl.pathname === '/admin/icon.svg') {
+    return NextResponse.next();
+  }
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
