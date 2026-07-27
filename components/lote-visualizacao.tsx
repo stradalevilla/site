@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { parseParametros, type LoteImage } from '@/lib/lotes';
+import type { LoteImage, ParametroItem } from '@/lib/lotes';
 
 type Vista = 'metragem' | 'construtiva';
 
@@ -40,7 +40,7 @@ export function LoteVisualizacao({
   area?: string;
   detalhe: LoteImage;
   areaConstrutiva?: LoteImage;
-  parametros?: string;
+  parametros?: ParametroItem[];
 }) {
   const [vista, setVista] = useState<Vista>('metragem');
 
@@ -57,7 +57,7 @@ export function LoteVisualizacao({
       : []),
   ];
 
-  const mostrarBox = vista === 'construtiva' && !!parametros;
+  const mostrarBox = vista === 'construtiva' && !!parametros?.length;
 
   return (
     <>
@@ -126,7 +126,7 @@ export function LoteVisualizacao({
 
         {/* Box com os parâmetros urbanísticos — sobreposto à foto, encostado
             à direita e com a altura dela (desktop); abaixo da foto no mobile */}
-        {parametros && (
+        {!!parametros?.length && (
           <aside
             aria-hidden={!mostrarBox}
             className={`z-10 mt-6 flex-col bg-navy p-6 transition-opacity duration-500 md:absolute md:inset-y-0 md:right-0 md:mt-0 md:w-[25.5%] md:p-7 ${
@@ -145,7 +145,7 @@ export function LoteVisualizacao({
 
             <div className="mt-3 min-h-0 flex-1 overflow-y-auto pr-1">
               <ul className="space-y-1">
-                {parseParametros(parametros).map(({ label, valor }) => (
+                {parametros.map(({ label, valor }) => (
                   <li
                     key={`${label}-${valor}`}
                     className="flex gap-2 font-body text-[11px] leading-snug text-white/75"

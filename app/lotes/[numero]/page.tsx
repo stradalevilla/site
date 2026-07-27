@@ -8,7 +8,8 @@ import { Footer } from '@/components/footer';
 import { LoteVistas } from '@/components/lote-vistas';
 import { LoteVisualizacao } from '@/components/lote-visualizacao';
 import { ContatoInteresse } from '@/components/contato-interesse';
-import { getLote, LOTES_INDISPONIVEIS, TOTAL_LOTES } from '@/lib/lotes';
+import { LOTES_INDISPONIVEIS, TOTAL_LOTES } from '@/lib/lotes';
+import { getLoteCompleto } from '@/lib/lotes-db';
 
 function parseLote(numero: string): number | null {
   if (!/^\d+$/.test(numero)) return null;
@@ -63,7 +64,7 @@ export default async function LotePage({
   }
 
   const pad = String(n).padStart(2, '0');
-  const data = getLote(n);
+  const data = await getLoteCompleto(n);
 
   return (
     <>
@@ -111,7 +112,7 @@ export default async function LotePage({
                           area={data.area}
                           detalhe={data.detalhe}
                           areaConstrutiva={data.areaConstrutiva}
-                          parametros={data.parametros}
+                          parametros={data.parametrosItens}
                         />
                       ) : (
                         <>

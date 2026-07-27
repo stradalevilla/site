@@ -14,10 +14,10 @@ const cards = [
     ativo: true,
   },
   {
-    href: '#',
+    href: '/admin/lotes',
     titulo: 'Lotes',
-    desc: 'Áreas, parâmetros e imagens de cada lote. (Em breve)',
-    ativo: false,
+    desc: 'Área e parâmetros urbanísticos de cada lote.',
+    ativo: true,
   },
   {
     href: '#',

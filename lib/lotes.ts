@@ -24,8 +24,10 @@ export interface LoteData {
   detalhe?: LoteImage;
   /** Vista do lote com o recuo e a área construtiva permitida */
   areaConstrutiva?: LoteImage;
-  /** Descritivo dos parâmetros urbanísticos, exibido no modal "ver parâmetros" */
+  /** Descritivo dos parâmetros urbanísticos (prosa; herança do .md) */
   parametros?: string;
+  /** Parâmetros estruturados (fonte da verdade: tabela lotes no Supabase) */
+  parametrosItens?: ParametroItem[];
   vistas?: LoteImage[];
 }
 

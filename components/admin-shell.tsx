@@ -7,6 +7,7 @@ import { criarSupabaseNavegador } from '@/lib/supabase/client';
 const links = [
   { href: '/admin', label: 'Início', exato: true },
   { href: '/admin/implantacao', label: 'Implantação' },
+  { href: '/admin/lotes', label: 'Lotes' },
   { href: '/admin/usuarios', label: 'Usuários' },
   { href: '/admin/senha', label: 'Trocar senha' },
 ];

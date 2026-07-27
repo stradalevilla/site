@@ -65,7 +65,7 @@ export function Navbar() {
           <Link href="/" className="flex items-center justify-center">
             <span
               className={`relative block transition-all duration-500 ease-out ${
-                scrolled ? 'h-20 w-20' : 'h-16 w-[220px]'
+                scrolled ? 'h-16 w-44' : 'h-16 w-[220px]'
               }`}
             >
               {/* Logotipo completo */}
@@ -84,7 +84,7 @@ export function Navbar() {
                 src="/logos/Icone-VillaStradale claro.svg"
                 alt="Villa Stradale"
                 fill
-                sizes="80px"
+                sizes="176px"
                 className={`object-contain transition-opacity duration-500 ease-out ${
                   scrolled ? 'opacity-100' : 'opacity-0'
                 }`}
