@@ -13,6 +13,7 @@ import { getLoteCompleto } from '@/lib/lotes-db';
 import { getContornos } from '@/lib/getContornos';
 import { janelasClose } from '@/lib/lote-close-config';
 import { LoteClose } from '@/components/lote-close';
+import { LoteConstrutiva } from '@/components/lote-construtiva';
 
 function parseLote(numero: string): number | null {
   if (!/^\d+$/.test(numero)) return null;
@@ -69,23 +70,37 @@ export default async function LotePage({
   const pad = String(n).padStart(2, '0');
   const data = await getLoteCompleto(n);
 
-  // Close dinâmico: entra no lugar da arte estática quando o lote tem as
-  // medidas preenchidas no admin (enquanto não tiver, o site segue estático).
+  // Visualizações dinâmicas: cada uma entra no lugar da arte estática quando o
+  // lote tem o conteúdo correspondente cadastrado no admin (medidas para a
+  // metragem, recuo/volumes para a área construtiva).
   const janela = janelasClose[n];
   let closeDinamico: React.ReactNode | undefined;
-  if (janela && data && data.medidas?.length) {
+  let construtivaDinamica: React.ReactNode | undefined;
+  if (janela && data && (data.medidas?.length || data.areaConstrutivaDesenho)) {
     const contorno = (await getContornos()).find((c) => c.numero === n);
     if (contorno) {
-      closeDinamico = (
-        <LoteClose
-          numero={n}
-          area={data.area}
-          pontos={contorno.pontos}
-          medidas={data.medidas ?? []}
-          janela={janela}
-          estilo={data.estilo}
-        />
-      );
+      if (data.medidas?.length) {
+        closeDinamico = (
+          <LoteClose
+            numero={n}
+            area={data.area}
+            pontos={contorno.pontos}
+            medidas={data.medidas}
+            janela={janela}
+            estilo={data.estilo}
+          />
+        );
+      }
+      if (data.areaConstrutivaDesenho) {
+        construtivaDinamica = (
+          <LoteConstrutiva
+            numero={n}
+            pontos={contorno.pontos}
+            janela={janela}
+            desenho={data.areaConstrutivaDesenho}
+          />
+        );
+      }
     }
   }
 
@@ -137,6 +152,7 @@ export default async function LotePage({
                           areaConstrutiva={data.areaConstrutiva}
                           parametros={data.parametrosItens}
                           closeDinamico={closeDinamico}
+                          construtivaDinamica={construtivaDinamica}
                         />
                       ) : (
                         <>

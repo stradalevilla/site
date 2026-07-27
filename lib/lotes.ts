@@ -27,6 +27,22 @@ export interface MedidaFace {
   texto: string;
 }
 
+/** Volume sugerido de construção (casa, piscina, etc.) desenhado no lote */
+export interface VolumeConstrutivo {
+  pontos: string;
+  cor: string;
+}
+
+/**
+ * Modo "Área construtiva": o limite dos recuos (linha tracejada) e os volumes
+ * sugeridos de implantação, desenhados sobre o lote.
+ */
+export interface AreaConstrutivaLote {
+  /** Polígono do limite dos recuos (tracejado). Vazio = não desenha */
+  recuo?: string;
+  volumes?: VolumeConstrutivo[];
+}
+
 /** Estilo da marcação do lote no close (cores do preenchimento, contorno) */
 export interface EstiloLote {
   /** Cor do topo do degradê de preenchimento (hex) */
@@ -58,6 +74,8 @@ export interface LoteData {
   medidas?: MedidaFace[];
   /** Estilo da marcação no close (fonte da verdade: tabela lotes no Supabase) */
   estilo?: EstiloLote;
+  /** Recuos e volumes do modo "Área construtiva" (fonte: tabela lotes) */
+  areaConstrutivaDesenho?: AreaConstrutivaLote;
   vistas?: LoteImage[];
 }
 

@@ -36,6 +36,7 @@ export function LoteVisualizacao({
   areaConstrutiva,
   parametros,
   closeDinamico,
+  construtivaDinamica,
 }: {
   numero: string;
   area?: string;
@@ -44,6 +45,8 @@ export function LoteVisualizacao({
   parametros?: ParametroItem[];
   /** Close gerado dinamicamente (SVG); quando presente, substitui a arte estática da metragem */
   closeDinamico?: React.ReactNode;
+  /** Área construtiva gerada dinamicamente; substitui a arte estática dessa aba */
+  construtivaDinamica?: React.ReactNode;
 }) {
   const [vista, setVista] = useState<Vista>('metragem');
 
@@ -112,11 +115,12 @@ export function LoteVisualizacao({
             const classes = `transition-opacity duration-500 ease-out ${
               ativo ? 'relative opacity-100' : 'absolute inset-0 opacity-0'
             }`;
-            // camada de metragem gerada dinamicamente (SVG) no lugar da arte estática
-            if (id === 'metragem' && closeDinamico) {
+            // camadas geradas dinamicamente (SVG) no lugar das artes estáticas
+            const dinamica = id === 'metragem' ? closeDinamico : construtivaDinamica;
+            if (dinamica) {
               return (
                 <div key={id} aria-hidden={!ativo} className={classes}>
-                  {closeDinamico}
+                  {dinamica}
                 </div>
               );
             }

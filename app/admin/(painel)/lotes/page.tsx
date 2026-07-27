@@ -3,9 +3,28 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ESTILO_PADRAO } from '@/components/lote-close';
 import { CloseEditor, type OpContorno } from '@/components/close-editor';
+import {
+  ConstrutivaEditor,
+  type DesenhoConstrutiva,
+  type FormaSel,
+} from '@/components/construtiva-editor';
+import { COR_VOLUME_PADRAO } from '@/components/lote-construtiva';
 import { janelasClose } from '@/lib/lote-close-config';
-import type { EstiloLote, MedidaFace } from '@/lib/lotes';
+import type { AreaConstrutivaLote, EstiloLote, MedidaFace } from '@/lib/lotes';
 import type { LoteContorno } from '@/lib/implantacao';
+import {
+  centroide,
+  metrosPorUnidade,
+  offsetInterno,
+  retanguloCentrado,
+  type Ponto,
+} from '@/lib/poligono';
+
+/** número em pt-BR ("3.302,77") -> 3302.77 */
+const paraNumero = (s: string): number => {
+  const n = Number(s.replace(/\./g, '').replace(',', '.'));
+  return Number.isFinite(n) ? n : 0;
+};
 
 /** 'x,y x,y ...' -> pares, sem o ponto de fechamento repetido */
 const parsePontos = (s: string): [number, number][] => {
@@ -19,6 +38,9 @@ const parsePontos = (s: string): [number, number][] => {
   }
   return pts;
 };
+
+/** pares -> 'x,y x,y ...' */
+const strPontos = (pts: Ponto[]): string => pts.map((p) => p.join(',')).join(' ');
 
 /** centroide do polígono (posição do rótulo na home) */
 const centroideDe = (pts: [number, number][]): [number, number] => {
@@ -43,6 +65,7 @@ type Lote = {
   parametros_itens: Item[] | null;
   medidas: MedidaFace[] | null;
   estilo: EstiloLote | null;
+  area_construtiva: AreaConstrutivaLote | null;
 };
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -77,15 +100,24 @@ export default function LotesAdminPage() {
   /** face sendo arrastada no painel de camadas */
   const [dragFace, setDragFace] = useState<number | null>(null);
   const [alvoDrop, setAlvoDrop] = useState<string | null>(null);
-  /** histórico do desfazer: fotos de {pontos, textos, uniões} antes de cada edição */
+  /** histórico do desfazer: fotos do desenho antes de cada edição */
   const [historico, setHistorico] = useState<
-    { pontos: [number, number][]; textos: Record<number, string>; unioes: number[] }[]
+    {
+      pontos: [number, number][];
+      textos: Record<number, string>;
+      unioes: number[];
+      construtiva: DesenhoConstrutiva;
+    }[]
   >([]);
   /** marca a última digitação: dentro de um campo recém-digitado, o Ctrl+Z é do navegador */
   const digitouEm = useRef(0);
   const [contornos, setContornos] = useState<LoteContorno[]>([]);
   const [pontosEdit, setPontosEdit] = useState<[number, number][]>([]);
   const [pontosDe, setPontosDe] = useState<number | null>(null);
+  /** desenho da área construtiva em edição */
+  const [construtiva, setConstrutiva] = useState<DesenhoConstrutiva>({ recuo: null, volumes: [] });
+  const [formaSel, setFormaSel] = useState<FormaSel>(null);
+  const [recuoMetros, setRecuoMetros] = useState('');
   const [salvando, setSalvando] = useState(false);
   const [msg, setMsg] = useState('');
 
@@ -120,6 +152,17 @@ export default function LotesAdminPage() {
     setUnioes(u);
     setEstilo(l.estilo ?? {});
     setGrupoFoco(undefined);
+    // área construtiva: string -> pares
+    const ac = l.area_construtiva;
+    setConstrutiva({
+      recuo: ac?.recuo ? parsePontos(ac.recuo) : null,
+      volumes: (ac?.volumes ?? []).map((v) => ({
+        pontos: parsePontos(v.pontos),
+        cor: v.cor || COR_VOLUME_PADRAO,
+      })),
+    });
+    setFormaSel(null);
+    setRecuoMetros('');
     setHistorico([]); // o desfazer não atravessa lotes
     setMsg('');
   };
@@ -218,6 +261,13 @@ export default function LotesAdminPage() {
         pontos: pontosEdit.map((p) => [...p] as [number, number]),
         textos: { ...textos },
         unioes: [...unioes],
+        construtiva: {
+          recuo: construtiva.recuo?.map((p) => [...p] as Ponto) ?? null,
+          volumes: construtiva.volumes.map((v) => ({
+            pontos: v.pontos.map((p) => [...p] as Ponto),
+            cor: v.cor,
+          })),
+        },
       },
     ]);
   };
@@ -229,6 +279,7 @@ export default function LotesAdminPage() {
       setPontosEdit(ultimo.pontos);
       setTextos(ultimo.textos);
       setUnioes(ultimo.unioes);
+      setConstrutiva(ultimo.construtiva);
       return h.slice(0, -1);
     });
   }, []);
@@ -333,6 +384,16 @@ export default function LotesAdminPage() {
     const estiloLimpo = Object.fromEntries(
       Object.entries(estilo).filter(([, v]) => v !== undefined && v !== '')
     );
+    const acSalvar: AreaConstrutivaLote | null =
+      construtiva.recuo || construtiva.volumes.length
+        ? {
+            ...(construtiva.recuo ? { recuo: strPontos(construtiva.recuo) } : {}),
+            volumes: construtiva.volumes.map((v) => ({
+              pontos: strPontos(v.pontos),
+              cor: v.cor,
+            })),
+          }
+        : null;
     const res = await fetch('/api/admin/lotes', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -342,6 +403,7 @@ export default function LotesAdminPage() {
         parametros_itens: itens.length ? itens : null,
         medidas: medidasArr,
         estilo: Object.keys(estiloLimpo).length ? estiloLimpo : null,
+        area_construtiva: acSalvar,
       }),
     });
     const j = await res.json();
@@ -379,6 +441,7 @@ export default function LotesAdminPage() {
                 parametros_itens: itens,
                 medidas: medidasArr,
                 estilo: Object.keys(estiloLimpo).length ? (estiloLimpo as EstiloLote) : null,
+                area_construtiva: acSalvar,
               }
             : l
         )
@@ -781,14 +844,184 @@ export default function LotesAdminPage() {
               )}
             </section>
 
-            {/* Seção 3: área construtiva — editor visual na próxima etapa */}
-            <section className="mt-4 rounded-lg border border-dashed border-neutral-300 bg-neutral-50 p-6">
-              <h2 className="font-body text-xs font-semibold uppercase tracking-wide text-gray-400">
+            {/* Seção 3: área construtiva — editor visual */}
+            <section className="mt-4 rounded-lg border border-neutral-200 bg-white p-6">
+              <h2 className="font-body text-xs font-semibold uppercase tracking-wide text-gray-500">
                 Área construtiva
               </h2>
-              <p className="mt-2 font-body text-sm text-gray-400">
-                Desenho dos recuos e volumes sugeridos — em construção.
-              </p>
+
+              {!janela || !pontosProntos ? (
+                <p className="mt-2 font-body text-sm text-gray-400">
+                  Este lote ainda não tem o close dinâmico gerado.
+                </p>
+              ) : (
+                <>
+                  <p className="mt-1 font-body text-[11px] text-gray-400">
+                    clique numa forma para selecionar • arraste os cantos • clique na forma
+                    selecionada para inserir ponto • clique-direito num canto para remover
+                  </p>
+                  <div className="mt-4 grid gap-6 xl:grid-cols-[1fr_300px]">
+                    <div className="overflow-hidden rounded border border-neutral-200">
+                      <ConstrutivaEditor
+                        numero={lote.numero}
+                        pontosLote={pontosEdit}
+                        janela={janela}
+                        desenho={construtiva}
+                        sel={formaSel}
+                        onSel={setFormaSel}
+                        onChange={setConstrutiva}
+                        onInicioArrasto={snapshot}
+                      />
+                    </div>
+
+                    <div className="space-y-5">
+                      {/* Limite dos recuos */}
+                      <div>
+                        <p className="font-body text-[10px] uppercase tracking-wide text-gray-400">
+                          Limite dos recuos
+                        </p>
+                        {construtiva.recuo ? (
+                          <div className="mt-2 space-y-2">
+                            <button
+                              type="button"
+                              onClick={() => setFormaSel({ tipo: 'recuo' })}
+                              className={`w-full rounded border px-3 py-1.5 text-left font-body text-xs ${
+                                formaSel?.tipo === 'recuo'
+                                  ? 'border-gold-dark bg-gold/10 text-navy'
+                                  : 'border-neutral-200 text-gray-600 hover:bg-neutral-50'
+                              }`}
+                            >
+                              tracejado do recuo ({construtiva.recuo.length} pontos)
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                snapshot();
+                                setConstrutiva((d) => ({ ...d, recuo: null }));
+                                if (formaSel?.tipo === 'recuo') setFormaSel(null);
+                              }}
+                              className="font-body text-[11px] text-gray-400 underline hover:text-navy"
+                            >
+                              remover recuo
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="mt-2 space-y-2">
+                            <div className="flex items-center gap-2">
+                              <input
+                                value={recuoMetros}
+                                onChange={(e) => {
+                                  digitouEm.current = Date.now();
+                                  setRecuoMetros(e.target.value);
+                                }}
+                                placeholder="distância"
+                                className="w-24 rounded border border-navy/20 px-2 py-1 font-body text-sm outline-none focus:border-gold-dark"
+                              />
+                              <span className="font-body text-xs text-gray-400">metros</span>
+                            </div>
+                            <button
+                              type="button"
+                              disabled={!paraNumero(recuoMetros) || !paraNumero(area)}
+                              onClick={() => {
+                                const mpu = metrosPorUnidade(pontosEdit, paraNumero(area));
+                                if (!mpu) return;
+                                snapshot();
+                                const d = paraNumero(recuoMetros) / mpu;
+                                setConstrutiva((s) => ({
+                                  ...s,
+                                  recuo: offsetInterno(pontosEdit, d),
+                                }));
+                                setFormaSel({ tipo: 'recuo' });
+                              }}
+                              className="w-full rounded-sm bg-navy px-3 py-1.5 font-body text-xs uppercase tracking-wide text-white hover:bg-gold-dark disabled:opacity-40"
+                            >
+                              gerar recuo
+                            </button>
+                            <p className="font-body text-[11px] text-gray-400">
+                              recolhe a divisa por igual em todas as faces (ponto de partida —
+                              depois você arrasta os cantos). Precisa da área do lote preenchida.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Volumes */}
+                      <div>
+                        <p className="font-body text-[10px] uppercase tracking-wide text-gray-400">
+                          Volumes sugeridos
+                        </p>
+                        <div className="mt-2 space-y-1.5">
+                          {construtiva.volumes.map((v, i) => {
+                            const ativo = formaSel?.tipo === 'volume' && formaSel.idx === i;
+                            return (
+                              <div
+                                key={i}
+                                className={`flex items-center gap-2 rounded border px-2 py-1.5 ${
+                                  ativo ? 'border-gold-dark bg-gold/10' : 'border-neutral-200'
+                                }`}
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() => setFormaSel({ tipo: 'volume', idx: i })}
+                                  className="flex-1 text-left font-body text-xs text-gray-600"
+                                >
+                                  Volume {i + 1}
+                                </button>
+                                <input
+                                  type="color"
+                                  value={v.cor}
+                                  onChange={(e) => {
+                                    const cor = e.target.value;
+                                    setConstrutiva((d) => ({
+                                      ...d,
+                                      volumes: d.volumes.map((x, j) =>
+                                        j === i ? { ...x, cor } : x
+                                      ),
+                                    }));
+                                  }}
+                                  className="h-6 w-9 cursor-pointer rounded border border-navy/20"
+                                />
+                                <button
+                                  type="button"
+                                  title="remover volume"
+                                  onClick={() => {
+                                    snapshot();
+                                    setConstrutiva((d) => ({
+                                      ...d,
+                                      volumes: d.volumes.filter((_, j) => j !== i),
+                                    }));
+                                    setFormaSel(null);
+                                  }}
+                                  className="font-body text-[11px] text-gray-400 hover:text-red-600"
+                                >
+                                  ✕
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            snapshot();
+                            const base = construtiva.recuo ?? pontosEdit;
+                            const c = centroide(base);
+                            const novo = {
+                              pontos: retanguloCentrado(c, janela.w * 0.09, janela.h * 0.13),
+                              cor: COR_VOLUME_PADRAO,
+                            };
+                            setConstrutiva((d) => ({ ...d, volumes: [...d.volumes, novo] }));
+                            setFormaSel({ tipo: 'volume', idx: construtiva.volumes.length });
+                          }}
+                          className="mt-2 w-full rounded border border-neutral-200 px-3 py-1.5 font-body text-xs text-gray-600 hover:bg-neutral-50 hover:text-navy"
+                        >
+                          + adicionar volume
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </section>
           </div>
         )}

@@ -38,6 +38,7 @@ export async function PATCH(req: Request) {
     parametros_itens?: unknown;
     medidas?: unknown;
     estilo?: unknown;
+    area_construtiva?: unknown;
   };
   try {
     body = await req.json();
@@ -109,6 +110,29 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ ok: false, error: 'estilo invalido' }, { status: 400 });
     }
     mudancas.estilo = e;
+  }
+  if ('area_construtiva' in body) {
+    const ac = body.area_construtiva;
+    let valido = ac === null;
+    if (!valido && typeof ac === 'object' && !Array.isArray(ac)) {
+      const o = ac as { recuo?: unknown; volumes?: unknown };
+      const recuoOk = o.recuo === undefined || typeof o.recuo === 'string';
+      const volumesOk =
+        o.volumes === undefined ||
+        (Array.isArray(o.volumes) &&
+          o.volumes.every(
+            (v) =>
+              v &&
+              typeof v === 'object' &&
+              typeof (v as { pontos?: unknown }).pontos === 'string' &&
+              typeof (v as { cor?: unknown }).cor === 'string'
+          ));
+      valido = recuoOk && volumesOk;
+    }
+    if (!valido) {
+      return NextResponse.json({ ok: false, error: 'area_construtiva invalida' }, { status: 400 });
+    }
+    mudancas.area_construtiva = ac;
   }
 
   const admin = criarSupabaseAdmin();

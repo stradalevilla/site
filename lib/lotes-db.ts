@@ -1,6 +1,7 @@
 import {
   lotesData,
   parseParametros,
+  type AreaConstrutivaLote,
   type EstiloLote,
   type LoteData,
   type MedidaFace,
@@ -14,6 +15,7 @@ export interface LoteDb {
   parametros_itens: ParametroItem[] | null;
   medidas: unknown[];
   estilo: unknown | null;
+  area_construtiva: unknown | null;
 }
 
 /**
@@ -75,6 +77,16 @@ export async function getLoteCompleto(numero: number): Promise<LoteData | null> 
       ? (db.estilo as EstiloLote)
       : undefined;
 
+  const construtiva =
+    db?.area_construtiva &&
+    typeof db.area_construtiva === 'object' &&
+    !Array.isArray(db.area_construtiva)
+      ? (db.area_construtiva as AreaConstrutivaLote)
+      : undefined;
+  // só vale se tiver algo desenhado
+  const areaConstrutivaDesenho =
+    construtiva && (construtiva.recuo || construtiva.volumes?.length) ? construtiva : undefined;
+
   return {
     ...estatico,
     area: db?.area ?? estatico.area,
@@ -82,5 +94,6 @@ export async function getLoteCompleto(numero: number): Promise<LoteData | null> 
     parametrosItens: itens,
     medidas,
     estilo,
+    areaConstrutivaDesenho,
   };
 }
