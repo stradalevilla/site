@@ -35,12 +35,15 @@ export function LoteVisualizacao({
   detalhe,
   areaConstrutiva,
   parametros,
+  closeDinamico,
 }: {
   numero: string;
   area?: string;
   detalhe: LoteImage;
   areaConstrutiva?: LoteImage;
   parametros?: ParametroItem[];
+  /** Close gerado dinamicamente (SVG); quando presente, substitui a arte estática da metragem */
+  closeDinamico?: React.ReactNode;
 }) {
   const [vista, setVista] = useState<Vista>('metragem');
 
@@ -102,10 +105,21 @@ export function LoteVisualizacao({
       <div className="relative">
         {/* Foto sempre em largura total; o box azul se sobrepõe a ela */}
         <div className="relative w-full">
-          {/* As duas imagens ficam empilhadas; só a opacidade muda, então o
+          {/* As duas camadas ficam empilhadas; só a opacidade muda, então o
               crossfade acontece entre elas, sem passar pelo fundo branco. */}
           {camadas.map(({ id, img, alt }) => {
             const ativo = id === vista;
+            const classes = `transition-opacity duration-500 ease-out ${
+              ativo ? 'relative opacity-100' : 'absolute inset-0 opacity-0'
+            }`;
+            // camada de metragem gerada dinamicamente (SVG) no lugar da arte estática
+            if (id === 'metragem' && closeDinamico) {
+              return (
+                <div key={id} aria-hidden={!ativo} className={classes}>
+                  {closeDinamico}
+                </div>
+              );
+            }
             return (
               <Image
                 key={id}
@@ -115,9 +129,7 @@ export function LoteVisualizacao({
                 alt={ativo ? alt : ''}
                 aria-hidden={!ativo}
                 priority={id === 'metragem'}
-                className={`h-auto w-full transition-opacity duration-500 ease-out ${
-                  ativo ? 'relative opacity-100' : 'absolute inset-0 opacity-0'
-                }`}
+                className={`h-auto w-full ${classes}`}
                 sizes="(max-width: 1024px) 100vw, 900px"
               />
             );

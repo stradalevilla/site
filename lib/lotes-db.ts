@@ -1,4 +1,11 @@
-import { lotesData, parseParametros, type LoteData, type ParametroItem } from './lotes';
+import {
+  lotesData,
+  parseParametros,
+  type EstiloLote,
+  type LoteData,
+  type MedidaFace,
+  type ParametroItem,
+} from './lotes';
 
 export interface LoteDb {
   numero: number;
@@ -53,10 +60,27 @@ export async function getLoteCompleto(numero: number): Promise<LoteData | null> 
         ? parseParametros(prosa)
         : undefined;
 
+  const medidas = Array.isArray(db?.medidas)
+    ? (db.medidas.filter(
+        (m) =>
+          m &&
+          typeof m === 'object' &&
+          typeof (m as MedidaFace).aresta === 'number' &&
+          typeof (m as MedidaFace).texto === 'string'
+      ) as MedidaFace[])
+    : [];
+
+  const estilo =
+    db?.estilo && typeof db.estilo === 'object' && !Array.isArray(db.estilo)
+      ? (db.estilo as EstiloLote)
+      : undefined;
+
   return {
     ...estatico,
     area: db?.area ?? estatico.area,
     parametros: prosa,
     parametrosItens: itens,
+    medidas,
+    estilo,
   };
 }

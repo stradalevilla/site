@@ -15,6 +15,32 @@ export interface LoteImage {
   height: number;
 }
 
+/**
+ * Medida de uma face do lote, alinhada à aresta do contorno da implantação.
+ * Quando `ate` está presente, a medida cobre o trecho de arestas
+ * consecutivas [aresta..ate] — uma curva desenhada com vários pontos
+ * recebe uma única medida no meio dela.
+ */
+export interface MedidaFace {
+  aresta: number;
+  ate?: number;
+  texto: string;
+}
+
+/** Estilo da marcação do lote no close (cores do preenchimento, contorno) */
+export interface EstiloLote {
+  /** Cor do topo do degradê de preenchimento (hex) */
+  fillTopo?: string;
+  /** Cor da base do degradê de preenchimento (hex) */
+  fillBase?: string;
+  /** Opacidade do preenchimento (0 a 1) */
+  fillOpacidade?: number;
+  /** Cor do traço do contorno (hex); vazio = sem traço */
+  contornoCor?: string;
+  /** Largura do traço do contorno */
+  contornoLargura?: number;
+}
+
 export interface LoteData {
   numero: number;
   /** Área do lote, ex.: "3276.81" (sem o sufixo m²) */
@@ -28,6 +54,10 @@ export interface LoteData {
   parametros?: string;
   /** Parâmetros estruturados (fonte da verdade: tabela lotes no Supabase) */
   parametrosItens?: ParametroItem[];
+  /** Medidas das faces do terreno (fonte da verdade: tabela lotes no Supabase) */
+  medidas?: MedidaFace[];
+  /** Estilo da marcação no close (fonte da verdade: tabela lotes no Supabase) */
+  estilo?: EstiloLote;
   vistas?: LoteImage[];
 }
 

@@ -23,8 +23,10 @@ export function AdminShell({ email, children }: { email: string; children: React
   };
 
   return (
-    <div className="flex min-h-screen bg-neutral-100 text-navy">
-      <aside className="flex w-56 shrink-0 flex-col border-r border-neutral-200 bg-white">
+    // h-screen + overflow-hidden: o painel ocupa exatamente a janela e cada
+    // área (menu, lista, conteúdo) rola por conta própria
+    <div className="flex h-screen overflow-hidden bg-neutral-100 text-navy">
+      <aside className="flex w-56 shrink-0 flex-col overflow-y-auto border-r border-neutral-200 bg-white">
         <div className="border-b border-neutral-200 px-5 py-5">
           <p className="font-heading text-lg uppercase tracking-wide text-navy">Villa Stradale</p>
           <p className="mt-0.5 font-body text-[10px] uppercase tracking-[0.2em] text-gray-400">

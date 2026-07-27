@@ -10,6 +10,9 @@ import { LoteVisualizacao } from '@/components/lote-visualizacao';
 import { ContatoInteresse } from '@/components/contato-interesse';
 import { LOTES_INDISPONIVEIS, TOTAL_LOTES } from '@/lib/lotes';
 import { getLoteCompleto } from '@/lib/lotes-db';
+import { getContornos } from '@/lib/getContornos';
+import { janelasClose } from '@/lib/lote-close-config';
+import { LoteClose } from '@/components/lote-close';
 
 function parseLote(numero: string): number | null {
   if (!/^\d+$/.test(numero)) return null;
@@ -66,6 +69,26 @@ export default async function LotePage({
   const pad = String(n).padStart(2, '0');
   const data = await getLoteCompleto(n);
 
+  // Close dinâmico: entra no lugar da arte estática quando o lote tem as
+  // medidas preenchidas no admin (enquanto não tiver, o site segue estático).
+  const janela = janelasClose[n];
+  let closeDinamico: React.ReactNode | undefined;
+  if (janela && data && data.medidas?.length) {
+    const contorno = (await getContornos()).find((c) => c.numero === n);
+    if (contorno) {
+      closeDinamico = (
+        <LoteClose
+          numero={n}
+          area={data.area}
+          pontos={contorno.pontos}
+          medidas={data.medidas ?? []}
+          janela={janela}
+          estilo={data.estilo}
+        />
+      );
+    }
+  }
+
   return (
     <>
       <Navbar />
@@ -113,6 +136,7 @@ export default async function LotePage({
                           detalhe={data.detalhe}
                           areaConstrutiva={data.areaConstrutiva}
                           parametros={data.parametrosItens}
+                          closeDinamico={closeDinamico}
                         />
                       ) : (
                         <>
