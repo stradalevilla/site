@@ -144,7 +144,7 @@ export default async function LotePage({
 
                     {/* Seção 2 - Detalhe do lote (metragem / área construtiva) */}
                     <section className="mt-10 border-t border-[#D07748]/40 pt-10 md:mt-14 md:pt-14">
-                      {data.detalhe ? (
+                      {data.detalhe || closeDinamico || construtivaDinamica ? (
                         <LoteVisualizacao
                           numero={pad}
                           area={data.area}

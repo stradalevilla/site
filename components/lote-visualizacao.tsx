@@ -40,7 +40,9 @@ export function LoteVisualizacao({
 }: {
   numero: string;
   area?: string;
-  detalhe: LoteImage;
+  /** Arte estática da metragem; dispensável quando há closeDinamico */
+  detalhe?: LoteImage;
+  /** Arte estática da área construtiva; dispensável quando há construtivaDinamica */
   areaConstrutiva?: LoteImage;
   parametros?: ParametroItem[];
   /** Close gerado dinamicamente (SVG); quando presente, substitui a arte estática da metragem */
@@ -48,11 +50,17 @@ export function LoteVisualizacao({
   /** Área construtiva gerada dinamicamente; substitui a arte estática dessa aba */
   construtivaDinamica?: React.ReactNode;
 }) {
-  const [vista, setVista] = useState<Vista>('metragem');
+  // Cada vista existe se tiver arte estática OU desenho dinâmico. Um lote sem
+  // arte do arquiteto (29 e 30) aparece assim que o close é cadastrado.
+  const temMetragem = !!(detalhe || closeDinamico);
+  const temConstrutiva = !!(areaConstrutiva || construtivaDinamica);
+  const [vista, setVista] = useState<Vista>(temMetragem ? 'metragem' : 'construtiva');
 
-  const camadas: { id: Vista; img: LoteImage; alt: string }[] = [
-    { id: 'metragem', img: detalhe, alt: `Medidas do terreno do lote ${numero}` },
-    ...(areaConstrutiva
+  const camadas: { id: Vista; img?: LoteImage; alt: string }[] = [
+    ...(temMetragem
+      ? [{ id: 'metragem' as const, img: detalhe, alt: `Medidas do terreno do lote ${numero}` }]
+      : []),
+    ...(temConstrutiva
       ? [
           {
             id: 'construtiva' as const,
@@ -78,7 +86,7 @@ export function LoteVisualizacao({
           </p>
         </div>
 
-        {areaConstrutiva && (
+        {camadas.length > 1 && (
           <div className="flex flex-wrap gap-x-8 gap-y-2" role="tablist">
             {opcoes.map(({ id, label }) => {
               const ativo = id === vista;
@@ -124,6 +132,7 @@ export function LoteVisualizacao({
                 </div>
               );
             }
+            if (!img) return null;
             return (
               <Image
                 key={id}
