@@ -113,9 +113,40 @@ essas marcações.
 
 ---
 
-## 8. Três lotes que o mapeamento automático não identificou
+## 8. Faixa entre os lotes 43 e 44
 
-Os lotes **14, 25 e 28** não casaram na varredura automática da planta (que
-identificou 49 dos 52). Pode ser área muito próxima à de um vizinho, ou região
-não fechada como aconteceu com o 30. Ainda não investigado — só afeta a
-automação, não os dados publicados.
+**O que acontece:** entre os lotes 43 e 44 existe uma faixa de cerca de 4 a 10 m
+de largura por 81 m de comprimento (cotas 10,07 / 4,12 / 10,02), que não é lote.
+É o que explica a divisa do 43 medir 81,50 m e a do 44 medir 80,99 m — não são a
+mesma linha, há essa faixa entre elas.
+
+**O que precisamos:** saber o que é (servidão? faixa de drenagem? passagem?) e se
+deveria aparecer na implantação do site.
+
+---
+
+## Encerrado
+
+- **Lotes 14, 25 e 28 não identificados pela varredura automática:** eram três dos
+  52 que a busca por metragem não casou sozinha. Todos foram revisados depois,
+  pelo mapeamento guiado. Não há pendência.
+
+---
+
+## Como as medidas foram conferidas
+
+Para cada lote, o contorno foi extraído do próprio arquivo da planta (preenchendo
+a região do lote e traçando a fronteira, então os cantos vêm do CAD) e projetado
+sobre a foto aérea. Cada cota impressa foi comparada com o comprimento medido no
+desenho; onde não fechava, o valor foi investigado antes de publicar — foi assim
+que apareceram os itens 1, 2 e 8 desta lista.
+
+Duas checagens de conjunto confirmam o resultado:
+
+- **Divisas lidas duas vezes.** Cada divisa entre lotes vizinhos foi lida em duas
+  imagens diferentes, uma por lote. Todas bateram — por exemplo, a corrente
+  88,75 (37↔38) · 91,45 (38↔39) · 88,87 (39↔40) · 85,65 (40↔41) · 81,95 (41↔42).
+- **Escala dos desenhos.** Cada lote tem uma escala própria (metros por unidade do
+  desenho), que deveria ser igual para todos por virem da mesma foto. A variação
+  ficou em 2,3%, sem nenhum lote fora da tolerância de 10%. Antes da correção da
+  numeração, essa mesma medida dava 8,8% com nove lotes fora.
