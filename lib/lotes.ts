@@ -1,9 +1,9 @@
-export const TOTAL_LOTES = 54;
+export const TOTAL_LOTES = 52;
 
-/** Lotes que não existem no empreendimento */
-export const LOTES_INDISPONIVEIS = [29, 30];
+/** Lotes que existem no empreendimento mas não estão à venda */
+export const LOTES_INDISPONIVEIS: number[] = [];
 
-/** Números de todos os lotes existentes (01–28 e 31–54) */
+/** Números de todos os lotes existentes (01–52, conforme a planta oficial) */
 export const lotesDisponiveis = Array.from(
   { length: TOTAL_LOTES },
   (_, i) => i + 1
@@ -86,7 +86,8 @@ const AREA_CONSTRUTIVA = `${BASE}/area-construtiva`;
 
 /**
  * Área de cada lote em m², como impresso na imagem de detalhe.
- * Lotes 53 e 54 ainda não têm arte de detalhe exportada.
+ * Os lotes 29 e 30 não têm arte: a área vem da planta topográfica oficial
+ * (KGL-STR-DE-098.001-K07.001.R01).
  */
 const areas: Record<number, string> = {
   1: '2.500,53',
@@ -117,6 +118,8 @@ const areas: Record<number, string> = {
   26: '2.073,33',
   27: '2.113,30',
   28: '2.554,95',
+  29: '3.268,23',
+  30: '3.263,17',
   31: '2.001,35',
   32: '2.002,84',
   33: '2.002,02',
@@ -146,7 +149,7 @@ const areas: Record<number, string> = {
  * exportou. Não usar a arte de outro lote como placeholder: elas trazem o
  * número e a metragem impressos, o que passaria informação errada.
  */
-export const LOTES_SEM_ARTE = [53, 54];
+export const LOTES_SEM_ARTE = [29, 30];
 
 /** Descritivo dos parâmetros urbanísticos por lote (fonte: _TEXTOS_LOTES_SITE.md). */
 const parametrosPorLote: Record<number, string> = {
