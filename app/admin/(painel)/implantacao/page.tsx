@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminImplantacao() {
-  const contornos = await getContornos();
+  // sem cache: quem acabou de salvar precisa reabrir e ver o próprio desenho
+  const contornos = await getContornos(true);
   return <ImplantacaoEditor iniciais={contornos} />;
 }
