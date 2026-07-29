@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { LoteContorno } from '@/lib/implantacao';
+import type { MedidaFace } from '@/lib/lotes';
+import { lerPontos, reindexar } from '@/lib/reindexa-medidas';
 import { criarSupabaseServidor } from '@/lib/supabase/server';
 import { criarSupabaseAdmin } from '@/lib/supabase/admin';
 
@@ -60,6 +62,15 @@ export async function POST(req: Request) {
   }
 
   const admin = criarSupabaseAdmin();
+
+  // Antes de gravar, guarda os contornos como estavam: as medidas de cada lote
+  // apontam para o índice da face, e inserir ou remover um ponto renumera tudo.
+  const { data: anterior } = await admin
+    .from('implantacao_marcacoes')
+    .select('contornos')
+    .eq('id', 1)
+    .maybeSingle();
+
   const { error } = await admin
     .from('implantacao_marcacoes')
     .upsert({ id: 1, contornos: body.contornos, atualizado_em: new Date().toISOString() });
@@ -67,5 +78,52 @@ export async function POST(req: Request) {
   if (error) {
     return NextResponse.json({ ok: false, error: 'falha ao salvar', detalhe: error.message }, { status: 500 });
   }
-  return NextResponse.json({ ok: true, total: body.contornos.length });
+
+  const medidasAjustadas = await acompanharMedidas(
+    admin,
+    (anterior?.contornos as LoteContorno[] | undefined) ?? [],
+    body.contornos
+  );
+  return NextResponse.json({ ok: true, total: body.contornos.length, medidasAjustadas });
+}
+
+/**
+ * Faz as medidas seguirem o desenho. Para cada lote que mudou de número de
+ * pontos, traduz os índices das faces do contorno antigo para o novo. Um lote
+ * que não dê para traduzir com segurança fica como está — melhor manter a
+ * medida onde estava do que chutar uma face errada.
+ *
+ * Devolve os números dos lotes ajustados, para o editor poder avisar.
+ */
+async function acompanharMedidas(
+  admin: ReturnType<typeof criarSupabaseAdmin>,
+  antes: LoteContorno[],
+  depois: LoteContorno[]
+): Promise<number[]> {
+  const mudaram = depois.filter((novo) => {
+    const velho = antes.find((c) => c.numero === novo.numero);
+    if (!velho) return false;
+    return lerPontos(velho.pontos).length !== lerPontos(novo.pontos).length;
+  });
+  if (!mudaram.length) return [];
+
+  const { data: lotes } = await admin
+    .from('lotes')
+    .select('numero, medidas')
+    .in('numero', mudaram.map((c) => c.numero));
+  if (!lotes?.length) return [];
+
+  const ajustados: number[] = [];
+  for (const lote of lotes) {
+    const medidas = (lote.medidas ?? []) as MedidaFace[];
+    if (!medidas.length) continue;
+    const velho = antes.find((c) => c.numero === lote.numero);
+    const novo = mudaram.find((c) => c.numero === lote.numero);
+    if (!velho || !novo) continue;
+    const novas = reindexar(medidas, velho.pontos, novo.pontos);
+    if (!novas) continue;
+    const { error } = await admin.from('lotes').update({ medidas: novas }).eq('numero', lote.numero);
+    if (!error) ajustados.push(lote.numero);
+  }
+  return ajustados;
 }
