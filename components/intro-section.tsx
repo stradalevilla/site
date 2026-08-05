@@ -156,15 +156,15 @@ export function IntroSection() {
             {/* Seção Casa Clube 2 - Imagem largura total com título */}
             <div className="relative -mx-6 md:-mx-12 lg:-mx-16 h-[400px] md:h-[500px] lg:h-[600px]">
               <Image
-                src="/images/casaclube/casaclube2.png"
+                src="/images/casaclube/lazer-beach-club.jpg"
                 alt="Casa Clube Villa Stradale - Lazer"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
               />
-              
-              {/* Overlay escuro */}
-              <div className="absolute inset-0 bg-black/30" />
+
+              {/* Overlay escuro, leve — só o bastante para o título ler bem */}
+              <div className="absolute inset-0 bg-black/15" />
               
               {/* Texto sobreposto */}
               <div className="absolute inset-0 flex flex-col items-start justify-end pb-8 md:pb-12 lg:pb-16 pr-8 md:pr-12 lg:pr-16 pl-14 md:pl-24 lg:pl-32">
