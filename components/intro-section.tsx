@@ -156,7 +156,7 @@ export function IntroSection() {
             {/* Seção Casa Clube 2 - Imagem largura total com título */}
             <div className="relative -mx-6 md:-mx-12 lg:-mx-16 h-[400px] md:h-[500px] lg:h-[600px]">
               <Image
-                src="/images/casaclube/casaclube2.png"
+                src="/images/casaclube/casa-clube-c04.jpg"
                 alt="Casa Clube Villa Stradale - Lazer"
                 fill
                 className="object-cover"

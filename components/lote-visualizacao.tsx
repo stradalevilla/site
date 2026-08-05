@@ -163,9 +163,9 @@ export function LoteVisualizacao({
               className="block h-7 w-16 shrink-0 bg-gold"
               style={emblemaStyle}
             />
-            {/* O número do lote já está no topo da seção; aqui só o título do box */}
-            <p className="mt-2 shrink-0 font-heading text-base uppercase tracking-[0.14em] text-gold md:text-lg">
-              Sugestão de implantação
+            {/* O número do lote é o título do box */}
+            <p className="mt-2 shrink-0 font-heading text-lg uppercase tracking-[0.14em] text-gold md:text-xl">
+              Lote {numero}
             </p>
 
             <div className="mt-3 min-h-0 flex-1 overflow-y-auto pr-1">
@@ -187,7 +187,10 @@ export function LoteVisualizacao({
               </ul>
             </div>
 
-            <p className="mt-3 shrink-0 border-t border-white/15 pt-2.5 font-body text-[9px] leading-snug text-white/50">
+            <p className="mt-3 shrink-0 border-t border-white/15 pt-2.5 font-heading text-xs uppercase tracking-[0.14em] text-gold">
+              Sugestão de área construtiva.
+            </p>
+            <p className="mt-1.5 shrink-0 font-body text-[9px] leading-snug text-white/50">
               {NOTA}
             </p>
           </aside>
