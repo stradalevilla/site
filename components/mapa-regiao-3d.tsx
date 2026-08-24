@@ -74,8 +74,9 @@ type Fase = 'carregando' | 'pronto' | 'falhou';
  * e sem estado de módulo: era essa "esperteza" que corrompia o carregamento.
  *
  * Regras de peso:
- *  · só no desktop; no celular fica a imagem estática;
- *  · a roda do mouse não dá zoom até o visitante clicar no mapa;
+ *  · desktop: a roda do mouse não dá zoom até o visitante clicar no convite;
+ *  · celular: gestos cooperativos — um dedo rola a página, o mapa se move com
+ *    dois dedos (a dica aparece na tela), sem prender ninguém dentro do mapa;
  *  · sem a chave da MapTiler, ou se o mapa falhar, a imagem estática assume.
  *
  * A atribuição (© MapTiler / EOX / OpenStreetMap) é exigência de licença.
@@ -100,16 +101,18 @@ export function MapaRegiao3D({
   /** calibragem (só em desenvolvimento) */
   const [cameraAtual, setCameraAtual] = useState<CameraMapa | null>(null);
   const [salvando, setSalvando] = useState<'parado' | 'salvando' | 'salvo' | 'erro'>('parado');
+  /** medido na montagem: muda os gestos e esconde o convite de clique */
+  const [movel, setMovel] = useState(false);
 
   const chave = process.env.NEXT_PUBLIC_MAPTILER_KEY;
-  // decidido no build: com chave, o desktop nunca vê a imagem estática, nem
-  // por um quadro — o esconder é CSS (lg:hidden), não JavaScript
+  /** decidido no build: sem chave o componente é só a imagem estática */
   const comMapa = Boolean(chave);
 
   useEffect(() => {
     const el = caixa.current;
     if (!el || !chave) return;
-    if (window.innerWidth < 1024) return;
+    const noCelular = window.innerWidth < 1024;
+    setMovel(noCelular);
 
     let vivo = true;
     let mapa: MapaGL | null = null;
@@ -146,7 +149,15 @@ export function MapaRegiao3D({
         bearing: camera.giro,
         pitch: camera.inclinacao,
         maxPitch: 80,
-        scrollZoom: false, // liga no primeiro clique
+        // desktop: a roda só dá zoom depois do clique no convite.
+        // celular: um dedo rola a página; o mapa se move com dois dedos.
+        scrollZoom: false,
+        cooperativeGestures: noCelular,
+        locale: {
+          'CooperativeGesturesHandler.MobileHelpText': 'Use dois dedos para mover o mapa',
+          'CooperativeGesturesHandler.WindowsHelpText': 'Segure Ctrl e role para dar zoom',
+          'CooperativeGesturesHandler.MacHelpText': 'Segure ⌘ e role para dar zoom',
+        },
         attributionControl: { compact: true },
       });
       mapaRef.current = mapa;
@@ -277,6 +288,8 @@ export function MapaRegiao3D({
         mapa.resize();
         setProgresso(100);
         setFase('pronto');
+        // sem convite de clique no celular: os gestos cooperativos já protegem
+        if (noCelular) setNavegando(true);
       });
       // se algum tile emperrar, mostra assim mesmo em vez de ficar preso
       temporizadores.push(
@@ -355,7 +368,8 @@ export function MapaRegiao3D({
       {/* A imagem estática: o celular sempre, e o desktop só sem chave ou em
           falha. Com o mapa no lugar ela é escondida por CSS desde a primeira
           pintura — nunca pisca a "foto antiga" antes do mapa. */}
-      <div className={comMapa && fase !== 'falhou' ? 'lg:hidden' : ''}>{estatico}</div>
+      {/* atrás do painel de carregamento; some quando o mapa assume */}
+      <div className={comMapa && fase === 'pronto' ? 'hidden' : ''}>{estatico}</div>
 
       {comMapa && fase !== 'falhou' && (
         <>
@@ -364,14 +378,14 @@ export function MapaRegiao3D({
           <div
             ref={caixa}
             aria-label={rotulo}
-            className={`absolute inset-0 hidden overflow-hidden lg:block ${
+            className={`absolute inset-0 overflow-hidden ${
               fase === 'pronto' ? 'opacity-100' : 'opacity-0'
             } transition-opacity duration-700`}
           />
 
           {/* Enquanto não está inteiro: fundo navy e a contagem real dos tiles */}
           {fase === 'carregando' && (
-            <div className="absolute inset-0 hidden items-center justify-center bg-[#0a1929] lg:flex">
+            <div className="absolute inset-0 flex items-center justify-center bg-[#0a1929]">
               <div className="flex w-64 flex-col items-center gap-5">
                 <span className="font-heading text-4xl font-light italic text-gold">
                   {progresso}%
@@ -389,7 +403,7 @@ export function MapaRegiao3D({
             </div>
           )}
 
-          {fase === 'pronto' && !navegando && (
+          {fase === 'pronto' && !navegando && !movel && (
             <button
               type="button"
               onClick={liberarNavegacao}
@@ -408,7 +422,7 @@ export function MapaRegiao3D({
               onClick={voltarAoEnquadramento}
               title="Voltar ao enquadramento inicial"
               aria-label="Voltar ao enquadramento inicial"
-              className="absolute bottom-5 left-1/2 z-10 hidden h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-white/50 bg-navy/60 text-white/90 backdrop-blur-sm transition-all duration-300 hover:border-white hover:bg-navy/85 hover:text-white lg:flex"
+              className="absolute bottom-5 left-1/2 z-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-white/50 bg-navy/60 text-white/90 backdrop-blur-sm transition-all duration-300 hover:border-white hover:bg-navy/85 hover:text-white"
             >
               {/* mira de recentrar */}
               <svg
