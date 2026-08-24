@@ -63,7 +63,7 @@ export function ContatoInteresse() {
               className="mt-0.5 h-4 w-4 shrink-0 accent-[#D07748]"
             />
             <span className="font-body text-xs text-white/60 leading-relaxed">
-              Declaro que li e concordo com a Política de privacidade e e Termos de Usos, incluindo
+              Declaro que li e concordo com a Política de Privacidade e os Termos de Uso, incluindo
               consulta ao SCR.
             </span>
           </label>

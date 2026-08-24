@@ -22,7 +22,9 @@ export function EmbaixadoresSection() {
   const next = () => setCurrent((c) => (c + 1) % embaixadores.length);
 
   return (
-    <section className="relative">
+    // Encostada na seção de cima, sem folga; a margem negativa embaixo faz a
+    // faixa avançar sobre o parallax da região
+    <section className="relative z-10 -mb-16 md:-mb-24 lg:-mb-28">
       <div className="container mx-auto px-4 md:px-8">
         <div className="relative overflow-hidden">
           {/* Imagem de fundo laranja (fixa) */}
@@ -115,10 +117,18 @@ export function EmbaixadoresSection() {
                       onClick={() => setCurrent(i)}
                       aria-label={`Ir para ${emb.name}`}
                       aria-current={i === current}
-                      className={`h-2 rounded-full transition-all ${
-                        i === current ? 'w-6 bg-white' : 'w-2 bg-white/40 hover:bg-white/70'
-                      }`}
-                    />
+                      // a área de toque tem 40px; o pontinho continua miúdo
+                      className="group flex h-10 w-10 items-center justify-center"
+                    >
+                      <span
+                        aria-hidden
+                        className={`block h-2 rounded-full transition-all ${
+                          i === current
+                            ? 'w-6 bg-white'
+                            : 'w-2 bg-white/40 group-hover:bg-white/70'
+                        }`}
+                      />
+                    </button>
                   ))}
                 </div>
               </div>

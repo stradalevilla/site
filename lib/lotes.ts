@@ -1,9 +1,9 @@
-export const TOTAL_LOTES = 52;
+export const TOTAL_LOTES = 54;
 
 /** Lotes que existem no empreendimento mas não estão à venda */
 export const LOTES_INDISPONIVEIS: number[] = [];
 
-/** Números de todos os lotes existentes (01–52, conforme a planta oficial) */
+/** Números de todos os lotes existentes (01–54) */
 export const lotesDisponiveis = Array.from(
   { length: TOTAL_LOTES },
   (_, i) => i + 1

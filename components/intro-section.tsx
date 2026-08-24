@@ -1,13 +1,15 @@
 import Image from 'next/image';
 import { DecorativeGraphic } from '@/components/decorative-graphic';
 import { ArquitetosSection } from '@/components/arquitetos-section';
+import { GaleriaLightbox } from '@/components/galeria-lightbox';
+import { imagensDoEmpreendimento } from '@/lib/galeria';
 
 export function IntroSection() {
   return (
     <section className="pt-20 md:pt-32 relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         {/* Container Branco com posição relativa */}
-        <div className="bg-white relative px-6 md:px-12 lg:px-16 py-12 md:py-16">
+        <div className="bg-white relative px-4 md:px-12 lg:px-16 py-12 md:py-16">
 
           {/* ÁREA DE CONTEÚDO */}
           <div className="relative z-10">
@@ -17,7 +19,7 @@ export function IntroSection() {
               <div className="absolute inset-0 border-2 border-[#D07748]/50 pointer-events-none z-50" />
 
             {/* Primeira seção de conteúdo */}
-            <div className="px-6 md:px-12 lg:px-16 py-12 md:py-16 lg:py-20">
+            <div className="px-4 md:px-12 lg:px-16 py-12 md:py-16 lg:py-20">
               {/* Ícone do Logo */}
               <div className="flex justify-center mb-12">
                 <Image
@@ -29,23 +31,32 @@ export function IntroSection() {
                 />
               </div>
 
-              {/* Placeholder de vídeo (simulação - vídeo futuro) */}
-              <div className="flex justify-center mb-12 md:mb-16">
-                <div className="group relative w-full max-w-md aspect-video cursor-pointer overflow-hidden bg-navy">
+              {/* Lugar do filme (o vídeo ainda não existe). Ocupa a largura toda
+                  do container, atrás das linhas douradas, para a seção já ler
+                  como cinema — e não como um quadradinho de aviso. */}
+              <div className="relative -mx-6 mb-12 md:-mx-12 md:mb-16 lg:-mx-16">
+                <div className="group relative aspect-video w-full cursor-pointer overflow-hidden bg-navy">
                   {/* Brilho sutil */}
                   <div className="absolute inset-0 bg-gradient-to-br from-navy-light to-navy" />
-                  {/* Moldura dourada fina */}
-                  <div className="pointer-events-none absolute inset-0 border border-gold/30" />
                   {/* Botão play */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="flex h-14 w-14 items-center justify-center rounded-full border border-white/70 bg-white/10 backdrop-blur-sm transition-all duration-300 ease-out group-hover:scale-105 group-hover:border-[#D07748] group-hover:bg-[#D07748]">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="ml-0.5 text-white">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
+                    <span className="flex h-20 w-20 items-center justify-center rounded-full border border-white/70 bg-white/10 backdrop-blur-sm transition-all duration-300 ease-out group-hover:scale-105 group-hover:border-[#D07748] group-hover:bg-[#D07748] md:h-24 md:w-24">
+                      <svg
+                        width="30"
+                        height="30"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="ml-1 text-white"
+                      >
                         <path d="M8 5v14l11-7z" />
                       </svg>
                     </span>
+                    <span className="font-heading text-xl font-light uppercase italic text-white/90 md:text-2xl lg:text-3xl">
+                      O filme do Villa Stradale
+                    </span>
                   </div>
                   {/* Legenda */}
-                  <span className="absolute bottom-3 left-0 right-0 text-center font-body text-[10px] uppercase tracking-[0.3em] text-white/60">
+                  <span className="absolute bottom-5 left-0 right-0 text-center font-body text-[10px] uppercase tracking-[0.3em] text-white/50 md:text-xs">
                     Vídeo em breve
                   </span>
                 </div>
@@ -65,7 +76,7 @@ export function IntroSection() {
               <div className="max-w-4xl mx-auto space-y-6 text-center">
                 <p className="font-body text-base md:text-lg text-gray-700 leading-relaxed">
                   O Villa Stradale pertence a essa segunda linhagem. Um refúgio pé na água, irreplicável. 
-                  52 famílias, uma península cercada por 270 graus de represa e a escolha de guardar o que
+                  54 famílias, uma península cercada por 270 graus de represa e a escolha de guardar o que
                   realmente importa: o tempo, a água, as pessoas certas ao lado.
                 </p>
                 
@@ -82,17 +93,21 @@ export function IntroSection() {
                 </p>
                 
                 <h3 className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-navy italic uppercase">
-                  52 Lotes de 2.000 a 4.554 m²
+                  54 Lotes de 2.000 a 4.554 m²
                 </h3>
                 
                 <p className="font-body text-sm md:text-base text-gray-600">
-                  Condomínio fechado, a 90km de São Paulo*
+                  Condomínio fechado, a 96 km de São Paulo*
+                </p>
+                {/* A nota do asterisco, que o site nunca teve */}
+                <p className="font-body text-[11px] text-gray-500">
+                  * Quilometragem aproximada, medida por rodovia a partir da capital.
                 </p>
               </div>
             </div>
 
             {/* Seção Casa Clube - Estende até as bordas do container branco */}
-            <div className="relative -mx-6 md:-mx-12 lg:-mx-16 h-[400px] md:h-[500px] lg:h-[600px]">
+            <div className="relative -mx-4 md:-mx-12 lg:-mx-16 h-[400px] md:h-[500px] lg:h-[600px]">
               <Image
                 src="/images/casaclube/casa-clube-c14.jpg"
                 alt="Casa Clube Villa Stradale"
@@ -113,7 +128,7 @@ export function IntroSection() {
             </div>
 
             {/* Seção Piscinas - Imagem 50% + Texto 50% */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 -mx-6 md:-mx-12 lg:-mx-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 -mx-4 md:-mx-12 lg:-mx-16">
               {/* Imagem - 50% esquerda */}
               <div className="relative h-[400px] md:h-[500px] lg:h-[600px]">
                 <Image
@@ -154,7 +169,7 @@ export function IntroSection() {
             </div>
 
             {/* Seção Casa Clube 2 - Imagem largura total com título */}
-            <div className="relative -mx-6 md:-mx-12 lg:-mx-16 h-[400px] md:h-[500px] lg:h-[600px]">
+            <div className="relative -mx-4 md:-mx-12 lg:-mx-16 h-[400px] md:h-[500px] lg:h-[600px]">
               <Image
                 src="/images/casaclube/casa-clube-c04.jpg"
                 alt="Casa Clube Villa Stradale - Lazer"
@@ -175,10 +190,10 @@ export function IntroSection() {
             </div>
 
             {/* Seção Wellness - Academia, Restaurante e Wellness */}
-            <div className="px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24">
+            <div className="px-4 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24">
               {/* Título */}
               <h3 className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-navy italic leading-relaxed uppercase text-center mb-12 md:mb-16 max-w-4xl mx-auto">
-                Sauna, massagem e a vista da represa. O bem estar como parte da rotina.
+                Sauna, massagem e a vista da represa. O bem-estar como parte da rotina.
               </h3>
 
               {/* Grade de Imagens - todas do mesmo tamanho (proporção 340x460), dentro da moldura */}
@@ -187,7 +202,7 @@ export function IntroSection() {
                 <div className="relative aspect-[340/460] border border-[#D07748]/40">
                   <Image
                     src="/images/casaclube/Frame Academia.png"
-                    alt="Academia com equipamentos TecnoGym"
+                    alt="Academia com equipamentos Technogym"
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 33vw"
@@ -220,13 +235,16 @@ export function IntroSection() {
               {/* Parágrafo + Link Galeria */}
               <div className="grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-8 md:gap-12 items-center mt-10 md:mt-12">
                 <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed">
-                  Academia com equipamentos TecnoGym. Espaço ao ar livre para yoga e funcional.
+                  Academia com equipamentos Technogym. Espaço ao ar livre para yoga e funcional.
                   Saunas seca e a vapor. Sala de massagem. Hot spa com vista. Cold spa. Área de
-                  descanso. Cada espaço foi posicionado para que o bem estar seja parte da rotina.
+                  descanso. Cada espaço foi posicionado para que o bem-estar seja parte da rotina.
                   Acordar, treinar, suar, mergulhar, descansar. Tudo no mesmo percurso, tudo com a
                   represa como cenário.
                 </p>
 
+                <GaleriaLightbox
+                  itens={imagensDoEmpreendimento}
+                  gatilho={
                 <div className="group flex items-center justify-start lg:justify-end gap-4 cursor-pointer">
                   <span className="font-body text-sm md:text-base text-gray-700">
                     Abrir galeria de imagens
@@ -248,11 +266,13 @@ export function IntroSection() {
                     </svg>
                   </span>
                 </div>
+                  }
+                />
               </div>
             </div>
 
             {/* Tira de Imagens - largura total, passa por trás das linhas douradas */}
-            <div className="grid grid-cols-3 md:grid-cols-6 -mx-6 md:-mx-12 lg:-mx-16">
+            <div className="grid grid-cols-3 md:grid-cols-6 -mx-4 md:-mx-12 lg:-mx-16">
               {[
                 { src: '/images/casaclube/tira de imagens/Pes na agua.png', alt: 'Pés na água' },
                 { src: '/images/casaclube/tira de imagens/jet.png', alt: 'Jet ski' },
@@ -277,11 +297,11 @@ export function IntroSection() {
             </div>
 
             {/* Seção Cards - Racket Club e Marina Stradale */}
-            <div className="px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24 space-y-10 md:space-y-14">
+            <div className="px-4 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24 space-y-10 md:space-y-14">
               {/* Card 1 - Racket Club (texto à esquerda, imagem à direita) */}
-              <div className="relative bg-[#EFEBE3] h-[420px] w-full grid grid-cols-1 lg:grid-cols-2">
+              <div className="relative bg-[#EFEBE3] w-full grid grid-cols-1 lg:h-[420px] lg:grid-cols-2">
                 {/* Texto */}
-                <div className="flex flex-col justify-center px-8 md:px-12 lg:px-16">
+                <div className="flex flex-col justify-center px-6 py-10 md:px-12 lg:px-16 lg:py-0">
                   <span className="font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.3em] mb-4">
                     Lazer ao ar livre
                   </span>
@@ -296,7 +316,7 @@ export function IntroSection() {
 
                 {/* Imagem */}
                 <div className="relative p-6 md:p-8">
-                  <div className="relative w-full h-full">
+                  <div className="relative h-[240px] w-full lg:h-full">
                     <Image
                       src="/images/casaclube/Quadras.png"
                       alt="Quadras do Racket Club"
@@ -315,10 +335,10 @@ export function IntroSection() {
               </div>
 
               {/* Card 2 - Marina Stradale (imagem à esquerda, texto à direita) */}
-              <div className="relative bg-[#EFEBE3] h-[420px] w-full grid grid-cols-1 lg:grid-cols-2">
+              <div className="relative bg-[#EFEBE3] w-full grid grid-cols-1 lg:h-[420px] lg:grid-cols-2">
                 {/* Imagem */}
                 <div className="relative p-6 md:p-8 order-1">
-                  <div className="relative w-full h-full">
+                  <div className="relative h-[240px] w-full lg:h-full">
                     <Image
                       src="/images/casaclube/Marina.png"
                       alt="Marina Stradale"
@@ -330,7 +350,7 @@ export function IntroSection() {
                 </div>
 
                 {/* Texto */}
-                <div className="flex flex-col justify-center px-8 md:px-12 lg:px-16 order-2">
+                <div className="flex flex-col justify-center px-6 py-10 md:px-12 lg:px-16 lg:py-0 order-2">
                   <span className="font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.3em] mb-4">
                     Esportes aquáticos
                   </span>
@@ -352,9 +372,9 @@ export function IntroSection() {
               </div>
 
               {/* Card 3 - Heliponto (texto à esquerda, imagem à direita) */}
-              <div className="relative bg-[#EFEBE3] h-[420px] w-full grid grid-cols-1 lg:grid-cols-2">
+              <div className="relative bg-[#EFEBE3] w-full grid grid-cols-1 lg:h-[420px] lg:grid-cols-2">
                 {/* Texto */}
-                <div className="flex flex-col justify-center px-8 md:px-12 lg:px-16">
+                <div className="flex flex-col justify-center px-6 py-10 md:px-12 lg:px-16 lg:py-0">
                   <span className="font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.3em] mb-4">
                     Acesso pelo ar
                   </span>
@@ -369,9 +389,9 @@ export function IntroSection() {
 
                 {/* Imagem */}
                 <div className="relative p-6 md:p-8">
-                  <div className="relative w-full h-full">
+                  <div className="relative h-[240px] w-full lg:h-full">
                     <Image
-                      src="/images/casaclube/Heliponto.png"
+                      src="/images/amenities/heliponto.jpg"
                       alt="Heliponto da península"
                       fill
                       className="object-cover"

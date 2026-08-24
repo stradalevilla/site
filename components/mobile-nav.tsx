@@ -6,19 +6,13 @@ import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconBrandInstagram, IconBrandLinkedin } from '@tabler/icons-react';
+import { menu } from '@/lib/menu';
 
 export function MobileNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const navLinks = [
-    { href: '#villa-stradale', label: 'Villa Stradale' },
-    { href: '#masterplan', label: 'Masterplan' },
-    { href: '#lifestyle', label: 'Lifestyle' },
-    { href: '#localizacao', label: 'Localização' },
-    { href: '#obra', label: 'Obra ao vivo' },
-    { href: '#contato', label: 'Contato' },
-  ];
+  const navLinks = menu;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -122,19 +116,29 @@ export function MobileNav() {
               <nav className="flex flex-col items-center gap-7">
                 {navLinks.map((link, i) => (
                   <motion.div
-                    key={link.href}
+                    key={link.label}
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ delay: 0.2 + i * 0.07, duration: 0.5, ease: 'easeOut' }}
                   >
-                    <Link
-                      href={link.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className="font-body text-2xl md:text-3xl uppercase tracking-[0.15em] text-white/85 transition-colors duration-300 hover:text-gold"
-                    >
-                      {link.label}
-                    </Link>
+                    {link.href ? (
+                      <Link
+                        href={link.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="font-body text-2xl md:text-3xl uppercase tracking-[0.15em] text-white/85 transition-colors duration-300 hover:text-gold"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      /* Página ainda não construída: visível, sem clique */
+                      <span
+                        aria-disabled
+                        className="cursor-default font-body text-2xl uppercase tracking-[0.15em] text-white/30 md:text-3xl"
+                      >
+                        {link.label}
+                      </span>
+                    )}
                   </motion.div>
                 ))}
               </nav>

@@ -3,6 +3,34 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { menuEsquerda, menuDireita, type ItemMenu } from '@/lib/menu';
+
+/**
+ * Item da barra: vira link quando a página existe; quando não existe ainda,
+ * fica visível em tom mais baixo e sem clique, em vez de link quebrado.
+ */
+function ItemBarra({ item }: { item: ItemMenu }) {
+  if (!item.href) {
+    return (
+      <span
+        aria-disabled
+        title="Em breve"
+        className="cursor-default font-body text-sm text-white/35"
+      >
+        {item.label}
+      </span>
+    );
+  }
+
+  return (
+    <Link
+      href={item.href}
+      className="font-body text-sm text-white/80 transition-colors hover:text-white"
+    >
+      {item.label}
+    </Link>
+  );
+}
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -16,18 +44,6 @@ export function Navbar() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const navLinks = [
-    { href: '#villa-stradale', label: 'Villa Stradale' },
-    { href: '#masterplan', label: 'Masterplan' },
-    { href: '#lifestyle', label: 'Lifestyle' },
-  ];
-
-  const rightLinks = [
-    { href: '#localizacao', label: 'Localização' },
-    { href: '#obra', label: 'Obra ao vivo' },
-    { href: '#contato', label: 'Contato' },
-  ];
 
   return (
     <nav
@@ -50,14 +66,8 @@ export function Navbar() {
         >
           {/* Links Esquerda - Desktop */}
           <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="font-body text-sm text-white/80 hover:text-white transition-colors"
-              >
-                {link.label}
-              </Link>
+            {menuEsquerda.map((item) => (
+              <ItemBarra key={item.label} item={item} />
             ))}
           </div>
 
@@ -94,14 +104,8 @@ export function Navbar() {
 
           {/* Links Direita - Desktop */}
           <div className="hidden lg:flex items-center gap-8">
-            {rightLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="font-body text-sm text-white/80 hover:text-white transition-colors"
-              >
-                {link.label}
-              </Link>
+            {menuDireita.map((item) => (
+              <ItemBarra key={item.label} item={item} />
             ))}
           </div>
         </div>

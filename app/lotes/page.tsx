@@ -2,68 +2,110 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Navbar } from '@/components/navbar';
 import { MobileNav } from '@/components/mobile-nav';
+import { PaginaHero } from '@/components/pagina-hero';
+import { ContatoSection } from '@/components/contato-section';
+import { MapaImplantacao } from '@/components/mapa-implantacao';
 import { Footer } from '@/components/footer';
-import { LoteSelector } from '@/components/lote-selector';
+import { TOTAL_LOTES } from '@/lib/lotes';
+import { getContornos } from '@/lib/getContornos';
 
 export const metadata: Metadata = {
-  title: 'Escolha o lote',
-  description: 'Selecione o número do lote que deseja visualizar no Villa Stradale.',
+  title: 'Masterplan',
+  description: `O masterplan do Villa Stradale: terreno de 275.951 m² e ${TOTAL_LOTES} lotes residenciais voltados à água, com casa-clube, marina, heliponto e quadras.`,
 };
 
-export default function LotesPage() {
+export default async function MasterplanPage() {
+  // os contornos dos lotes vêm do banco (mesma fonte da home)
+  const contornos = await getContornos();
+
   return (
     <>
       <Navbar />
       <MobileNav />
 
-      <main className="relative overflow-hidden pt-28 pb-20 lg:pt-40 lg:pb-28">
-        <div className="container mx-auto px-4 md:px-8">
-          {/* Container branco (padrão das seções da home) */}
-          <div className="relative overflow-hidden bg-white">
-            {/* Imagem de fundo leve */}
-            <div className="pointer-events-none absolute inset-0">
-              <Image
-                src="/images/casaclube/arquitetos/bg arquitetos.png"
-                alt=""
-                fill
-                className="object-cover"
-              />
-            </div>
+      <main>
+        {/* Título de uma palavra e bem acima da faixa que o container de baixo
+            cobre, para nunca correr o risco de ser encoberto */}
+        <PaginaHero
+          titulo="Masterplan"
+          imagem="/images/aereas/peninsula-aerea-hero.jpg"
+          alt="Vista aérea da península do Villa Stradale, com os lotes desenhados entre a mata e a represa"
+          avancoAbaixo
+        />
 
-            {/* Moldura dourada sobre o conteúdo */}
-            <div className="relative m-6 md:m-10 lg:m-12">
-              <div className="pointer-events-none absolute inset-0 z-20 border-2 border-[#D07748]/50" />
+        {/* ================= MASTERPLAN =================
+            O container branco veio da página Villa Stradale: título e subtítulo
+            na parte branca, e o mapa animado na largura inteira do container,
+            passando atrás das linhas douradas. A margem negativa no topo faz o
+            container avançar sobre o hero. */}
+        <section
+          id="masterplan"
+          className="relative z-10 -mt-16 scroll-mt-28 overflow-hidden md:-mt-24 lg:-mt-28"
+        >
+          <div className="container mx-auto px-4 md:px-8">
+            {/* Sem folga embaixo: o mapa fecha o container encostado na base, e a
+                moldura dourada termina mais acima, emoldurando por cima da
+                imagem — o respiro de baixo é a faixa de mapa que sobra sob o fio
+                dourado, em vez de uma barra branca. */}
+            <div className="relative bg-white px-4 pt-12 md:px-12 md:pt-16 lg:px-16">
+              <div className="relative z-10">
+                <div className="relative">
+                  <div className="pointer-events-none absolute bottom-12 left-0 right-0 top-0 z-50 border-2 border-[#D07748]/50 md:bottom-16" />
 
-              {/* Conteúdo */}
-              <div className="relative z-10 flex flex-col items-center px-6 py-20 md:px-12 md:py-28 lg:py-32">
-                {/* Emblema (tingido na cor terracota) */}
-                <span
-                  aria-hidden
-                  className="mb-8 block h-16 w-28 bg-gold-dark"
-                  style={{
-                    WebkitMaskImage: "url('/logos/Icone-VillaStradale escuro.svg')",
-                    maskImage: "url('/logos/Icone-VillaStradale escuro.svg')",
-                    WebkitMaskRepeat: 'no-repeat',
-                    maskRepeat: 'no-repeat',
-                    WebkitMaskPosition: 'center',
-                    maskPosition: 'center',
-                    WebkitMaskSize: 'contain',
-                    maskSize: 'contain',
-                  }}
-                />
+                  {/* Título e subtítulo, na parte branca, fora do mapa */}
+                  <div className="px-4 py-12 md:px-12 md:py-16 lg:px-16 lg:py-20">
+                    <div className="mb-12 flex justify-center">
+                      <Image
+                        src="/logos/Icone-VillaStradale escuro.svg"
+                        alt="Villa Stradale"
+                        width={40}
+                        height={40}
+                        className="h-8 w-auto opacity-90 md:h-10"
+                      />
+                    </div>
 
-                {/* Título */}
-                <h1 className="mb-12 text-center font-heading text-2xl italic uppercase leading-snug text-gold-dark md:text-4xl">
-                  Escolha o número
-                  <br />
-                  do lote que deseja ver
-                </h1>
+                    {/* Sem a palavra Masterplan: ela é o título do hero */}
+                    <div className="mb-10 text-center md:mb-12">
+                      <h2 className="font-heading text-2xl font-light uppercase italic leading-relaxed text-navy md:text-3xl lg:text-4xl">
+                        Terreno de 275.951 m²
+                      </h2>
+                    </div>
 
-                <LoteSelector />
+                    <p className="mb-10 text-center font-body text-base leading-relaxed text-[#D07748] md:mb-12 md:text-lg">
+                      São {TOTAL_LOTES} lotes residenciais voltados à água.
+                    </p>
+
+                    <div className="mx-auto max-w-4xl text-center">
+                      <p className="font-body text-base leading-relaxed text-gray-700 md:text-lg">
+                        Com casa-clube, marina, heliponto, quadras esportivas e infraestrutura
+                        subterrânea, em um território protegido por segurança 24h por terra e por
+                        água. Passe o mouse sobre um lote para ver o número e abrir a página dele.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* O mapa animado, na largura do container branco. Aqui ele é
+                      irmão do bloco de título, então a margem negativa só precisa
+                      cancelar o padding do cartão. */}
+                  {/* No celular o mapa inteiro caberia em 190px de altura, e
+                      cada lote viraria um risco impossível de tocar. Então ele
+                      mantém tamanho de leitura e a faixa rola para o lado. */}
+                  <div className="relative -mx-4 overflow-x-auto md:-mx-12 lg:-mx-16 lg:overflow-x-visible">
+                    <div className="min-w-[760px] lg:min-w-0">
+                      <MapaImplantacao contornos={contornos} />
+                    </div>
+                  </div>
+                  <p className="px-4 pt-4 text-center font-body text-[11px] uppercase tracking-[0.25em] text-navy/50 md:px-12 lg:hidden">
+                    Arraste para o lado para percorrer a península
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* Fecho padrão do site: o formulário de interesse */}
+        <ContatoSection respiroNoTopo />
       </main>
 
       <Footer />

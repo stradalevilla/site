@@ -110,7 +110,7 @@
   }
 
   .lote-acende {
-    animation: lote-acende 0.9s ease-in-out both;
+    animation: lote-acende 1.6s ease-in-out both;
   }
 
   @media (prefers-reduced-motion: reduce) {

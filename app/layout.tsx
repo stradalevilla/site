@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Providers } from '@/components/providers';
+import { PrepararMapa } from '@/components/preparar-mapa';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://villastradale.com'),
@@ -46,8 +47,13 @@ export default function RootLayout({
     <html lang="pt-BR">
       <head>
         <link rel="stylesheet" href="https://use.typekit.net/hap2dqc.css" />
+        {/* O mapa da região sai destes dois: abrir a conexão desde já poupa o
+            aperto de mão quando o visitante chega em Localização. */}
+        <link rel="preconnect" href="https://api.maptiler.com" crossOrigin="" />
+        <link rel="preconnect" href="https://tiles.maps.eox.at" crossOrigin="" />
       </head>
       <body className="antialiased font-body">
+        <PrepararMapa />
         {/* Fundo global da página */}
         <div aria-hidden className="fixed inset-0 -z-10 bg-[#EFEBE3]" />
         {/* Grafismo de fundo - repetido em todo o site */}

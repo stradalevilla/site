@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { IconCar, IconHelicopter, IconBrandWaze } from '@tabler/icons-react';
 import { DecorativeGraphic } from '@/components/decorative-graphic';
 
@@ -47,10 +48,10 @@ export function LocalizacaoSection() {
                 </p>
               </div>
 
-              {/* Botão seta */}
-              <button
-                type="button"
-                aria-label="Saiba mais"
+              {/* Botão seta — leva à página de Localização */}
+              <Link
+                href="/localizacao"
+                aria-label="Saiba mais sobre a localização"
                 className="group flex items-center justify-center w-16 h-10 rounded-full border border-navy/50 text-navy transition-all duration-300 ease-out hover:border-navy hover:bg-navy hover:text-white"
               >
                 <svg
@@ -67,7 +68,7 @@ export function LocalizacaoSection() {
                   <line x1="5" y1="12" x2="19" y2="12" />
                   <polyline points="12 5 19 12 12 19" />
                 </svg>
-              </button>
+              </Link>
             </div>
 
             {/* Coluna direita - com divisória vertical */}
@@ -91,7 +92,7 @@ export function LocalizacaoSection() {
                   <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#05c8f7] text-white">
                     <IconBrandWaze size={22} stroke={1.5} />
                   </span>
-                  <span className="font-body text-sm md:text-base text-gray-700">Rota “Nome A”</span>
+                  <span className="font-body text-sm md:text-base text-gray-700">Pino em definição</span>
                 </div>
               </div>
 
@@ -102,8 +103,8 @@ export function LocalizacaoSection() {
                   <span className="font-body text-base md:text-lg">Pelo Ar</span>
                 </div>
                 <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed max-w-sm">
-                  20 minutos de São Paulo. Direto na península. Do Helicidade, em São Paulo, direto
-                  ao heliponto da península.
+                  Do Helicidade, em São Paulo, direto ao heliponto da península. Três spots
+                  privativos de pouso, recuados junto à marina.
                 </p>
               </div>
             </div>

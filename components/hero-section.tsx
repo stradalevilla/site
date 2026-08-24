@@ -11,7 +11,7 @@ export function HeroSection() {
       <div className="absolute inset-0">
         {/* Desktop */}
         <Image
-          src="/images/hero/hero-peninsula-desk.png"
+          src="/images/hero/hero-peninsula-desk.jpg"
           alt="Villa Stradale - Uma península irreplicável"
           fill
           priority
@@ -22,7 +22,7 @@ export function HeroSection() {
         
         {/* Tablet */}
         <Image
-          src="/images/hero/hero-peninsula-tablet.png"
+          src="/images/hero/hero-peninsula-tablet.jpg"
           alt="Villa Stradale - Uma península irreplicável"
           fill
           priority
@@ -33,7 +33,7 @@ export function HeroSection() {
         
         {/* Mobile */}
         <Image
-          src="/images/hero/hero-peninsula-mobile.png"
+          src="/images/hero/hero-peninsula-mobile.jpg"
           alt="Villa Stradale - Uma península irreplicável"
           fill
           priority
@@ -43,8 +43,9 @@ export function HeroSection() {
         />
       </div>
 
-      {/* Overlay Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+      {/* Overlay Gradient — a lente de baixo é leve: a água escura da represa já
+          segura o texto branco (contraste medido acima de 12:1) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/35" />
 
       {/* Decorative Graphics - FORA do container com padding */}
       <DecorativeGraphic 
@@ -71,7 +72,7 @@ export function HeroSection() {
 
           {/* Description */}
           <p className="font-body font-light text-base md:text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed px-4">
-            Cercado pela Serra da Mantiqueira, o Villa Stradale ocupa um dos pontos mais singulares de represa, onde a geografia desenhou, por acaso, o cenário perfeito.
+            Cercado pela Serra da Mantiqueira, o Villa Stradale ocupa um dos pontos mais singulares da represa, onde a geografia desenhou, por acaso, o cenário perfeito.
           </p>
 
           {/* Subtitle */}

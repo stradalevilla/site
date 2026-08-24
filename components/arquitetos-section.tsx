@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { DecorativeGraphic } from '@/components/decorative-graphic';
 
 const arquitetos = [
@@ -96,8 +97,11 @@ export function ArquitetosSection() {
           ))}
         </div>
 
-        {/* Veja mais */}
-        <div className="group mt-12 md:mt-16 flex items-center gap-4 cursor-pointer">
+        {/* Veja mais — leva à seção dos arquitetos na página Villa Stradale */}
+        <Link
+          href="/villa-stradale#arquitetura-paisagismo"
+          className="group mt-12 md:mt-16 flex w-fit items-center gap-4"
+        >
           <span className="font-body text-sm md:text-base text-navy">veja mais</span>
           <span className="flex items-center justify-center w-16 h-10 rounded-full border border-navy/60 text-navy transition-all duration-300 ease-out group-hover:border-navy group-hover:bg-navy group-hover:text-white">
             <svg
@@ -115,7 +119,7 @@ export function ArquitetosSection() {
               <polyline points="12 5 19 12 12 19" />
             </svg>
           </span>
-        </div>
+        </Link>
       </div>
     </div>
   );
