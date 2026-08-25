@@ -6,6 +6,13 @@ import { Navbar } from '@/components/navbar';
 import { MobileNav } from '@/components/mobile-nav';
 import { Footer } from '@/components/footer';
 import { LoteVistas } from '@/components/lote-vistas';
+
+/**
+ * A seção "Vistas" está desligada por enquanto: o material de imagens de cada
+ * lote ainda não chegou do cliente. Vire para true quando as fotos próprias
+ * entrarem — o componente e os dados continuam prontos, só não aparecem.
+ */
+const MOSTRAR_VISTAS = false;
 import { LoteVisualizacao } from '@/components/lote-visualizacao';
 import { ContatoInteresse } from '@/components/contato-interesse';
 import { LOTES_INDISPONIVEIS, TOTAL_LOTES } from '@/lib/lotes';
@@ -167,7 +174,7 @@ export default async function LotePage({
                     </section>
 
                     {/* Seção 3 - Vistas */}
-                    {data.vistas && data.vistas.length > 0 && (
+                    {MOSTRAR_VISTAS && data.vistas && data.vistas.length > 0 && (
                       <section className="mt-10 border-t border-[#D07748]/40 pt-10 md:mt-14 md:pt-14">
                         <SectionLabel title="Vistas" subtitle="Imagens do local" />
                         <LoteVistas vistas={data.vistas} numero={pad} />
