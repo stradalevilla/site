@@ -7,21 +7,36 @@ import { DecorativeGraphic } from '@/components/decorative-graphic';
  * Separa as grandes seções de uma página de categoria — e serve de âncora
  * para o menu do topo (o id vira /pagina#secao).
  */
+/**
+ * Quanto o container seguinte avança sobre a base da faixa. A faixa reserva
+ * essa área como padding de baixo, então o texto é centralizado só no espaço
+ * que continua visível — nunca cai debaixo do container, em nenhuma altura de
+ * tela.
+ *  · 'normal' = 64/96/112px (o avanço padrão do site)
+ *  · 'grande' = 80/160/224px (o avanço da seção do fundador)
+ */
+const RESERVA_DO_AVANCO = {
+  normal: 'pb-36 md:pb-52 lg:pb-60',
+  grande: 'pb-40 md:pb-[272px] lg:pb-[352px]',
+};
+
 export function DivisorCapitulo({
   id,
   rotulo,
   titulo,
   frase,
+  avancoDoProximo = 'normal',
 }: {
   id: string;
   rotulo: string;
   titulo: React.ReactNode;
   frase?: string;
+  avancoDoProximo?: keyof typeof RESERVA_DO_AVANCO;
 }) {
   return (
     <section
       id={id}
-      className="relative flex w-full scroll-mt-28 items-center overflow-hidden bg-[#0a1929] py-20 md:min-h-[70vh] md:py-28 lg:min-h-[80vh] lg:py-32"
+      className={`relative flex w-full scroll-mt-28 items-center overflow-hidden bg-[#0a1929] pt-20 md:min-h-[70vh] md:pt-28 lg:min-h-[80vh] lg:pt-32 ${RESERVA_DO_AVANCO[avancoDoProximo]}`}
     >
       {/* As curvas de nível ficam fixas na tela enquanto a faixa passa: é o
           parallax do fundo navy. No celular rolam junto, porque o

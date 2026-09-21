@@ -43,9 +43,10 @@ export function HeroSection() {
         />
       </div>
 
-      {/* Overlay Gradient — a lente de baixo é leve: a água escura da represa já
-          segura o texto branco (contraste medido acima de 12:1) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/35" />
+      {/* Overlay Gradient — a lente de baixo, somada à vinheta assentada na
+          própria imagem, segura o texto sobre o brilho do sol na água:
+          medido 7:1 no título e 4,1:1 na assinatura dourada */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/45" />
 
       {/* Decorative Graphics - FORA do container com padding */}
       <DecorativeGraphic 

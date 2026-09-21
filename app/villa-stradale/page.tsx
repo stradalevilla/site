@@ -635,6 +635,7 @@ export default function VillaStradale() {
         {/* ================= STAKEHOLDERS ================= */}
         <DivisorCapitulo
           id="stakeholders"
+          avancoDoProximo="grande"
           rotulo="Fundador"
           titulo={
             <>
