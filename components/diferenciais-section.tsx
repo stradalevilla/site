@@ -15,7 +15,7 @@ const diferenciais = [
   'Iluminação perimetral e de vias com fotocélulas',
   'Equipe treinada para atendimento emergencial',
   'Monitoramento remoto do sistema de segurança',
-  'Administração e protocolo operacional pela BBZ',
+  'Administração e protocolo operacional do condomínio',
   'Shuttle de helicóptero',
 ];
 

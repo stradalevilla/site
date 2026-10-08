@@ -2,9 +2,8 @@ import { Navbar } from '@/components/navbar';
 import { MobileNav } from '@/components/mobile-nav';
 import { HeroSection } from '@/components/hero-section';
 import { IntroSection } from '@/components/intro-section';
-import { ParallaxGaleria } from '@/components/parallax-galeria';
+import { FaixaParallax } from '@/components/faixa-parallax';
 import { ConceitoSection } from '@/components/conceito-section';
-import { FaixaPortaria } from '@/components/faixa-portaria';
 import { AutoresSection } from '@/components/autores-section';
 import { EmbaixadoresSection } from '@/components/embaixadores-section';
 import { FundadorSection } from '@/components/fundador-section';
@@ -12,7 +11,6 @@ import { RegiaoSection } from '@/components/regiao-section';
 import { LocalizacaoSection } from '@/components/localizacao-section';
 import { ContatoSection } from '@/components/contato-section';
 import { Footer } from '@/components/footer';
-import { imagensDoEmpreendimento } from '@/lib/galeria';
 
 export default function Home() {
   return (
@@ -26,13 +24,19 @@ export default function Home() {
       <main>
         <HeroSection />
         <IntroSection />
-        {/* A faixa da galeria entra entre os dois containers brancos, e os
-            dois avançam 112px sobre ela, um de cada lado. */}
-        <ParallaxGaleria imagens={imagensDoEmpreendimento} rotulo="Imagens do empreendimento" />
+        {/* Faixa de imagem entre os dois containers brancos, e os dois
+            avançam 112px sobre ela, um de cada lado. */}
+        <FaixaParallax
+          imagem="/images/casaclube/faixa-casa-clube.jpg"
+          rotulo="A casa clube pela varanda, com a represa ao fundo"
+        />
         <ConceitoSection />
         {/* A faixa da portaria faz o mesmo corte da anterior: fecha o
             container das amenities e abre o dos autores. */}
-        <FaixaPortaria />
+        <FaixaParallax
+          imagem="/images/portaria/portaria-2026.jpg"
+          rotulo="A portaria do Villa Stradale"
+        />
         <AutoresSection />
         {/* O masterplan e a implantação saíram daqui: eles têm página própria,
             em /lotes, com o mapa animado dentro do container branco. */}

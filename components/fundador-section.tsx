@@ -6,23 +6,35 @@ import { TOTAL_LOTES } from '@/lib/lotes';
 
 /**
  * O fundador e os stakeholders: o divisor de capítulo navy e, logo abaixo, o
- * container branco com Pedro Costa, a Stradale Inc., Marcello Romero e a BBZ.
+ * container branco com Pedro Costa, a Stradale Inc. e Marcello Romero.
  *
  * Veio inteiro da página /villa-stradale. O divisor mora dentro deste
  * componente de propósito: os dois estão amarrados pelos avanços — a faixa
  * recebe 112px do bloco de cima e reserva 224px para este container descer
  * sobre ela, e separar um do outro quebraria a conta.
  *
+ * Vive em dois lugares: na home, encaixado entre o cartão laranja e a faixa
+ * da represa, e sozinho em /quem-somos. As duas props acertam os avanços para
+ * cada caso, já que fora da home não há faixa nenhuma para avançar.
+ *
  * Copy: book de vendas do cliente (V12), p34 e p35.
  */
 
-export function FundadorSection() {
+export function FundadorSection({
+  /** um container desce sobre o topo da faixa azul (é o caso da home) */
+  avancoAcima = 'normal',
+  /** o container branco desce sobre uma faixa logo abaixo (idem) */
+  avancaNaFaixaAbaixo = true,
+}: {
+  avancoAcima?: 'nenhum' | 'normal';
+  avancaNaFaixaAbaixo?: boolean;
+} = {}) {
   return (
     <>
         {/* ================= STAKEHOLDERS ================= */}
         <DivisorCapitulo
           id="stakeholders"
-          avancoAcima="normal"
+          avancoAcima={avancoAcima}
           avancoDoProximo="grande"
           rotulo="Fundador"
           titulo={
@@ -38,7 +50,11 @@ export function FundadorSection() {
         {/* O container avança bem mais sobre a faixa azul que os outros do
             site: 224px no desktop, contra os 112px das demais sobreposições.
             Embaixo ele desce os 112px de sempre, sobre a faixa da represa. */}
-        <section className="relative z-10 -mb-16 -mt-20 overflow-hidden md:-mb-24 md:-mt-40 lg:-mb-28 lg:-mt-56">
+        <section
+          className={`relative z-10 -mt-20 overflow-hidden md:-mt-40 lg:-mt-56 ${
+            avancaNaFaixaAbaixo ? '-mb-16 md:-mb-24 lg:-mb-28' : ''
+          }`}
+        >
           <div className="container relative z-10 mx-auto px-4 md:px-8">
             <div className="relative bg-white px-4 py-12 md:px-12 md:py-16 lg:px-16">
               <div className="relative z-10">
@@ -132,45 +148,6 @@ export function FundadorSection() {
                     </div>
                   </div>
 
-                  {/* BBZ */}
-                  <div className="px-4 pb-16 md:px-12 md:pb-20 lg:px-16">
-                    <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
-                      <div className="relative w-full border border-[#D07748]/40 p-5 lg:order-1">
-                        <div className="relative h-[280px] md:h-[360px] lg:h-[400px]">
-                          <Image
-                            src="/images/portaria/portaria-entrada.jpg"
-                            alt="A portaria do Villa Stradale, em pedra, madeira e espelho de água"
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                          />
-                        </div>
-                        <DecorativeGraphic
-                          position="left"
-                          className="left-0 top-1/2 z-20 -translate-x-6 -translate-y-1/2 md:-translate-x-12 lg:-translate-x-16"
-                        />
-                      </div>
-
-                      <div className="lg:order-2">
-                        <span className="mb-6 block font-heading text-sm font-thin uppercase italic tracking-[0.3em] text-[#D07748] md:text-base">
-                          Obra e execução
-                        </span>
-                        <h3 className="mb-8 font-heading text-2xl font-light uppercase italic leading-snug text-navy md:text-3xl lg:text-4xl">
-                          BBZ
-                        </h3>
-                        <div className="max-w-md space-y-5">
-                          <p className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
-                            A BBZ responde pela obra: administração e execução do empreendimento, da
-                            infraestrutura enterrada às vias, à portaria e à casa clube.
-                          </p>
-                          <p className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
-                            É também dela a administração e o protocolo operacional do condomínio,
-                            a frente que transforma o desenho em terreno pisável.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

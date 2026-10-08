@@ -1,4 +1,32 @@
 import Image from 'next/image';
+import { GaleriaLightbox } from '@/components/galeria-lightbox';
+import { imagensDoEmpreendimento } from '@/lib/galeria';
+
+/**
+ * O trio do wellness. Cada foto é um recorte retrato de um render que também
+ * está na galeria: `naGaleria` é por onde a galeria abre quando a pessoa
+ * clica nela.
+ */
+const trioDoWellness = [
+  {
+    src: '/images/casaclube/Frame Academia.jpg',
+    alt: 'Academia com equipamentos Technogym e vista da represa',
+    titulo: 'Academia',
+    naGaleria: '/images/galeria/academia.jpg',
+  },
+  {
+    src: '/images/casaclube/Frame Lounge.jpg',
+    alt: 'Lounge da casa clube, com lareira, mesa de sinuca e vista da represa',
+    titulo: 'Lounge',
+    naGaleria: '/images/galeria/lounge.jpg',
+  },
+  {
+    src: '/images/casaclube/Frame Wellness.jpg',
+    alt: 'Área wellness com espreguiçadeiras, a piscina coberta e o jardim',
+    titulo: 'Spa',
+    naGaleria: '/images/galeria/spa.jpg',
+  },
+];
 
 export function IntroSection() {
   return (
@@ -192,51 +220,93 @@ export function IntroSection() {
                 Sauna, massagem e a vista da represa. O bem-estar como parte da rotina.
               </h3>
 
-              {/* Grade de Imagens - todas do mesmo tamanho (proporção 340x460), dentro da moldura */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 items-stretch">
-                {/* Academia */}
-                <div className="relative aspect-[340/460] border border-[#D07748]/40">
-                  <Image
-                    src="/images/casaclube/Frame Academia.jpg"
-                    alt="Academia com equipamentos Technogym e vista da represa"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                </div>
+              {/* Grade de imagens (proporção 340x460), dentro da moldura. Cada
+                  uma abre a galeria nela mesma, não na primeira foto. */}
+              <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-3 md:gap-6">
+                {trioDoWellness.map((foto) => (
+                  <GaleriaLightbox
+                    key={foto.src}
+                    itens={imagensDoEmpreendimento}
+                    inicio={foto.naGaleria}
+                    rotuloDoGatilho={`Ver na galeria: ${foto.titulo}`}
+                    gatilho={
+                      <div className="group relative aspect-[340/460] cursor-zoom-in overflow-hidden border border-[#D07748]/40">
+                        <Image
+                          src={foto.src}
+                          alt={foto.alt}
+                          fill
+                          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
 
-                {/* Lounge */}
-                <div className="relative aspect-[340/460] border border-[#D07748]/40">
-                  <Image
-                    src="/images/casaclube/Frame Lounge.jpg"
-                    alt="Lounge da casa clube, com lareira, mesa de sinuca e vista da represa"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 33vw"
+                        {/* O convite, só no hover */}
+                        <span className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-navy/45 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 ease-out group-hover:opacity-100">
+                          <span className="flex h-14 w-14 items-center justify-center rounded-full border border-white/80 text-white">
+                            <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              aria-hidden
+                            >
+                              <polyline points="15 3 21 3 21 9" />
+                              <polyline points="9 21 3 21 3 15" />
+                              <line x1="21" y1="3" x2="14" y2="10" />
+                              <line x1="3" y1="21" x2="10" y2="14" />
+                            </svg>
+                          </span>
+                          <span className="font-body text-[11px] uppercase tracking-[0.3em] text-white">
+                            Ver galeria
+                          </span>
+                        </span>
+                      </div>
+                    }
                   />
-                </div>
-
-                {/* Wellness */}
-                <div className="relative aspect-[340/460] border border-[#D07748]/40">
-                  <Image
-                    src="/images/casaclube/Frame Wellness.jpg"
-                    alt="Área wellness com espreguiçadeiras, a piscina coberta e o jardim"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                </div>
+                ))}
               </div>
 
-              {/* Parágrafo, centralizado no container. O botão da galeria
-                  saiu: a faixa parallax logo abaixo já abre as imagens. */}
-              <p className="mx-auto mt-10 max-w-4xl text-center font-body text-sm md:text-base text-gray-700 leading-relaxed md:mt-12">
-                Academia com equipamentos Technogym. Espaço ao ar livre para yoga e funcional.
-                Saunas seca e a vapor. Sala de massagem. Hot spa com vista. Cold spa. Área de
-                descanso. Cada espaço foi posicionado para que o bem-estar seja parte da rotina.
-                Acordar, treinar, suar, mergulhar, descansar. Tudo no mesmo percurso, tudo com a
-                represa como cenário.
-              </p>
+              {/* Parágrafo e, ao lado, a galeria: é por aqui que as imagens do
+                  empreendimento se abrem grandes, em lightbox. */}
+              <div className="mt-10 grid grid-cols-1 items-center gap-8 md:mt-12 md:gap-12 lg:grid-cols-[1.8fr_1fr]">
+                <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed">
+                  Academia com equipamentos Technogym. Espaço ao ar livre para yoga e funcional.
+                  Saunas seca e a vapor. Sala de massagem. Hot spa com vista. Cold spa. Área de
+                  descanso. Cada espaço foi posicionado para que o bem-estar seja parte da rotina.
+                  Acordar, treinar, suar, mergulhar, descansar. Tudo no mesmo percurso, tudo com a
+                  represa como cenário.
+                </p>
+
+                <GaleriaLightbox
+                  itens={imagensDoEmpreendimento}
+                  gatilho={
+                    <div className="group flex cursor-pointer items-center justify-start gap-4 lg:justify-end">
+                      <span className="font-body text-sm text-gray-700 md:text-base">
+                        Abrir galeria de imagens
+                      </span>
+                      <span className="flex h-10 w-16 items-center justify-center rounded-full border border-[#D07748]/60 text-[#D07748] transition-all duration-300 ease-out group-hover:border-[#D07748] group-hover:bg-[#D07748] group-hover:text-white">
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="transition-transform delay-150 duration-300 ease-out group-hover:translate-x-1"
+                        >
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                      </span>
+                    </div>
+                  }
+                />
+              </div>
             </div>
 
             </div>

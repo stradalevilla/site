@@ -2,14 +2,28 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { menuEsquerda, menuDireita, type ItemMenu } from '@/lib/menu';
 
 /**
+ * A página em que estamos: vale para a rota do item e para tudo abaixo dela,
+ * então /lotes/07 mantém "Masterplan" aceso.
+ */
+export function rotaAtiva(caminho: string | null, href?: string) {
+  if (!caminho || !href) return false;
+  if (href === '/') return caminho === '/';
+  return caminho === href || caminho.startsWith(`${href}/`);
+}
+
+/**
  * Item da barra: vira link quando a página existe; quando não existe ainda,
  * fica visível em tom mais baixo e sem clique, em vez de link quebrado.
+ * O item da página em que estamos fica dourado.
  */
 function ItemBarra({ item }: { item: ItemMenu }) {
+  const caminho = usePathname();
+
   if (!item.href) {
     return (
       <span
@@ -22,10 +36,15 @@ function ItemBarra({ item }: { item: ItemMenu }) {
     );
   }
 
+  const ativo = rotaAtiva(caminho, item.href);
+
   return (
     <Link
       href={item.href}
-      className="font-body text-sm text-white/80 transition-colors hover:text-white"
+      aria-current={ativo ? 'page' : undefined}
+      className={`font-body text-sm transition-colors ${
+        ativo ? 'text-gold' : 'text-white/80 hover:text-white'
+      }`}
     >
       {item.label}
     </Link>

@@ -6,10 +6,13 @@ import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconBrandInstagram, IconBrandLinkedin } from '@tabler/icons-react';
+import { usePathname } from 'next/navigation';
 import { menu } from '@/lib/menu';
+import { rotaAtiva } from '@/components/navbar';
 
 export function MobileNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const caminho = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
 
   const navLinks = menu;
@@ -125,8 +128,11 @@ export function MobileNav() {
                     {link.href ? (
                       <Link
                         href={link.href}
+                        aria-current={rotaAtiva(caminho, link.href) ? 'page' : undefined}
                         onClick={() => setIsMenuOpen(false)}
-                        className="font-body text-2xl md:text-3xl uppercase tracking-[0.15em] text-white/85 transition-colors duration-300 hover:text-gold"
+                        className={`font-body text-2xl md:text-3xl uppercase tracking-[0.15em] transition-colors duration-300 ${
+                          rotaAtiva(caminho, link.href) ? 'text-gold' : 'text-white/85 hover:text-gold'
+                        }`}
                       >
                         {link.label}
                       </Link>

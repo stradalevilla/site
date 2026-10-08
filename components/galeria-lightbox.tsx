@@ -50,6 +50,8 @@ export function GaleriaLightbox({
   proporcao = 'aspect-[4/3]',
   variante = 'legenda',
   gatilho,
+  inicio,
+  rotuloDoGatilho,
 }: {
   itens: ItemGaleria[];
   colunas?: 2 | 3;
@@ -62,6 +64,14 @@ export function GaleriaLightbox({
    * galeria" no meio do texto, sem repetir as fotos que já estão na página.
    */
   gatilho?: React.ReactNode;
+  /**
+   * Por qual imagem a galeria abre, pelo src. Serve para uma foto na página
+   * abrir a galeria nela mesma, e não sempre na primeira. Procura pelo src e
+   * não por índice, então reordenar a lista não quebra nada.
+   */
+  inicio?: string;
+  /** o nome acessível do gatilho, quando ele não é o botão de texto */
+  rotuloDoGatilho?: string;
 }) {
   const [aberto, setAberto] = useState<number | null>(null);
   const gatilhos = useRef<(HTMLButtonElement | null)[]>([]);
@@ -70,6 +80,14 @@ export function GaleriaLightbox({
 
   /** no modo gatilho existe um botão só, e é para ele que o foco volta */
   const modoGatilho = !!gatilho;
+
+  /** a imagem por onde a galeria abre neste gatilho */
+  const indiceInicial = inicio
+    ? Math.max(
+        0,
+        itens.findIndex((it) => it.src === inicio)
+      )
+    : 0;
 
   const fechar = useCallback(() => {
     const indice = aberto;
@@ -228,8 +246,10 @@ export function GaleriaLightbox({
           ref={(el) => {
             gatilhos.current[0] = el;
           }}
-          onClick={() => setAberto(0)}
-          aria-label={`Abrir a galeria de imagens (${itens.length} fotos)`}
+          onClick={() => setAberto(indiceInicial)}
+          aria-label={
+            rotuloDoGatilho ?? `Abrir a galeria de imagens (${itens.length} fotos)`
+          }
           className="block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D07748] focus-visible:ring-offset-2"
         >
           {gatilho}
@@ -263,11 +283,11 @@ export function GaleriaLightbox({
               if (Math.abs(dx) > 50) irPara(dx < 0 ? 1 : -1);
               toqueX.current = null;
             }}
-            className="fixed inset-0 z-[100] flex flex-col bg-[#0a1929]/97 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] flex flex-col bg-[#050c14]/75 backdrop-blur-2xl"
           >
             {/* Topo: contador e fechar */}
             <div className="flex shrink-0 items-center justify-between px-5 pt-5 md:px-10 md:pt-8">
-              <span className="font-heading text-sm italic tracking-[0.2em] text-gold md:text-base">
+              <span className="font-heading text-base italic tracking-[0.2em] text-gold md:text-lg">
                 {String(aberto + 1).padStart(2, '0')} / {String(itens.length).padStart(2, '0')}
               </span>
 
@@ -278,7 +298,7 @@ export function GaleriaLightbox({
                   fechar();
                 }}
                 aria-label="Fechar"
-                className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/50 text-white transition-all duration-300 hover:border-white hover:bg-white hover:text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                className="group flex h-11 w-11 items-center justify-center rounded-full border border-white/60 bg-white/5 text-white transition-all duration-300 hover:border-white hover:bg-white hover:text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
               >
                 <svg
                   width="18"
@@ -297,14 +317,14 @@ export function GaleriaLightbox({
             </div>
 
             {/* A imagem */}
-            <div className="flex min-h-0 flex-1 items-center justify-center px-4 py-6 md:px-16">
+            <div className="flex min-h-0 flex-1 items-center justify-center px-16 py-4 md:px-24 md:py-6">
               <motion.div
                 key={item.src}
                 initial={{ opacity: 0, scale: 0.99 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.35, ease: 'easeOut' }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative h-full w-full max-w-6xl"
+                className="relative h-full w-full max-w-[1600px]"
               >
                 <Image
                   src={item.src}
@@ -318,34 +338,62 @@ export function GaleriaLightbox({
               </motion.div>
             </div>
 
-            {/* Base: legenda e navegação */}
+            {/* Base: a legenda e os tracinhos */}
             <div
               onClick={(e) => e.stopPropagation()}
-              className="flex shrink-0 flex-col items-center gap-5 px-5 pb-7 md:flex-row md:justify-between md:px-10 md:pb-9"
+              className="flex shrink-0 flex-col items-center gap-4 px-5 pb-6 md:gap-5 md:px-10 md:pb-7"
             >
-              <p className="order-2 max-w-xl text-center font-body text-[11px] uppercase tracking-[0.18em] text-white/70 md:order-1 md:text-left md:text-xs">
+              <p className="max-w-xl text-center font-body text-xs uppercase tracking-[0.22em] text-white/85 md:text-sm">
                 {item.legenda ?? item.alt}
               </p>
 
-              <div className="order-1 flex items-center gap-4 md:order-2">
-                <button
-                  type="button"
-                  onClick={() => irPara(-1)}
-                  aria-label="Imagem anterior"
-                  className="group flex h-10 w-16 items-center justify-center rounded-full border border-white/70 text-white transition-all duration-300 ease-out hover:border-white hover:bg-white hover:text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-                >
-                  <Seta sentido="anterior" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => irPara(1)}
-                  aria-label="Próxima imagem"
-                  className="group flex h-10 w-16 items-center justify-center rounded-full border border-white/70 text-white transition-all duration-300 ease-out hover:border-white hover:bg-white hover:text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-                >
-                  <Seta sentido="proximo" />
-                </button>
+              {/* Quantas são e em qual estamos; cada tracinho leva direto */}
+              <div className="flex flex-wrap items-center justify-center gap-1.5 md:gap-2">
+                {itens.map((it, i) => (
+                  <button
+                    key={it.src}
+                    type="button"
+                    onClick={() => setAberto(i)}
+                    aria-label={`Imagem ${i + 1}: ${it.legenda ?? it.alt}`}
+                    aria-current={i === aberto}
+                    className="group flex h-6 items-center justify-center px-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                  >
+                    <span
+                      className={`block h-[2px] rounded-full transition-all duration-300 ${
+                        i === aberto
+                          ? 'w-7 bg-gold md:w-9'
+                          : 'w-3.5 bg-white/40 group-hover:bg-white/80 md:w-5'
+                      }`}
+                    />
+                  </button>
+                ))}
               </div>
             </div>
+
+            {/* As setas nas laterais, na altura do meio */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                irPara(-1);
+              }}
+              aria-label="Imagem anterior"
+              className="group absolute left-3 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/60 bg-white/10 text-white backdrop-blur-sm transition-all duration-300 ease-out hover:border-white hover:bg-white hover:text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-gold md:left-6 md:h-14 md:w-14"
+            >
+              <Seta sentido="anterior" />
+            </button>
+
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                irPara(1);
+              }}
+              aria-label="Próxima imagem"
+              className="group absolute right-3 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/60 bg-white/10 text-white backdrop-blur-sm transition-all duration-300 ease-out hover:border-white hover:bg-white hover:text-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-gold md:right-6 md:h-14 md:w-14"
+            >
+              <Seta sentido="proximo" />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

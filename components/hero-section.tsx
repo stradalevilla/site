@@ -16,13 +16,11 @@ const SLIDES = [
     chave: 'terreno',
     base: '/images/hero/hero-terreno',
     alt: 'A península do Villa Stradale vista do alto, o terreno como ele é hoje',
-    rotulo: 'A península hoje',
   },
   {
     chave: 'render',
     base: '/images/hero/hero-peninsula',
     alt: 'Villa Stradale - Uma península irreplicável',
-    rotulo: 'O empreendimento',
   },
 ];
 
@@ -115,14 +113,6 @@ export function HeroSection() {
 
         {/* Main Content */}
         <div className="max-w-5xl mx-auto space-y-6 md:space-y-8">
-          {/* Qual das duas penínsulas está na tela */}
-          <p
-            aria-live="polite"
-            className="font-body text-[11px] uppercase tracking-[0.3em] text-white/70 md:text-xs"
-          >
-            {SLIDES[atual].rotulo}
-          </p>
-
           {/* Main Title */}
           <h1 className="font-heading font-light text-4xl md:text-4xl lg:text-5xl text-white tracking-wider italic">
             UMA PENÍNSULA<br className="md:hidden" /> IRREPLICÁVEL

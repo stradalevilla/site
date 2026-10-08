@@ -20,6 +20,11 @@ export interface ItemMenu {
 
 export const menu: ItemMenu[] = [
   {
+    label: 'Quem somos',
+    href: '/quem-somos',
+    secoes: [{ label: 'Fundador e stakeholders', hash: '#stakeholders' }],
+  },
+  {
     label: 'Masterplan',
     href: '/lotes',
     secoes: [{ label: 'Explorar lotes', hash: '' }],
