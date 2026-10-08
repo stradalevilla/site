@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Navbar } from '@/components/navbar';
 import { MobileNav } from '@/components/mobile-nav';
-import { PaginaHero } from '@/components/pagina-hero';
 import { ContatoSection } from '@/components/contato-section';
 import { MapaImplantacao } from '@/components/mapa-implantacao';
 import { Footer } from '@/components/footer';
@@ -24,23 +23,12 @@ export default async function MasterplanPage() {
       <MobileNav />
 
       <main>
-        {/* Título de uma palavra e bem acima da faixa que o container de baixo
-            cobre, para nunca correr o risco de ser encoberto */}
-        <PaginaHero
-          titulo="Masterplan"
-          imagem="/images/aereas/peninsula-aerea-hero.jpg"
-          alt="Vista aérea da península do Villa Stradale, com os lotes desenhados entre a mata e a represa"
-          avancoAbaixo
-        />
-
         {/* ================= MASTERPLAN =================
-            O container branco veio da página Villa Stradale: título e subtítulo
-            na parte branca, e o mapa animado na largura inteira do container,
-            passando atrás das linhas douradas. A margem negativa no topo faz o
-            container avançar sobre o hero. */}
+            A página abre direto no container, sem banner: o padding de cima
+            abre a folga da barra fixa do topo, que tem 112px no desktop. */}
         <section
           id="masterplan"
-          className="relative z-10 -mt-16 scroll-mt-28 overflow-hidden md:-mt-24 lg:-mt-28"
+          className="relative z-10 scroll-mt-28 overflow-hidden pt-32 md:pt-40 lg:pt-44"
         >
           <div className="container mx-auto px-4 md:px-8">
             {/* Sem folga embaixo: o mapa fecha o container encostado na base, e a
@@ -64,9 +52,12 @@ export default async function MasterplanPage() {
                       />
                     </div>
 
-                    {/* Sem a palavra Masterplan: ela é o título do hero */}
-                    <div className="mb-10 text-center md:mb-12">
-                      <h2 className="font-heading text-2xl font-light uppercase italic leading-relaxed text-navy md:text-3xl lg:text-4xl">
+                    {/* Sem banner, é aqui que a página se apresenta */}
+                    <div className="mb-10 space-y-3 text-center md:mb-12">
+                      <h1 className="font-heading text-3xl font-light uppercase italic leading-tight text-navy md:text-4xl lg:text-5xl">
+                        Masterplan
+                      </h1>
+                      <h2 className="font-heading text-2xl font-light uppercase italic leading-relaxed text-navy/80 md:text-3xl lg:text-4xl">
                         Terreno de 275.951 m²
                       </h2>
                     </div>
