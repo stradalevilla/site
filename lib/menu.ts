@@ -1,6 +1,9 @@
 /**
- * As seis categorias da barra do topo, conforme o mapa do menu do documento
- * de estrutura do cliente: "Seis categorias na barra. O logo leva à Home."
+ * As categorias da barra do topo, conforme o mapa do menu do documento de
+ * estrutura do cliente: "Seis categorias na barra. O logo leva à Home."
+ *
+ * Villa Stradale saiu da barra: o conteúdo dela mudou para a home, que é
+ * onde o logo leva.
  *
  * Cada categoria é UMA página; os itens listados no documento embaixo de cada
  * uma são as seções dessa página, alcançadas por âncora (ex.: /localizacao#piracaia).
@@ -16,15 +19,6 @@ export interface ItemMenu {
 }
 
 export const menu: ItemMenu[] = [
-  {
-    label: 'Villa Stradale',
-    href: '/villa-stradale',
-    secoes: [
-      { label: 'O Projeto', hash: '#o-projeto' },
-      { label: 'Arquitetura + Paisagismo', hash: '#arquitetura-paisagismo' },
-      { label: 'Stakeholders', hash: '#stakeholders' },
-    ],
-  },
   {
     label: 'Masterplan',
     href: '/lotes',
@@ -65,5 +59,11 @@ export const menu: ItemMenu[] = [
 ];
 
 /** A barra divide as seis em dois grupos, com o logo no meio */
-export const menuEsquerda = menu.slice(0, 3);
-export const menuDireita = menu.slice(3);
+/**
+ * A barra se divide nos dois lados do logo. O corte é a metade arredondada
+ * para baixo: com um número ímpar de itens, a sobra vai para a direita, onde
+ * os rótulos são mais curtos.
+ */
+const meioDaBarra = Math.floor(menu.length / 2);
+export const menuEsquerda = menu.slice(0, meioDaBarra);
+export const menuDireita = menu.slice(meioDaBarra);

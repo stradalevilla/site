@@ -104,7 +104,7 @@ export function LocalizacaoSection() {
                 </div>
                 <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed max-w-sm">
                   Do Helicidade, em São Paulo, direto ao heliponto da península. Três spots
-                  privativos de pouso, recuados junto à marina.
+                  privativos de pouso, recuados do centro de convivência.
                 </p>
               </div>
             </div>

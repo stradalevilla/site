@@ -59,20 +59,24 @@ export function Navbar() {
       />
 
       <div className="container mx-auto px-4 lg:px-8">
+        {/* Os dois grupos de links e o logo andam juntos, centralizados: cada
+            lado ocupa metade da barra e encosta no logo, em vez de ir para a
+            ponta. O flex-1 nos dois mantém o logo no centro exato, mesmo com
+            um lado tendo mais itens que o outro. */}
         <div
-          className={`flex items-center justify-between transition-all duration-500 ease-out ${
+          className={`flex items-center transition-all duration-500 ease-out ${
             scrolled ? 'h-24' : 'h-28'
           }`}
         >
           {/* Links Esquerda - Desktop */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden flex-1 items-center justify-end gap-8 pr-12 lg:flex">
             {menuEsquerda.map((item) => (
               <ItemBarra key={item.label} item={item} />
             ))}
           </div>
 
           {/* Logo Central - crossfade entre logotipo completo e ícone */}
-          <Link href="/" className="flex items-center justify-center">
+          <Link href="/" className="flex shrink-0 items-center justify-center">
             <span
               className={`relative block transition-all duration-500 ease-out ${
                 scrolled ? 'h-16 w-44' : 'h-16 w-[220px]'
@@ -103,7 +107,7 @@ export function Navbar() {
           </Link>
 
           {/* Links Direita - Desktop */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden flex-1 items-center justify-start gap-8 pl-12 lg:flex">
             {menuDireita.map((item) => (
               <ItemBarra key={item.label} item={item} />
             ))}

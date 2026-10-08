@@ -11,7 +11,7 @@ import { getContornos } from '@/lib/getContornos';
 
 export const metadata: Metadata = {
   title: 'Masterplan',
-  description: `O masterplan do Villa Stradale: terreno de 275.951 m² e ${TOTAL_LOTES} lotes residenciais voltados à água, com casa-clube, marina, heliponto e quadras.`,
+  description: `O masterplan do Villa Stradale: terreno de 275.951 m² e ${TOTAL_LOTES} lotes voltados à água, com casa-clube, marina, heliponto e quadras.`,
 };
 
 export default async function MasterplanPage() {
@@ -72,7 +72,7 @@ export default async function MasterplanPage() {
                     </div>
 
                     <p className="mb-10 text-center font-body text-base leading-relaxed text-[#D07748] md:mb-12 md:text-lg">
-                      São {TOTAL_LOTES} lotes residenciais voltados à água.
+                      São {TOTAL_LOTES} lotes voltados à água.
                     </p>
 
                     <div className="mx-auto max-w-4xl text-center">

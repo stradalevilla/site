@@ -1,12 +1,8 @@
 import Image from 'next/image';
-import { DecorativeGraphic } from '@/components/decorative-graphic';
-import { ArquitetosSection } from '@/components/arquitetos-section';
-import { GaleriaLightbox } from '@/components/galeria-lightbox';
-import { imagensDoEmpreendimento } from '@/lib/galeria';
 
 export function IntroSection() {
   return (
-    <section className="pt-20 md:pt-32 relative overflow-hidden">
+    <section className="relative z-10 -mb-16 overflow-hidden pt-20 md:-mb-24 md:pt-32 lg:-mb-28">
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         {/* Container Branco com posição relativa */}
         <div className="bg-white relative px-4 md:px-12 lg:px-16 py-12 md:py-16">
@@ -75,9 +71,9 @@ export function IntroSection() {
               {/* Texto Descritivo */}
               <div className="max-w-4xl mx-auto space-y-6 text-center">
                 <p className="font-body text-base md:text-lg text-gray-700 leading-relaxed">
-                  O Villa Stradale pertence a essa segunda linhagem. Um refúgio pé na água, irreplicável. 
-                  54 famílias, uma península cercada por 270 graus de represa e a escolha de guardar o que
-                  realmente importa: o tempo, a água, as pessoas certas ao lado.
+                  O Villa Stradale pertence a essa segunda linhagem. Um refúgio pé na água,
+                  irreplicável. Uma península cercada por 270 graus de represa e a escolha de guardar
+                  o que realmente importa: o tempo, a água, as pessoas certas ao lado.
                 </p>
                 
                 <p className="font-body text-base md:text-lg text-gray-700 leading-relaxed">
@@ -109,8 +105,8 @@ export function IntroSection() {
             {/* Seção Casa Clube - Estende até as bordas do container branco */}
             <div className="relative -mx-4 md:-mx-12 lg:-mx-16 h-[400px] md:h-[500px] lg:h-[600px]">
               <Image
-                src="/images/casaclube/casa-clube-c14.jpg"
-                alt="Casa Clube Villa Stradale"
+                src="/images/galeria/casa-clube-chegada.jpg"
+                alt="A casa clube vista do gramado, com o volume baixo apoiado no muro de pedra"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
@@ -132,8 +128,8 @@ export function IntroSection() {
               {/* Imagem - 50% esquerda */}
               <div className="relative h-[400px] md:h-[500px] lg:h-[600px]">
                 <Image
-                  src="/images/casaclube/piscinas.png"
-                  alt="Piscinas Villa Stradale"
+                  src="/images/casaclube/piscinas-2026.jpg"
+                  alt="O deck da piscina da casa clube, com espreguiçadeiras e a represa ao fundo"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -171,8 +167,8 @@ export function IntroSection() {
             {/* Seção Casa Clube 2 - Imagem largura total com título */}
             <div className="relative -mx-4 md:-mx-12 lg:-mx-16 h-[400px] md:h-[500px] lg:h-[600px]">
               <Image
-                src="/images/casaclube/casa-clube-c04.jpg"
-                alt="Casa Clube Villa Stradale - Lazer"
+                src="/images/galeria/vao-para-a-agua.jpg"
+                alt="O grande vão da casa clube enquadrando a represa e a serra ao fundo"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
@@ -201,19 +197,19 @@ export function IntroSection() {
                 {/* Academia */}
                 <div className="relative aspect-[340/460] border border-[#D07748]/40">
                   <Image
-                    src="/images/casaclube/Frame Academia.png"
-                    alt="Academia com equipamentos Technogym"
+                    src="/images/casaclube/Frame Academia.jpg"
+                    alt="Academia com equipamentos Technogym e vista da represa"
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 </div>
 
-                {/* Restaurante */}
+                {/* Lounge */}
                 <div className="relative aspect-[340/460] border border-[#D07748]/40">
                   <Image
-                    src="/images/casaclube/Frame Restaurante.png"
-                    alt="Restaurante com vista da represa"
+                    src="/images/casaclube/Frame Lounge.jpg"
+                    alt="Lounge da casa clube, com lareira, mesa de sinuca e vista da represa"
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 33vw"
@@ -223,8 +219,8 @@ export function IntroSection() {
                 {/* Wellness */}
                 <div className="relative aspect-[340/460] border border-[#D07748]/40">
                   <Image
-                    src="/images/casaclube/Frame Wellness.png"
-                    alt="Área wellness com spa e descanso"
+                    src="/images/casaclube/Frame Wellness.jpg"
+                    alt="Área wellness com espreguiçadeiras, a piscina coberta e o jardim"
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 33vw"
@@ -232,186 +228,21 @@ export function IntroSection() {
                 </div>
               </div>
 
-              {/* Parágrafo + Link Galeria */}
-              <div className="grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-8 md:gap-12 items-center mt-10 md:mt-12">
-                <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed">
-                  Academia com equipamentos Technogym. Espaço ao ar livre para yoga e funcional.
-                  Saunas seca e a vapor. Sala de massagem. Hot spa com vista. Cold spa. Área de
-                  descanso. Cada espaço foi posicionado para que o bem-estar seja parte da rotina.
-                  Acordar, treinar, suar, mergulhar, descansar. Tudo no mesmo percurso, tudo com a
-                  represa como cenário.
-                </p>
-
-                <GaleriaLightbox
-                  itens={imagensDoEmpreendimento}
-                  gatilho={
-                <div className="group flex items-center justify-start lg:justify-end gap-4 cursor-pointer">
-                  <span className="font-body text-sm md:text-base text-gray-700">
-                    Abrir galeria de imagens
-                  </span>
-                  <span className="flex items-center justify-center w-16 h-10 rounded-full border border-[#D07748]/60 text-[#D07748] transition-all duration-300 ease-out group-hover:border-[#D07748] group-hover:bg-[#D07748] group-hover:text-white">
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="transition-transform duration-300 ease-out delay-150 group-hover:translate-x-1"
-                    >
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                      <polyline points="12 5 19 12 12 19" />
-                    </svg>
-                  </span>
-                </div>
-                  }
-                />
-              </div>
+              {/* Parágrafo, centralizado no container. O botão da galeria
+                  saiu: a faixa parallax logo abaixo já abre as imagens. */}
+              <p className="mx-auto mt-10 max-w-4xl text-center font-body text-sm md:text-base text-gray-700 leading-relaxed md:mt-12">
+                Academia com equipamentos Technogym. Espaço ao ar livre para yoga e funcional.
+                Saunas seca e a vapor. Sala de massagem. Hot spa com vista. Cold spa. Área de
+                descanso. Cada espaço foi posicionado para que o bem-estar seja parte da rotina.
+                Acordar, treinar, suar, mergulhar, descansar. Tudo no mesmo percurso, tudo com a
+                represa como cenário.
+              </p>
             </div>
 
-            {/* Tira de Imagens - largura total, passa por trás das linhas douradas */}
-            <div className="grid grid-cols-3 md:grid-cols-6 -mx-4 md:-mx-12 lg:-mx-16">
-              {[
-                { src: '/images/casaclube/tira de imagens/Pes na agua.png', alt: 'Pés na água' },
-                { src: '/images/casaclube/tira de imagens/jet.png', alt: 'Jet ski' },
-                { src: '/images/casaclube/tira de imagens/Caminhada.png', alt: 'Caminhada na praia' },
-                { src: '/images/casaclube/tira de imagens/Raquetes.png', alt: 'Raquetes' },
-                { src: '/images/casaclube/tira de imagens/wakeboard.png', alt: 'Wakeboard' },
-                { src: '/images/casaclube/tira de imagens/Firepit.png', alt: 'Firepit' },
-              ].map((img) => (
-                <div
-                  key={img.src}
-                  className="relative h-[260px] md:h-[340px] lg:h-[420px]"
-                >
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 33vw, 16vw"
-                  />
-                </div>
-              ))}
             </div>
-
-            {/* Seção Cards - Racket Club e Marina Stradale */}
-            <div className="px-4 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24 space-y-10 md:space-y-14">
-              {/* Card 1 - Racket Club (texto à esquerda, imagem à direita) */}
-              <div className="relative bg-[#EFEBE3] w-full grid grid-cols-1 lg:h-[420px] lg:grid-cols-2">
-                {/* Texto */}
-                <div className="flex flex-col justify-center px-6 py-10 md:px-12 lg:px-16 lg:py-0">
-                  <span className="font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.3em] mb-4">
-                    Lazer ao ar livre
-                  </span>
-                  <h3 className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-navy italic uppercase mb-6">
-                    Racket Club
-                  </h3>
-                  <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed max-w-md">
-                    O Villa Stradale é o condomínio das raquetes. Duas quadras de tênis em piso
-                    rápido, uma quadra de padel, duas de beach tennis e um campo de futebol society.
-                  </p>
-                </div>
-
-                {/* Imagem */}
-                <div className="relative p-6 md:p-8">
-                  <div className="relative h-[240px] w-full lg:h-full">
-                    <Image
-                      src="/images/casaclube/Quadras.png"
-                      alt="Quadras do Racket Club"
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
-                  </div>
-                </div>
-
-                {/* Grafismo decorativo - lado direito (colado na linha dourada) */}
-                <DecorativeGraphic
-                  position="right"
-                  className="right-0 top-1/2 -translate-y-1/2 translate-x-6 md:translate-x-12 lg:translate-x-16 z-20"
-                />
-              </div>
-
-              {/* Card 2 - Marina Stradale (imagem à esquerda, texto à direita) */}
-              <div className="relative bg-[#EFEBE3] w-full grid grid-cols-1 lg:h-[420px] lg:grid-cols-2">
-                {/* Imagem */}
-                <div className="relative p-6 md:p-8 order-1">
-                  <div className="relative h-[240px] w-full lg:h-full">
-                    <Image
-                      src="/images/casaclube/Marina.png"
-                      alt="Marina Stradale"
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
-                  </div>
-                </div>
-
-                {/* Texto */}
-                <div className="flex flex-col justify-center px-6 py-10 md:px-12 lg:px-16 lg:py-0 order-2">
-                  <span className="font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.3em] mb-4">
-                    Esportes aquáticos
-                  </span>
-                  <h3 className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-navy italic uppercase mb-6">
-                    Garagem Náutica
-                  </h3>
-                  <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed max-w-md">
-                    O acesso do Villa Stradale à represa. Garagem náutica com capacidade para até 30
-                    jet skis e lanchas de wakeboard. Rampa de acesso à água. Píer privativo para
-                    embarque e desembarque.
-                  </p>
-                </div>
-
-                {/* Grafismo decorativo - lado esquerdo (colado na linha dourada) */}
-                <DecorativeGraphic
-                  position="left"
-                  className="left-0 top-1/2 -translate-y-1/2 -translate-x-6 md:-translate-x-12 lg:-translate-x-16 z-20"
-                />
-              </div>
-
-              {/* Card 3 - Heliponto (texto à esquerda, imagem à direita) */}
-              <div className="relative bg-[#EFEBE3] w-full grid grid-cols-1 lg:h-[420px] lg:grid-cols-2">
-                {/* Texto */}
-                <div className="flex flex-col justify-center px-6 py-10 md:px-12 lg:px-16 lg:py-0">
-                  <span className="font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.3em] mb-4">
-                    Acesso pelo ar
-                  </span>
-                  <h3 className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-navy italic uppercase mb-6">
-                    Heliponto
-                  </h3>
-                  <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed max-w-md">
-                    Do Helicidade, em São Paulo, direto ao heliponto da península. Três spots
-                    privativos, integrados à paisagem, recuados junto à marina.
-                  </p>
-                </div>
-
-                {/* Imagem */}
-                <div className="relative p-6 md:p-8">
-                  <div className="relative h-[240px] w-full lg:h-full">
-                    <Image
-                      src="/images/amenities/heliponto.jpg"
-                      alt="Heliponto da península"
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
-                  </div>
-                </div>
-
-                {/* Grafismo decorativo - lado direito (colado na linha dourada) */}
-                <DecorativeGraphic
-                  position="right"
-                  className="right-0 top-1/2 -translate-y-1/2 translate-x-6 md:translate-x-12 lg:translate-x-16 z-20"
-                />
-              </div>
-            </div>
-            </div>
-            {/* Fim do conteúdo Casa Clube (moldura dourada) */}
-
-            {/* SEÇÃO ARQUITETOS - dentro do container branco, sem moldura */}
-            <ArquitetosSection />
+            {/* Fim do conteúdo da Casa Clube (moldura dourada). O container
+                encerra aqui, com o respiro e a linha dourada fechando, para a
+                faixa da galeria entrar logo abaixo. */}
 
           </div>
         </div>

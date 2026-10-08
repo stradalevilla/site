@@ -20,23 +20,36 @@ const RESERVA_DO_AVANCO = {
   grande: 'pb-40 md:pb-[272px] lg:pb-[352px]',
 };
 
+/**
+ * O mesmo, para o container que desce sobre o TOPO da faixa. Sem isto o
+ * cartão de cima encosta no emblema.
+ *  · 'nenhum' = ninguém avança por cima
+ *  · 'normal' = 64/96/112px de avanço, somados ao respiro de sempre
+ */
+const RESERVA_DO_AVANCO_ACIMA = {
+  nenhum: 'pt-20 md:pt-28 lg:pt-32',
+  normal: 'pt-36 md:pt-52 lg:pt-60',
+};
+
 export function DivisorCapitulo({
   id,
   rotulo,
   titulo,
   frase,
   avancoDoProximo = 'normal',
+  avancoAcima = 'nenhum',
 }: {
   id: string;
   rotulo: string;
   titulo: React.ReactNode;
   frase?: string;
   avancoDoProximo?: keyof typeof RESERVA_DO_AVANCO;
+  avancoAcima?: keyof typeof RESERVA_DO_AVANCO_ACIMA;
 }) {
   return (
     <section
       id={id}
-      className={`relative flex w-full scroll-mt-28 items-center overflow-hidden bg-[#0a1929] pt-20 md:min-h-[70vh] md:pt-28 lg:min-h-[80vh] lg:pt-32 ${RESERVA_DO_AVANCO[avancoDoProximo]}`}
+      className={`relative flex w-full scroll-mt-28 items-center overflow-hidden bg-[#0a1929] md:min-h-[70vh] lg:min-h-[80vh] ${RESERVA_DO_AVANCO_ACIMA[avancoAcima]} ${RESERVA_DO_AVANCO[avancoDoProximo]}`}
     >
       {/* As curvas de nível ficam fixas na tela enquanto a faixa passa: é o
           parallax do fundo navy. No celular rolam junto, porque o
