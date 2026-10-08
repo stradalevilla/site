@@ -120,7 +120,7 @@ export default function Localizacao() {
             </>
           }
           tagline="Piracaia · São Paulo"
-          imagem="/images/imagem da regiao.jpeg"
+          imagem="/images/imagem da regiao 2.jpg"
           alt="A represa e a Serra da Mantiqueira ao amanhecer, com neblina baixa sobre os morros"
         />
 

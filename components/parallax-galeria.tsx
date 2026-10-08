@@ -42,11 +42,16 @@ function Seta({ sentido }: { sentido: 'anterior' | 'proximo' }) {
  */
 export function ParallaxGaleria({
   imagens,
-  altura = 'h-[70vh] md:h-[100vh] lg:h-[130vh]',
+  altura = 'h-[180vh] md:h-[200vh] lg:h-[220vh]',
   rotulo = 'Galeria do empreendimento',
 }: {
   imagens: ImagemParallax[];
-  /** classes de altura da faixa */
+  /**
+   * Altura do trilho, não da imagem. A tela fica presa (sticky) durante o
+   * trecho que sobra depois de descontar os 100vh dela: é esse resto que
+   * segura a faixa parada enquanto a pessoa rola, dando tempo de os textos
+   * entrarem e serem lidos.
+   */
   altura?: string;
   rotulo?: string;
 }) {
@@ -169,6 +174,11 @@ export function ParallaxGaleria({
         toqueX.current = null;
       }}
     >
+      {/* A tela presa: enquanto o trilho passa, ela fica parada ocupando a
+          janela inteira. É o que dá tempo de os textos entrarem, serem lidos e
+          de a pessoa perceber que pode navegar, antes de a página seguir. */}
+      <div className="sticky top-0 h-screen overflow-hidden">
+
       {/* Camadas de fundo: o parallax continua em cada uma, e a troca é um
           crossfade lento entre elas. */}
       <div className="absolute inset-0 overflow-hidden bg-navy">
@@ -189,16 +199,14 @@ export function ParallaxGaleria({
           qualquer imagem. */}
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-x-0 bottom-0 z-[5] h-[45vh] bg-gradient-to-t from-black/75 via-black/30 to-transparent transition-opacity duration-700"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[45vh] bg-gradient-to-t from-black/75 via-black/30 to-transparent transition-opacity duration-700"
         style={{ opacity: revelado ? 1 - saida : 0 }}
       />
 
-      {/* Trilho do sticky: os controles ficam presos perto da base da tela
-          enquanto a faixa passa. */}
-      <div className="relative h-full">
-        {/* O recuo acompanha o tamanho dos elementos: com eles maiores, o trilho
-            sobe para manter a mesma folga até a base da tela. */}
-        <div className="sticky top-[calc(100vh-210px)] z-10 px-4 md:px-8">
+      {/* Os controles, ancorados na tela presa. O recuo acompanha o tamanho
+          dos elementos: com eles maiores, a âncora sobe para manter a mesma
+          folga até a base da tela. */}
+      <div className="absolute inset-x-0 top-[calc(100%-210px)] z-10 px-4 md:px-8">
           {/* Na saída, título e controles sobem juntos e se dissolvem — ligados à
               rolagem, então acompanham o container de baixo em qualquer
               velocidade. A transição curta só suaviza os saltos da roda. */}
@@ -281,8 +289,10 @@ export function ParallaxGaleria({
               </div>
             </div>
           </div>
-        </div>
       </div>
+
+      </div>
+      {/* fim da tela presa */}
     </section>
   );
 }
