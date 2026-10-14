@@ -317,7 +317,9 @@ export function GaleriaLightbox({
             </div>
 
             {/* A imagem */}
-            <div className="flex min-h-0 flex-1 items-center justify-center px-16 py-4 md:px-24 md:py-6">
+            {/* No celular a foto vai de borda a borda: as setas tem fundo e desfoque
+                próprios e sobrepõem bem. Do tablet para cima elas ganham calha. */}
+            <div className="flex min-h-0 flex-1 items-center justify-center px-3 py-4 md:px-24 md:py-6">
               <motion.div
                 key={item.src}
                 initial={{ opacity: 0, scale: 0.99 }}

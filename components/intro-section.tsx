@@ -239,8 +239,9 @@ export function IntroSection() {
                           sizes="(max-width: 768px) 100vw, 33vw"
                         />
 
-                        {/* O convite, só no hover */}
-                        <span className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-navy/45 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 ease-out group-hover:opacity-100">
+                        {/* O convite inteiro, no hover. Do tablet para cima,
+                            onde existe mouse. */}
+                        <span className="absolute inset-0 hidden flex-col items-center justify-center gap-4 bg-navy/45 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 ease-out group-hover:opacity-100 md:flex">
                           <span className="flex h-14 w-14 items-center justify-center rounded-full border border-white/80 text-white">
                             <svg
                               width="20"
@@ -262,6 +263,27 @@ export function IntroSection() {
                           <span className="font-body text-[11px] uppercase tracking-[0.3em] text-white">
                             Ver galeria
                           </span>
+                        </span>
+
+                        {/* No celular não existe hover: o selo fica sempre à
+                            vista, no canto, sem véu cobrindo a foto. */}
+                        <span className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-navy/45 text-white backdrop-blur-sm md:hidden">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden
+                          >
+                            <polyline points="15 3 21 3 21 9" />
+                            <polyline points="9 21 3 21 3 15" />
+                            <line x1="21" y1="3" x2="14" y2="10" />
+                            <line x1="3" y1="21" x2="10" y2="14" />
+                          </svg>
                         </span>
                       </div>
                     }
@@ -287,7 +309,7 @@ export function IntroSection() {
                       <span className="font-body text-sm text-gray-700 md:text-base">
                         Abrir galeria de imagens
                       </span>
-                      <span className="flex h-10 w-16 items-center justify-center rounded-full border border-[#D07748]/60 text-[#D07748] transition-all duration-300 ease-out group-hover:border-[#D07748] group-hover:bg-[#D07748] group-hover:text-white">
+                      <span className="flex h-11 w-16 items-center justify-center rounded-full border border-[#D07748]/60 text-[#D07748] transition-all duration-300 ease-out group-hover:border-[#D07748] group-hover:bg-[#D07748] group-hover:text-white">
                         <svg
                           width="20"
                           height="20"

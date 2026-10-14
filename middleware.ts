@@ -39,8 +39,13 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
   const ehLogin = pathname === '/admin/login';
+  /* Quem esqueceu a senha chega aqui deslogado por definição: mandar para o
+     login seria um círculo. A tela da senha nova também entra, porque a sessão
+     de recuperação só é aberta pelo navegador, depois que a página carrega. */
+  const ehPublica =
+    ehLogin || pathname === '/admin/recuperar' || pathname === '/admin/nova-senha';
 
-  if (!user && !ehLogin) {
+  if (!user && !ehPublica) {
     const url = request.nextUrl.clone();
     url.pathname = '/admin/login';
     url.searchParams.set('proximo', pathname);

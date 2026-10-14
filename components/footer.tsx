@@ -9,11 +9,20 @@ export function Footer() {
         {/* Topo - redes sociais + logos */}
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
           {/* Redes sociais */}
-          <div className="flex items-center gap-4 text-white/80">
-            <a href="#" aria-label="Instagram" className="hover:text-white transition-colors">
+          {/* os alvos têm 44px: a caixa cresce em volta do ícone, que fica do mesmo tamanho */}
+          <div className="-ml-2.5 flex items-center gap-1 text-white/80">
+            <a
+              href="#"
+              aria-label="Instagram"
+              className="inline-flex h-11 w-11 items-center justify-center transition-colors hover:text-white"
+            >
               <IconBrandInstagram size={24} stroke={1.5} />
             </a>
-            <a href="#" aria-label="LinkedIn" className="hover:text-white transition-colors">
+            <a
+              href="#"
+              aria-label="LinkedIn"
+              className="inline-flex h-11 w-11 items-center justify-center transition-colors hover:text-white"
+            >
               <IconBrandLinkedin size={24} stroke={1.5} />
             </a>
           </div>
@@ -65,7 +74,10 @@ export function Footer() {
 
         {/* Rodapé inferior */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <a href="#" className="font-body text-xs text-white/60 hover:text-white transition-colors">
+          <a
+            href="#"
+            className="inline-flex min-h-[44px] items-center font-body text-xs text-white/60 transition-colors hover:text-white"
+          >
             Política de Privacidade
           </a>
           <div className="flex items-center gap-5">
@@ -75,7 +87,7 @@ export function Footer() {
               href="/admin"
               aria-label="Área restrita"
               title="Área restrita"
-              className="text-white/25 transition-colors hover:text-white/70"
+              className="-m-2.5 inline-flex h-11 w-11 items-center justify-center text-white/25 transition-colors hover:text-white/70"
             >
               <IconLock size={16} stroke={1.5} />
             </Link>

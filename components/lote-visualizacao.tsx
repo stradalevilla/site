@@ -97,7 +97,7 @@ export function LoteVisualizacao({
                   role="tab"
                   aria-selected={ativo}
                   onClick={() => setVista(id)}
-                  className="group relative pb-2 font-body text-[11px] uppercase tracking-[0.2em] transition-colors duration-300"
+                  className="group relative flex min-h-[44px] items-end pb-3 font-body text-[11px] uppercase tracking-[0.2em] transition-colors duration-300"
                 >
                   <span className="text-navy">{label}</span>
                   <span
@@ -114,8 +114,12 @@ export function LoteVisualizacao({
       </div>
 
       <div className="relative">
-        {/* Foto sempre em largura total; o box azul se sobrepõe a ela */}
-        <div className="relative w-full">
+        {/* O desenho tem as medidas escritas dentro dele, e elas encolhem junto
+            com a largura exibida: em 375px os números saíam com 5px de altura.
+            Então ele guarda um tamanho mínimo de leitura e a faixa rola para o
+            lado, como o mapa do masterplan faz. */}
+        <div className="overflow-x-auto xl:overflow-x-visible">
+        <div className="relative w-full min-w-[700px] xl:min-w-0">
           {/* As duas camadas ficam empilhadas; só a opacidade muda, então o
               crossfade acontece entre elas, sem passar pelo fundo branco. */}
           {camadas.map(({ id, img, alt }) => {
@@ -148,13 +152,22 @@ export function LoteVisualizacao({
             );
           })}
         </div>
+        </div>
+
+        <p className="mt-3 text-center font-body text-[11px] uppercase tracking-[0.25em] text-navy/50 xl:hidden">
+          Arraste para o lado para ver o desenho inteiro
+        </p>
 
         {/* Box com os parâmetros urbanísticos — sobreposto à foto, encostado
             à direita e com a altura dela (desktop); abaixo da foto no mobile */}
         {!!parametros?.length && (
           <aside
             aria-hidden={!mostrarBox}
-            className={`z-10 mt-6 flex-col bg-navy p-6 transition-opacity duration-500 md:absolute md:inset-y-0 md:right-0 md:mt-0 md:w-[25.5%] md:p-7 ${
+            /* Só vira sobreposição quando existe largura para isso. Em 768px o
+               box dava 74px de conteúdo (11 caracteres por linha) e em 1024px
+               metade da lista sumia num scroll interno sem indicação nenhuma.
+               Até 1279px ele fica empilhado embaixo da foto, em largura cheia. */
+            className={`z-10 mt-6 flex-col bg-navy p-6 transition-opacity duration-500 xl:absolute xl:inset-y-0 xl:right-0 xl:mt-0 xl:w-[26%] xl:p-7 ${
               mostrarBox ? 'flex opacity-100' : 'hidden opacity-0'
             }`}
           >
@@ -168,7 +181,7 @@ export function LoteVisualizacao({
               Lote {numero}
             </p>
 
-            <div className="mt-3 min-h-0 flex-1 overflow-y-auto pr-1">
+            <div className="mt-3 min-h-0 flex-1 overflow-y-auto pr-1 [overflow-wrap:anywhere]">
               <ul className="space-y-1">
                 {parametros.map(({ label, valor }) => (
                   <li
@@ -190,7 +203,7 @@ export function LoteVisualizacao({
             <p className="mt-3 shrink-0 border-t border-white/15 pt-2.5 font-heading text-xs uppercase tracking-[0.14em] text-gold">
               Sugestão de área construtiva.
             </p>
-            <p className="mt-1.5 shrink-0 font-body text-[9px] leading-snug text-white/50">
+            <p className="mt-1.5 shrink-0 font-body text-[11px] leading-snug text-white/60">
               {NOTA}
             </p>
           </aside>

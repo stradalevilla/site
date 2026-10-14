@@ -70,7 +70,11 @@ export default async function MasterplanPage() {
                       <p className="font-body text-base leading-relaxed text-gray-700 md:text-lg">
                         Com casa-clube, marina, heliponto, quadras esportivas e infraestrutura
                         subterrânea, em um território protegido por segurança 24h por terra e por
-                        água. Passe o mouse sobre um lote para ver o número e abrir a página dele.
+                        água.{' '}
+                        <span className="lg:hidden">Toque num lote para abrir a página dele.</span>
+                        <span className="hidden lg:inline">
+                          Passe o mouse sobre um lote para ver o número e abrir a página dele.
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -79,10 +83,11 @@ export default async function MasterplanPage() {
                       irmão do bloco de título, então a margem negativa só precisa
                       cancelar o padding do cartão. */}
                   {/* No celular o mapa inteiro caberia em 190px de altura, e
-                      cada lote viraria um risco impossível de tocar. Então ele
-                      mantém tamanho de leitura e a faixa rola para o lado. */}
+                      cada lote viraria um risco impossível de tocar. A 760px a
+                      mediana do lote ainda dava 27px de largura: abaixo do dedo.
+                      A 1250px ela chega aos 44px, ao custo de mais arrasto. */}
                   <div className="relative -mx-4 overflow-x-auto md:-mx-12 lg:-mx-16 lg:overflow-x-visible">
-                    <div className="min-w-[760px] lg:min-w-0">
+                    <div className="min-w-[1250px] md:min-w-[1000px] lg:min-w-0">
                       <MapaImplantacao contornos={contornos} />
                     </div>
                   </div>

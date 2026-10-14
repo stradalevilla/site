@@ -90,7 +90,7 @@ export function EmbaixadoresSection() {
                   type="button"
                   onClick={next}
                   aria-label="Próximo embaixador"
-                  className="group flex items-center justify-center w-16 h-10 rounded-full border border-white/70 text-white transition-all duration-300 ease-out hover:border-white hover:bg-white hover:text-navy"
+                  className="group flex items-center justify-center w-16 h-11 rounded-full border border-white/70 text-white transition-all duration-300 ease-out hover:border-white hover:bg-white hover:text-navy"
                 >
                   <svg
                     width="22"
@@ -118,7 +118,7 @@ export function EmbaixadoresSection() {
                       aria-label={`Ir para ${emb.name}`}
                       aria-current={i === current}
                       // a área de toque tem 40px; o pontinho continua miúdo
-                      className="group flex h-10 w-10 items-center justify-center"
+                      className="group flex h-11 w-11 items-center justify-center"
                     >
                       <span
                         aria-hidden

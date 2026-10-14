@@ -138,7 +138,7 @@ export function BlocoPedroCosta() {
             <span className="font-body text-sm text-navy md:text-base">
               {aberto ? 'fechar' : 'saiba mais'}
             </span>
-            <span className="flex h-10 w-16 items-center justify-center rounded-full border border-navy/60 text-navy transition-all duration-300 ease-out group-hover:border-navy group-hover:bg-navy group-hover:text-white">
+            <span className="flex h-11 w-16 items-center justify-center rounded-full border border-navy/60 text-navy transition-all duration-300 ease-out group-hover:border-navy group-hover:bg-navy group-hover:text-white">
               <svg
                 width="20"
                 height="20"

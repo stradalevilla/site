@@ -20,6 +20,12 @@ const cards = [
     ativo: true,
   },
   {
+    href: '/admin/grafismo',
+    titulo: 'Grafismo de fundo',
+    desc: 'Calibrar as curvas de nível que ficam atrás de todo o site.',
+    ativo: true,
+  },
+  {
     href: '#',
     titulo: 'Conteúdo',
     desc: 'Textos e imagens das seções do site. (Em breve)',

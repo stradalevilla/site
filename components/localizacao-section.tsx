@@ -52,7 +52,7 @@ export function LocalizacaoSection() {
               <Link
                 href="/localizacao"
                 aria-label="Saiba mais sobre a localização"
-                className="group flex items-center justify-center w-16 h-10 rounded-full border border-navy/50 text-navy transition-all duration-300 ease-out hover:border-navy hover:bg-navy hover:text-white"
+                className="group flex items-center justify-center w-16 h-11 rounded-full border border-navy/50 text-navy transition-all duration-300 ease-out hover:border-navy hover:bg-navy hover:text-white"
               >
                 <svg
                   width="22"

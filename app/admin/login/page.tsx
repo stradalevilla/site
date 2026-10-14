@@ -1,13 +1,31 @@
 'use client';
 
 import { Suspense, useState } from 'react';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { criarSupabaseNavegador } from '@/lib/supabase/client';
+
+/**
+ * Só volta um caminho de dentro do painel.
+ *
+ * O `?proximo=` vem da URL, e a URL vem de quem mandou o link. Sem esta
+ * trava, `/admin/login?proximo=https://outro-site.com/admin` levava o admin
+ * para fora do domínio logo depois de ele digitar a senha certa — e uma cópia
+ * da tela de login do outro lado colhe a segunda digitação. Barra dupla e
+ * contrabarra entram na peneira porque `//outro-site.com` também é endereço
+ * de outro servidor.
+ */
+function destinoSeguro(bruto: string | null): string {
+  if (!bruto) return '/admin';
+  if (!bruto.startsWith('/admin')) return '/admin';
+  if (bruto.startsWith('//') || bruto.includes('\\')) return '/admin';
+  return bruto;
+}
 
 function Formulario() {
   const router = useRouter();
   const params = useSearchParams();
-  const proximo = params.get('proximo') || '/admin';
+  const proximo = destinoSeguro(params.get('proximo'));
 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -21,7 +39,18 @@ function Formulario() {
     const supabase = criarSupabaseNavegador();
     const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
     if (error) {
-      setErro('E-mail ou senha incorretos.');
+      /* Falha de rede chegava aqui como "senha incorreta", e a pessoa ficava
+         tentando senha atrás de senha contra um servidor que nem respondia.
+         O Supabase marca essas como AuthRetryableFetchError, sem status. */
+      const semConexao =
+        error.name === 'AuthRetryableFetchError' ||
+        !error.status ||
+        /fetch|network|failed to/i.test(error.message);
+      setErro(
+        semConexao
+          ? 'Não foi possível falar com o servidor de login. Não é a sua senha: o serviço está fora do ar.'
+          : 'E-mail ou senha incorretos.'
+      );
       setEntrando(false);
       return;
     }
@@ -68,6 +97,13 @@ function Formulario() {
       >
         {entrando ? 'entrando…' : 'entrar'}
       </button>
+
+      <Link
+        href="/admin/recuperar"
+        className="block text-center font-body text-xs text-gray-500 underline-offset-4 hover:text-navy hover:underline"
+      >
+        esqueci minha senha
+      </Link>
     </form>
   );
 }

@@ -1,7 +1,19 @@
 export const TOTAL_LOTES = 54;
 
-/** Lotes que existem no empreendimento mas não estão à venda */
-export const LOTES_INDISPONIVEIS: number[] = [];
+/**
+ * Lotes que existem no empreendimento mas não estão à venda.
+ *
+ * A planta topográfica traz 52 lotes desenhados, numerados de 01 a 52, e é
+ * dela que saem as medidas e os recortes do masterplan. O 53 e o 54 não têm
+ * área, nem contorno, nem imagem: /lotes/53 respondia 200 com o cabeçalho
+ * vazio e a planta quebrada, e as duas estavam listadas no sitemap para o
+ * Google indexar.
+ *
+ * TOTAL_LOTES continua 54 de propósito: é o número que o cliente usa na copy.
+ * Falta confirmar com ele QUAIS dois dos 54 são área comum — se não forem o
+ * 53 e o 54, é só trocar os números aqui.
+ */
+export const LOTES_INDISPONIVEIS: number[] = [53, 54];
 
 /** Números de todos os lotes existentes (01–54) */
 export const lotesDisponiveis = Array.from(

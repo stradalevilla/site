@@ -119,12 +119,12 @@ export default async function LotePage({
       <main className="relative overflow-hidden pt-28 pb-20 lg:pt-40 lg:pb-28">
         <div className="container mx-auto px-4 md:px-8">
           {/* Container branco (padrão das seções) */}
-          <div className="relative bg-white p-6 md:p-10 lg:p-12">
+          <div className="relative bg-white p-4 md:p-10 lg:p-12">
             <div className="relative">
               {/* Moldura dourada */}
               <div className="pointer-events-none absolute inset-0 z-20 border-2 border-[#D07748]/50" />
 
-              <div className="relative z-10 px-6 py-12 md:px-14 md:py-16">
+              <div className="relative z-10 px-3 py-10 sm:px-6 md:px-14 md:py-16">
                 {/* Cabeçalho: emblema + título do lote */}
                 <div className="flex items-center justify-between gap-4 border-b border-[#D07748]/40 pb-6">
                   <span aria-hidden className="block h-16 w-32 bg-gold-dark md:h-24 md:w-48" style={emblemMaskStyle} />

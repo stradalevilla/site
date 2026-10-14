@@ -48,7 +48,8 @@ export function MobileNav() {
           <div className="flex items-center justify-between h-16 px-6">
             <div className="flex-1" />
 
-            <Link href="/">
+            {/* alvo de 44px em volta do logo */}
+            <Link href="/" className="-ml-2.5 inline-flex h-11 items-center px-2.5">
               <Image
                 src="/logos/Icone-VillaStradale escuro.svg"
                 alt="Villa Stradale"
