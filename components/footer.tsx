@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { IconBrandInstagram, IconBrandLinkedin, IconLock } from '@tabler/icons-react';
 
 export function Footer() {
@@ -77,15 +76,17 @@ export function Footer() {
           </a>
           <div className="flex items-center gap-5">
             <span className="font-body text-xs text-white/60">Desenvolvido por rfill.co</span>
-            {/* Acesso discreto ao painel de gestão */}
-            <Link
+            {/* Acesso discreto ao painel de gestão. Recarrega de propósito: com
+                <Link> o Tag Manager que já roda no site entraria junto no painel. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a
               href="/admin"
               aria-label="Área restrita"
               title="Área restrita"
               className="-m-2.5 inline-flex h-11 w-11 items-center justify-center text-white/25 transition-colors hover:text-white/70"
             >
               <IconLock size={16} stroke={1.5} />
-            </Link>
+            </a>
           </div>
         </div>
       </div>

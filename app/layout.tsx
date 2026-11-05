@@ -7,6 +7,8 @@ import { PrepararMapa } from '@/components/preparar-mapa';
 import { AnimacoesDeEntrada } from '@/components/animacoes-de-entrada';
 import { TransicaoDePagina } from '@/components/transicao-de-pagina';
 
+const TAG_MANAGER = 'GTM-MBN9W4ZF';
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://villastradale.com'),
   title: {
@@ -77,6 +79,15 @@ export default async function RootLayout({
               "(function(){try{if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&location.pathname.indexOf('/admin')!==0)document.documentElement.classList.add('surgir')}catch(e){}})()",
           }}
         />
+        {/* O código é o que o Google entrega, no alto do head como ele pede, só
+            que fora do painel: script de terceiro não roda nas páginas de senha
+            e de gestão. */}
+        {/* eslint-disable-next-line @next/next/next-script-for-ga */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if(location.pathname.indexOf('/admin')!==0){(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${TAG_MANAGER}');}`,
+          }}
+        />
         <link rel="stylesheet" href="https://use.typekit.net/hap2dqc.css" />
         {/* O mapa da região sai destes dois: abrir a conexão desde já poupa o
             aperto de mão quando o visitante chega em Localização. */}
@@ -84,6 +95,14 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://tiles.maps.eox.at" crossOrigin="" />
       </head>
       <body className="antialiased font-body">
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${TAG_MANAGER}`}
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
         <PrepararMapa />
         {/* Fundo global da página */}
         <div aria-hidden className="fixed inset-0 -z-10 bg-[#EFEBE3]" />
