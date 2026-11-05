@@ -7,7 +7,7 @@ import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconBrandInstagram, IconBrandLinkedin } from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
-import { menu, type ItemMenu } from '@/lib/menu';
+import { INSTAGRAM, menu, type ItemMenu } from '@/lib/menu';
 import { rotaAtiva } from '@/components/navbar';
 
 export function MobileNav() {
@@ -161,12 +161,19 @@ export function MobileNav() {
                 transition={{ delay: 0.2 + navLinks.length * 0.07 + 0.1, duration: 0.5 }}
                 className="mt-14 flex items-center gap-6 text-white/70"
               >
-                <a href="#" aria-label="Instagram" className="transition-colors hover:text-gold">
+                <a
+                  href={INSTAGRAM}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="transition-colors hover:text-gold"
+                >
                   <IconBrandInstagram size={24} stroke={1.5} />
                 </a>
-                <a href="#" aria-label="LinkedIn" className="transition-colors hover:text-gold">
+                {/* Ainda sem página: visível, sem clique */}
+                <span role="img" aria-label="LinkedIn, ainda sem página" className="cursor-default text-white/30">
                   <IconBrandLinkedin size={24} stroke={1.5} />
-                </a>
+                </span>
               </motion.div>
             </div>
           </motion.div>

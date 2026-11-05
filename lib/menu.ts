@@ -11,6 +11,8 @@
  * `href` ausente = página ainda não construída. O item aparece na barra, em tom
  * mais baixo e sem clique, em vez de virar link quebrado.
  */
+export const INSTAGRAM = 'https://www.instagram.com/villastradale/';
+
 export interface ItemMenu {
   label: string;
   href?: string;

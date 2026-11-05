@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { IconBrandInstagram, IconBrandLinkedin, IconLock } from '@tabler/icons-react';
+import { INSTAGRAM } from '@/lib/menu';
 
 export function Footer() {
   return (
@@ -8,26 +9,30 @@ export function Footer() {
         {/* Topo - redes sociais + logos */}
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
           {/* Redes sociais */}
-          {/* os alvos têm 44px: a caixa cresce em volta do ícone, que fica do mesmo tamanho */}
-          <div data-surgir="subir" className="-ml-2.5 flex items-center gap-1 text-white/80">
+          {/* centrados até o tablet; no computador, o recuo alinha o desenho do ícone,
+              e não a caixa de toque, com o texto legal */}
+          <div data-surgir="subir" className="flex items-center justify-center gap-2 text-white/80 lg:-ml-1.5 lg:justify-start">
             <a
-              href="#"
+              href={INSTAGRAM}
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="Instagram"
-              className="inline-flex h-11 w-11 items-center justify-center transition-colors hover:text-white"
+              className="inline-flex h-12 w-12 items-center justify-center transition-colors hover:text-white"
             >
-              <IconBrandInstagram size={24} stroke={1.5} />
+              <IconBrandInstagram size={36} stroke={1.25} />
             </a>
-            <a
-              href="#"
-              aria-label="LinkedIn"
-              className="inline-flex h-11 w-11 items-center justify-center transition-colors hover:text-white"
+            {/* Ainda sem página: visível, sem clique, como os itens do menu */}
+            <span
+              role="img"
+              aria-label="LinkedIn, ainda sem página"
+              className="inline-flex h-12 w-12 cursor-default items-center justify-center text-white/30"
             >
-              <IconBrandLinkedin size={24} stroke={1.5} />
-            </a>
+              <IconBrandLinkedin size={36} stroke={1.25} />
+            </span>
           </div>
 
           {/* Grupos de logos */}
-          <div className="flex flex-col sm:flex-row items-center gap-12 lg:gap-20">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-12 lg:gap-20">
             {/* Comercialização */}
             <div data-surgir="subir" className="flex flex-col items-center gap-4">
               <span className="font-body text-xs text-white/60 tracking-wide">Comercialização</span>
