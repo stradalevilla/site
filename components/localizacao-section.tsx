@@ -15,7 +15,7 @@ export function LocalizacaoSection() {
             {/* Coluna esquerda */}
             <div>
               {/* Emblema */}
-              <div className="mb-6">
+              <div className="mb-6 flex justify-center md:justify-start">
                 <Image
                   src="/logos/Icone-VillaStradale escuro.svg"
                   alt="Villa Stradale"

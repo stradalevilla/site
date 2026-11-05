@@ -7,7 +7,7 @@ import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconBrandInstagram, IconBrandLinkedin } from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
-import { menu } from '@/lib/menu';
+import { menu, type ItemMenu } from '@/lib/menu';
 import { rotaAtiva } from '@/components/navbar';
 
 export function MobileNav() {
@@ -15,7 +15,9 @@ export function MobileNav() {
   const caminho = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const navLinks = menu;
+  // no computador o logo leva à Home; aqui ele só aparece depois de rolar, e no
+  // topo da página o menu é a única volta
+  const navLinks: ItemMenu[] = [{ label: 'Home', href: '/' }, ...menu];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -93,13 +95,15 @@ export function MobileNav() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="lg:hidden fixed inset-0 z-[100] bg-navy"
+            className="lg:hidden fixed inset-0 z-[100] overflow-y-auto bg-navy"
           >
             {/* Linhas douradas decorativas */}
             <div className="absolute top-6 left-6 right-6 h-[1px] bg-gold/30" />
             <div className="absolute bottom-6 left-6 right-6 h-[1px] bg-gold/30" />
 
-            <div className="flex h-full flex-col items-center justify-center px-8">
+            {/* min-h, e não h: com o celular deitado o menu passa da tela e rola,
+                em vez de cortar o primeiro item */}
+            <div className="flex min-h-full flex-col items-center justify-center px-8 py-10">
               {/* Emblema */}
               <motion.div
                 initial={{ opacity: 0, y: -10 }}

@@ -139,7 +139,7 @@ export function DiferenciaisSection() {
 
       <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-20">
         <div>
-          <div className="mb-6">
+          <div className="mb-6 flex justify-center md:justify-start">
             <Image
               src="/logos/Icone-VillaStradale escuro.svg"
               alt="Villa Stradale"

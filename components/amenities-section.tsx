@@ -69,7 +69,7 @@ const amenities = [
 export function AmenitiesSection() {
   return (
     <div className="px-4 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24">
-      <div className="mb-6">
+      <div className="mb-6 flex justify-center md:justify-start">
         <Image
           src="/logos/Icone-VillaStradale escuro.svg"
           alt="Villa Stradale"

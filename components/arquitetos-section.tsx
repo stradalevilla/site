@@ -197,7 +197,7 @@ export function ArquitetosSection() {
 
       <div className="relative z-10 px-4 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24">
         {/* Emblema */}
-        <div className="mb-6">
+        <div className="mb-6 flex justify-center md:justify-start">
           <Image
             src="/logos/Icone-VillaStradale escuro.svg"
             alt="Villa Stradale"

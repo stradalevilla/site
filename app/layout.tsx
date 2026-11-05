@@ -7,10 +7,11 @@ import { PrepararMapa } from '@/components/preparar-mapa';
 import { AnimacoesDeEntrada } from '@/components/animacoes-de-entrada';
 import { TransicaoDePagina } from '@/components/transicao-de-pagina';
 
+const SITE = 'https://www.villastradale.com.br';
 const TAG_MANAGER = 'GTM-MBN9W4ZF';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://villastradale.com'),
+  metadataBase: new URL(SITE),
   title: {
     default: 'Villa Stradale',
     template: '%s | Villa Stradale',
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    url: 'https://villastradale.com',
+    url: SITE,
     siteName: 'Villa Stradale',
     title: 'Villa Stradale — uma península irreplicável',
     description:

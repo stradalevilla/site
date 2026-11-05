@@ -66,7 +66,7 @@ export function FundadorSection({
                   {/* Stradale Inc. e comercialização — book p35 */}
                   <div className="relative bg-[#0a1929] px-4 py-16 md:-mx-12 md:px-24 md:py-20 lg:-mx-16 lg:px-32">
                     <div className="max-w-3xl text-white md:mb-16">
-                      <div className="mb-6">
+                      <div className="mb-6 flex justify-center md:justify-start">
                         <Image
                           src="/logos/Icone-VillaStradale claro.svg"
                           alt="Villa Stradale"

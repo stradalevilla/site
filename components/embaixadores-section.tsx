@@ -44,7 +44,7 @@ export function EmbaixadoresSection() {
             {/* Texto */}
             <div className="text-white">
               {/* Emblema */}
-              <div className="mb-6">
+              <div className="mb-6 flex justify-center md:justify-start">
                 <Image
                   src="/logos/Icone-VillaStradale claro.svg"
                   alt="Villa Stradale"

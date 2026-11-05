@@ -206,7 +206,7 @@ export default function Localizacao() {
 
                   <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,0.85fr)_1fr] lg:gap-20">
                     <div>
-                      <div className="mb-6">
+                      <div className="mb-6 flex justify-center md:justify-start">
                         <Image
                           src="/logos/Icone-VillaStradale escuro.svg"
                           alt="Villa Stradale"

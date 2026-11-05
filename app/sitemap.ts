@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { lotesDisponiveis } from '@/lib/lotes';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://villastradale.com';
+  const baseUrl = 'https://www.villastradale.com.br';
 
   return [
     {

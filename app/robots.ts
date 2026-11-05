@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/api/',
     },
-    sitemap: 'https://villastradale.com/sitemap.xml',
+    sitemap: 'https://www.villastradale.com.br/sitemap.xml',
   };
 }

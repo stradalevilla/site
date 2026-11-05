@@ -7,7 +7,7 @@ export function ContatoInteresse() {
         {/* Coluna esquerda - texto */}
         <div className="text-white">
           {/* Emblema */}
-          <div data-surgir="subir" className="mb-6">
+          <div data-surgir="subir" className="mb-6 flex justify-center md:justify-start">
             <Image
               src="/logos/Icone-VillaStradale claro.svg"
               alt="Villa Stradale"

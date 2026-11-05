@@ -30,16 +30,18 @@ export function DecorativeGraphic({ position, className = '', animated = false }
   const lines = position === 'left' ? leftLines : rightLines;
 
   return (
-    <div className={`absolute ${className}`} style={{ width: '170px', height: '50px' }}>
+    // No celular o grafismo fica na metade: a foto ali é estreita, e no tamanho
+    // cheio ele cobria quase metade dela
+    <div className={`absolute h-[30px] w-[85px] md:h-[50px] md:w-[170px] ${className}`}>
       {lines.map((line, index) => (
         <div
           key={index}
-          className={`absolute h-[2px] bg-gold ${
+          className={`absolute top-[calc(var(--topo)*0.6)] h-[1.5px] w-[calc(var(--largura)/2)] bg-gold md:top-[var(--topo)] md:h-[2px] md:w-[var(--largura)] ${
             animated ? 'animate-slide-in' : ''
           }`}
           style={{
-            width: `${line.width}px`,
-            top: `${line.top}px`,
+            '--largura': `${line.width}px`,
+            '--topo': `${line.top}px`,
             // ESQUERDA: linhas começam em left:0
             // DIREITA: linhas começam em right:0 (espelhado)
             ...(position === 'left' 
@@ -48,7 +50,7 @@ export function DecorativeGraphic({ position, className = '', animated = false }
             ),
             animationDelay: animated ? `${line.delay}s` : undefined,
             opacity: animated ? 0 : 1,
-          } as CSSProperties}
+          } as CSSProperties & Record<`--${string}`, string>}
         />
       ))}
     </div>

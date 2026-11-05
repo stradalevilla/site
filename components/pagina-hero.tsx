@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { DecorativeGraphic } from '@/components/decorative-graphic';
+import { MobileHeroLogo } from '@/components/mobile-hero-logo';
 import { VideoFaixa } from '@/components/video-faixa';
 import { vez } from '@/lib/abertura';
 
@@ -55,6 +56,8 @@ export function PaginaHero({
 
       {/* Gradiente de legibilidade: escurece topo e base, meio transparente */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+
+      <MobileHeroLogo />
 
       {/* Grafismos dourados colados nas bordas da viewport */}
       <DecorativeGraphic position="left" className="absolute bottom-32 left-0 hidden lg:block z-10" animated />
