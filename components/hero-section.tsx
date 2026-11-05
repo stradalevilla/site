@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+import { getImageProps } from 'next/image';
 import { DecorativeGraphic } from './decorative-graphic';
 import { MobileHeroLogo } from './mobile-hero-logo';
 import { vez } from '@/lib/abertura';
@@ -15,21 +15,29 @@ import { vez } from '@/lib/abertura';
  * quanto uma foto: o filme só baixa depois que a página terminou de carregar, e
  * o segundo só depois de o primeiro estar pronto. Quem pede menos movimento ou
  * economia de dados fica nas imagens, com a troca pelo relógio.
+ *
+ * No celular em pé, imagem e filme têm versão vertical, com o mesmo enquadramento
+ * central, recortada do 4K: o arquivo horizontal ficaria ampliado 3,5 vezes ali.
  */
 const SLIDES = [
   {
     chave: 'por-do-sol',
     imagem: '/images/renders/hero-por-do-sol.jpg',
+    imagemEmPe: '/images/renders/hero-por-do-sol-retrato.jpg',
     filme: '/videos/hero-por-do-sol',
     alt: 'A península do Villa Stradale vista do alto ao pôr do sol, com a represa e a serra ao fundo',
   },
   {
     chave: 'peninsula',
     imagem: '/images/renders/hero-peninsula.jpg',
+    imagemEmPe: '/images/renders/hero-peninsula-retrato.jpg',
     filme: '/videos/hero-peninsula',
     alt: 'Villa Stradale - Uma península irreplicável',
   },
 ];
+
+/** a tela que recebe os arquivos verticais */
+const CELULAR_EM_PE = '(max-width: 767px) and (orientation: portrait)';
 
 /** sem filme, quanto cada imagem fica parada antes de passar sozinha */
 const PAUSA = 6000;
@@ -38,11 +46,26 @@ const DISSOLVE_MS = 1800;
 /** filme parado por esse tempo não segura o slide */
 const TRAVOU_MS = 6000;
 
+/** next/image não troca de arquivo conforme a tela: quem faz isso é o <picture> */
+function FotoDoSlide({ slide, alt, prioridade }: { slide: (typeof SLIDES)[number]; alt: string; prioridade: boolean }) {
+  const comum = { alt, fill: true, sizes: '100vw', quality: 90, priority: prioridade, className: 'object-cover' };
+  const emPe = getImageProps({ ...comum, src: slide.imagemEmPe }).props;
+  const deitada = getImageProps({ ...comum, src: slide.imagem }).props;
+
+  return (
+    <picture>
+      <source media={CELULAR_EM_PE} srcSet={emPe.srcSet} sizes={emPe.sizes} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img {...deitada} alt={alt} />
+    </picture>
+  );
+}
+
 export function HeroSection() {
   const caixa = useRef<HTMLElement>(null);
   const filmes = useRef<(HTMLVideoElement | null)[]>([]);
   const [atual, setAtual] = useState(0);
-  const [tamanho, setTamanho] = useState<720 | 1080 | null>(null);
+  const [tamanho, setTamanho] = useState<720 | 1080 | 'retrato' | null>(null);
   const [primeiroPronto, setPrimeiroPronto] = useState(false);
   const [naTela, setNaTela] = useState(true);
 
@@ -55,16 +78,22 @@ export function HeroSection() {
     const calmo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const economia = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
     if (calmo || economia) return;
+    const emPe = window.matchMedia(CELULAR_EM_PE);
     const ligar = () => {
       const largura = (caixa.current?.clientWidth ?? 0) * window.devicePixelRatio;
-      setTamanho(largura > 1400 ? 1080 : 720);
+      setTamanho(emPe.matches ? 'retrato' : largura > 1400 ? 1080 : 720);
     };
-    if (document.readyState === 'complete') {
+    // quem gira o celular troca de arquivo: o vertical deitado ficaria todo cortado
+    const aoCarregar = () => {
       ligar();
-      return;
-    }
-    window.addEventListener('load', ligar, { once: true });
-    return () => window.removeEventListener('load', ligar);
+      emPe.addEventListener('change', ligar);
+    };
+    if (document.readyState === 'complete') aoCarregar();
+    else window.addEventListener('load', aoCarregar, { once: true });
+    return () => {
+      window.removeEventListener('load', aoCarregar);
+      emPe.removeEventListener('change', ligar);
+    };
   }, []);
 
   useEffect(() => {
@@ -136,15 +165,7 @@ export function HeroSection() {
             i === atual ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <Image
-            src={slide.imagem}
-            alt={i === atual ? slide.alt : ''}
-            fill
-            priority={i === 0}
-            quality={90}
-            className="object-cover"
-            sizes="100vw"
-          />
+          <FotoDoSlide slide={slide} alt={i === atual ? slide.alt : ''} prioridade={i === 0} />
 
           {/* Transparente até ter quadro: a imagem de baixo segura o lugar */}
           {tamanho && (i === 0 || primeiroPronto) && (
