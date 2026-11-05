@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -74,6 +75,9 @@ export function GaleriaLightbox({
   rotuloDoGatilho?: string;
 }) {
   const [aberto, setAberto] = useState<number | null>(null);
+  /** o painel vai para o body, que só existe depois de montar no navegador */
+  const [montado, setMontado] = useState(false);
+  useEffect(() => setMontado(true), []);
   const gatilhos = useRef<(HTMLButtonElement | null)[]>([]);
   const painel = useRef<HTMLDivElement>(null);
   const toqueX = useRef<number | null>(null);
@@ -153,12 +157,15 @@ export function GaleriaLightbox({
     };
   }, [aberto]);
 
-  // Ao abrir, leva o foco para dentro do painel
+  /* Ao abrir, leva o foco para dentro do painel. Só ao abrir: dependendo do
+     índice, o efeito rodava a cada foto e jogava o foco no Fechar, e o Enter
+     seguinte na seta fechava a galeria em vez de avançar. */
+  const painelAberto = aberto !== null;
   useEffect(() => {
-    if (aberto === null) return;
+    if (!painelAberto) return;
     const alvo = painel.current?.querySelector<HTMLElement>('button');
     alvo?.focus();
-  }, [aberto]);
+  }, [painelAberto]);
 
   const item = aberto !== null ? itens[aberto] : null;
 
@@ -258,6 +265,11 @@ export function GaleriaLightbox({
         grade
       )}
 
+      {/* No body, e não aqui: as seções do site têm z-index próprio, e um
+          z-index só vale dentro da seção que o contém. Montado no lugar, o
+          painel disputava como z-10 e o menu fixo (z-50) ficava por cima,
+          escondendo o contador e o botão de fechar. */}
+      {montado && createPortal(
       <AnimatePresence>
         {item && aberto !== null && (
           <motion.div
@@ -275,18 +287,21 @@ export function GaleriaLightbox({
             ref={painel}
             onClick={fechar}
             onTouchStart={(e) => {
-              toqueX.current = e.touches[0].clientX;
+              // dois dedos é pinça para ampliar a foto, não arrasto
+              toqueX.current = e.touches.length === 1 ? e.touches[0].clientX : null;
             }}
             onTouchEnd={(e) => {
               if (toqueX.current === null) return;
               const dx = e.changedTouches[0].clientX - toqueX.current;
-              if (Math.abs(dx) > 50) irPara(dx < 0 ? 1 : -1);
               toqueX.current = null;
+              // com a página ampliada, um dedo só está passeando pela foto
+              if ((window.visualViewport?.scale ?? 1) > 1.01) return;
+              if (Math.abs(dx) > 50) irPara(dx < 0 ? 1 : -1);
             }}
-            className="fixed inset-0 z-[100] flex flex-col bg-[#050c14]/75 backdrop-blur-2xl"
+            className="fixed inset-0 z-[120] flex flex-col bg-[#050c14]/75 backdrop-blur-2xl"
           >
             {/* Topo: contador e fechar */}
-            <div className="flex shrink-0 items-center justify-between px-5 pt-5 md:px-10 md:pt-8">
+            <div className="flex shrink-0 items-center justify-between px-5 pt-5 md:px-10 md:pt-8 [@media(max-height:500px)]:pt-2">
               <span className="font-heading text-base italic tracking-[0.2em] text-gold md:text-lg">
                 {String(aberto + 1).padStart(2, '0')} / {String(itens.length).padStart(2, '0')}
               </span>
@@ -319,7 +334,7 @@ export function GaleriaLightbox({
             {/* A imagem */}
             {/* No celular a foto vai de borda a borda: as setas tem fundo e desfoque
                 próprios e sobrepõem bem. Do tablet para cima elas ganham calha. */}
-            <div className="flex min-h-0 flex-1 items-center justify-center px-3 py-4 md:px-24 md:py-6">
+            <div className="flex min-h-0 flex-1 items-center justify-center px-3 py-4 md:px-24 md:py-6 [@media(max-height:500px)]:py-1">
               <motion.div
                 key={item.src}
                 initial={{ opacity: 0, scale: 0.99 }}
@@ -343,14 +358,16 @@ export function GaleriaLightbox({
             {/* Base: a legenda e os tracinhos */}
             <div
               onClick={(e) => e.stopPropagation()}
-              className="flex shrink-0 flex-col items-center gap-4 px-5 pb-6 md:gap-5 md:px-10 md:pb-7"
+              className="flex shrink-0 flex-col items-center gap-4 px-5 pb-6 md:gap-5 md:px-10 md:pb-7 [@media(max-height:500px)]:pb-2"
             >
               <p className="max-w-xl text-center font-body text-xs uppercase tracking-[0.22em] text-white/85 md:text-sm">
                 {item.legenda ?? item.alt}
               </p>
 
-              {/* Quantas são e em qual estamos; cada tracinho leva direto */}
-              <div className="flex flex-wrap items-center justify-center gap-1.5 md:gap-2">
+              {/* Quantas são e em qual estamos; cada tracinho leva direto. Com o
+                  celular deitado eles saem: 27 tracinhos em duas linhas comiam
+                  a altura da foto, e o contador já diz em qual estamos. */}
+              <div className="flex flex-wrap items-center justify-center gap-1.5 md:gap-2 [@media(max-height:500px)]:hidden">
                 {itens.map((it, i) => (
                   <button
                     key={it.src}
@@ -398,7 +415,9 @@ export function GaleriaLightbox({
             </button>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
+      )}
     </>
   );
 }

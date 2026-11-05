@@ -120,3 +120,215 @@
   }
 }
 
+/* ============================================================================
+   Entrada dos elementos.
+
+   Três gestos, sempre os mesmos, para o site inteiro ler como uma coisa só:
+   o texto sobe para o lugar, a imagem é revelada de cima para baixo enquanto
+   encolhe até o tamanho certo, e cada elemento entra um pouco depois do outro.
+
+   data-abertura  o que já está na tela quando a página abre. É CSS puro: roda
+                  no primeiro quadro, sem esperar o JavaScript. --ordem é a vez
+                  de cada um.
+   data-surgir    o que entra com a rolagem. components/animacoes-de-entrada.tsx
+                  dispara e, ao terminar, tira os atributos do elemento.
+
+   Tudo é opacidade, translate, scale e clip-path: nada aqui mexe no layout. Os
+   deslocamentos usam as propriedades translate e scale, e não transform, para
+   somar com o que o elemento já tem, como o -translate-x-1/2 do Tailwind.
+   ========================================================================= */
+:root {
+  --surgir-curva: cubic-bezier(0, 0.55, 0.45, 1);
+}
+
+/* Sem opacity no fim, de propósito: o elemento volta à opacidade que já tinha,
+   como o emblema de 90%, em vez de pular de 100% para ela ao terminar. */
+@keyframes surgir-subir {
+  from {
+    opacity: 0;
+    translate: 0 min(100%, 72px);
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+@keyframes surgir-descer {
+  from {
+    opacity: 0;
+    translate: 0 -100%;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+@keyframes surgir-lado {
+  from {
+    opacity: 0;
+    translate: 56px 0;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+@keyframes surgir-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes surgir-cortina {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes surgir-escala {
+  from {
+    scale: var(--surgir-escala, 1.4);
+  }
+  to {
+    scale: 1;
+  }
+}
+
+/* Se o JavaScript não chegar, nada fica escondido: tudo aparece sozinho. */
+@keyframes surgir-seguranca {
+  to {
+    opacity: 1;
+  }
+}
+
+/* A classe surgir só existe com movimento permitido; ver o script em layout.tsx */
+html.surgir [data-surgir]:not([data-surgiu]) {
+  opacity: 0;
+  animation: surgir-seguranca 0.5s 6s forwards;
+}
+
+/* Quem espera fica só transparente, mesmo a imagem. A máscara fechada entra junto
+   com a animação: com clip-path zerado o elemento perde a área, e o
+   IntersectionObserver nunca o vê chegar à tela. */
+html.surgir-vivo [data-surgir]:not([data-surgiu]) {
+  animation: none;
+}
+
+[data-surgiu] {
+  animation-delay: var(--surgir-atraso, 0ms);
+  animation-fill-mode: both;
+  animation-timing-function: var(--surgir-curva);
+}
+
+[data-surgiu='subir'] {
+  animation-name: surgir-subir;
+  animation-duration: 0.85s;
+}
+
+[data-surgiu='lado'] {
+  animation-name: surgir-lado;
+  animation-duration: 0.85s;
+}
+
+[data-surgiu='fade'] {
+  animation-name: surgir-fade;
+  animation-duration: 1.25s;
+}
+
+[data-surgiu='imagem'],
+[data-surgiu='cortina'] {
+  animation-name: surgir-cortina;
+  animation-duration: var(--surgir-tempo, 1.6s);
+}
+
+/* A imagem encolhe dentro da máscara, no mesmo tempo dela */
+[data-surgiu='imagem'] :is(img, video):not([data-fixo]),
+[data-surgiu='cortina'] [data-miolo] {
+  animation: surgir-escala var(--surgir-tempo, 1.6s) var(--surgir-curva) var(--surgir-atraso, 0ms) both;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-abertura] {
+    animation-delay: calc(var(--ordem, 0) * 110ms + 150ms);
+    animation-fill-mode: backwards;
+    animation-timing-function: var(--surgir-curva);
+  }
+
+  [data-abertura='subir'] {
+    animation-name: surgir-subir;
+    animation-duration: 0.95s;
+  }
+
+  [data-abertura='descer'] {
+    animation-name: surgir-descer;
+    animation-duration: 0.85s;
+  }
+
+  [data-abertura='fade'] {
+    animation-name: surgir-fade;
+    animation-duration: 1.25s;
+  }
+
+  /* No hero o zoom é menor que os 1.4 das imagens: é tela cheia, e com filme */
+  [data-abertura='cortina'] {
+    --surgir-escala: 1.16;
+    animation-name: surgir-cortina;
+    animation-duration: 2.1s;
+    animation-delay: 80ms;
+  }
+
+  [data-abertura='cortina'] [data-miolo] {
+    animation: surgir-escala 2.1s var(--surgir-curva) 80ms backwards;
+  }
+}
+
+/* A cortina entre as páginas: sai sozinha na primeira carga, sem depender do
+   JavaScript, e nas trocas de página fecha e abre pelo estado. */
+.cortina-de-pagina {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #0a1929;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+}
+
+.cortina-de-pagina[data-estado='inicio'] {
+  animation: cortina-sai 0.45s ease 0.05s both;
+}
+
+.cortina-de-pagina[data-estado='fechando'] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.3s ease;
+}
+
+@keyframes cortina-sai {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cortina-de-pagina {
+    display: none;
+  }
+}
+
+@media print {
+  html.surgir [data-surgir] {
+    opacity: 1 !important;
+  }
+}
+

@@ -11,7 +11,7 @@ export function ConceitoSection() {
   return (
     <section className="relative z-10 -mb-16 -mt-16 overflow-hidden md:-mb-24 md:-mt-24 lg:-mb-28 lg:-mt-28">
       <div className="container relative z-10 mx-auto px-4 md:px-8">
-        <div className="relative bg-white px-4 py-12 md:px-12 md:py-16 lg:px-16">
+        <div className="relative bg-white px-4 py-4 md:px-12 md:py-16 lg:px-16">
           <div className="relative z-10">
             <div className="relative">
               {/* A moldura dourada */}

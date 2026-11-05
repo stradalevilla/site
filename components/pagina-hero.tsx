@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import { DecorativeGraphic } from '@/components/decorative-graphic';
+import { VideoFaixa } from '@/components/video-faixa';
+import { vez } from '@/lib/abertura';
 
 /**
  * Hero das páginas internas — mesma gramática do hero da home:
@@ -11,6 +13,7 @@ export function PaginaHero({
   frase,
   tagline,
   imagem,
+  filme,
   alt,
   posicao = 'object-center',
   avancoAbaixo = false,
@@ -21,6 +24,8 @@ export function PaginaHero({
   /** Assinatura dourada com tracking largo, sempre por último */
   tagline?: string;
   imagem: string;
+  /** Começo do nome do filme em laço; `imagem` passa a ser o primeiro quadro dele */
+  filme?: string;
   alt: string;
   /** Ajuste fino do enquadramento (ex.: 'object-[50%_70%]') */
   posicao?: string;
@@ -32,8 +37,9 @@ export function PaginaHero({
   avancoAbaixo?: boolean;
 }) {
   return (
-    <section className="relative h-screen w-full overflow-hidden">
-      <div className="absolute inset-0">
+    <section className="relative h-screen w-full overflow-hidden bg-[#0a1929]">
+      <div className="absolute inset-0" data-abertura="cortina">
+      <div className="absolute inset-0" data-miolo>
         <Image
           src={imagem}
           alt={alt}
@@ -43,6 +49,8 @@ export function PaginaHero({
           sizes="100vw"
           className={`object-cover ${posicao}`}
         />
+        {filme && <VideoFaixa base={filme} />}
+      </div>
       </div>
 
       {/* Gradiente de legibilidade: escurece topo e base, meio transparente */}
@@ -59,18 +67,30 @@ export function PaginaHero({
         }`}
       >
         <div className="max-w-5xl mx-auto space-y-6 md:space-y-8">
-          <h1 className="font-heading font-light text-4xl md:text-4xl lg:text-5xl text-white tracking-wider italic uppercase">
+          <h1
+            data-abertura="subir"
+            style={vez(4)}
+            className="font-heading font-light text-4xl md:text-4xl lg:text-5xl text-white tracking-wider italic uppercase"
+          >
             {titulo}
           </h1>
 
           {frase && (
-            <p className="font-body font-light text-base md:text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed px-4">
+            <p
+              data-abertura="subir"
+              style={vez(5)}
+              className="font-body font-light text-base md:text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed px-4"
+            >
               {frase}
             </p>
           )}
 
           {tagline && (
-            <p className="font-heading font-light text-xl md:text-2xl lg:text-3xl text-gold tracking-[0.3em] mt-8 uppercase">
+            <p
+              data-abertura="subir"
+              style={vez(6)}
+              className="font-heading font-light text-xl md:text-2xl lg:text-3xl text-gold tracking-[0.3em] mt-8 uppercase"
+            >
               {tagline}
             </p>
           )}

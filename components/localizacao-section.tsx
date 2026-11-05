@@ -19,6 +19,7 @@ export function LocalizacaoSection() {
                 <Image
                   src="/logos/Icone-VillaStradale escuro.svg"
                   alt="Villa Stradale"
+                  data-surgir="subir"
                   width={64}
                   height={40}
                   className="h-9 md:h-10 w-auto"
@@ -26,23 +27,23 @@ export function LocalizacaoSection() {
               </div>
 
               {/* Overline */}
-              <span className="block font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.3em] mb-6">
+              <span data-surgir="subir" className="block font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.3em] mb-6">
                 Localização
               </span>
 
               {/* Título */}
-              <h2 className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-navy italic uppercase leading-snug mb-8">
+              <h2 data-surgir="subir" className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-navy italic uppercase leading-snug mb-8">
                 Piracaia, 96 km de São Paulo.<br />
                 No encontro da serra com a água
               </h2>
 
               {/* Parágrafos */}
               <div className="space-y-5 max-w-md mb-12">
-                <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed">
+                <p data-surgir="subir" className="font-body text-sm md:text-base text-gray-700 leading-relaxed">
                   O Villa Stradale fica em Piracaia, na região bragantina do interior paulista, onde
                   a Serra da Mantiqueira encontra as águas do Sistema Cantareira.
                 </p>
-                <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed">
+                <p data-surgir="subir" className="font-body text-sm md:text-base text-gray-700 leading-relaxed">
                   Atibaia está a 25 km. Bragança Paulista, Joanópolis e Bom Jesus dos Perdões são
                   vizinhas diretas. Monte Verde, em Minas Gerais, fica a 40 km.
                 </p>
@@ -52,6 +53,7 @@ export function LocalizacaoSection() {
               <Link
                 href="/localizacao"
                 aria-label="Saiba mais sobre a localização"
+                data-surgir="subir"
                 className="group flex items-center justify-center w-16 h-11 rounded-full border border-navy/50 text-navy transition-all duration-300 ease-out hover:border-navy hover:bg-navy hover:text-white"
               >
                 <svg
@@ -75,11 +77,11 @@ export function LocalizacaoSection() {
             <div className="lg:border-l lg:border-navy/15 lg:pl-12 xl:pl-16 space-y-10">
               {/* Por Terra */}
               <div>
-                <div className="flex items-center gap-2 text-[#D07748] mb-4">
+                <div data-surgir="subir" className="flex items-center gap-2 text-[#D07748] mb-4">
                   <IconCar size={22} stroke={1.5} />
                   <span className="font-body text-base md:text-lg">Por Terra</span>
                 </div>
-                <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed max-w-sm">
+                <p data-surgir="subir" className="font-body text-sm md:text-base text-gray-700 leading-relaxed max-w-sm">
                   96 km de São Paulo. Acesso pela Fernão Dias até Atibaia, depois pela SP 036 até
                   Piracaia. Alternativa pela Bandeirantes.
                 </p>
@@ -87,8 +89,8 @@ export function LocalizacaoSection() {
 
               {/* Waze */}
               <div>
-                <span className="block font-body text-sm md:text-base text-navy mb-3">Waze</span>
-                <div className="flex items-center gap-3">
+                <span data-surgir="subir" className="block font-body text-sm md:text-base text-navy mb-3">Waze</span>
+                <div data-surgir="subir" className="flex items-center gap-3">
                   <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#05c8f7] text-white">
                     <IconBrandWaze size={22} stroke={1.5} />
                   </span>
@@ -98,11 +100,11 @@ export function LocalizacaoSection() {
 
               {/* Pelo Ar */}
               <div>
-                <div className="flex items-center gap-2 text-[#D07748] mb-4">
+                <div data-surgir="subir" className="flex items-center gap-2 text-[#D07748] mb-4">
                   <IconHelicopter size={22} stroke={1.5} />
                   <span className="font-body text-base md:text-lg">Pelo Ar</span>
                 </div>
-                <p className="font-body text-sm md:text-base text-gray-700 leading-relaxed max-w-sm">
+                <p data-surgir="subir" className="font-body text-sm md:text-base text-gray-700 leading-relaxed max-w-sm">
                   Do Helicidade, em São Paulo, direto ao heliponto da península. Três spots
                   privativos de pouso, recuados do centro de convivência.
                 </p>

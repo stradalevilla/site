@@ -25,10 +25,13 @@ const RESERVA_DO_AVANCO = {
  * cartão de cima encosta no emblema.
  *  · 'nenhum' = ninguém avança por cima
  *  · 'normal' = 64/96/112px de avanço, somados ao respiro de sempre
+ *  · 'soNoCelular' = o avanço só pesa no celular: do tablet para cima a altura
+ *    mínima da faixa e a centralização já dão conta dele
  */
 const RESERVA_DO_AVANCO_ACIMA = {
   nenhum: 'pt-20 md:pt-28 lg:pt-32',
   normal: 'pt-36 md:pt-52 lg:pt-60',
+  soNoCelular: 'pt-36 md:pt-28 lg:pt-32',
 };
 
 export function DivisorCapitulo({
@@ -80,22 +83,23 @@ export function DivisorCapitulo({
           <Image
             src="/logos/Icone-VillaStradale claro.svg"
             alt="Villa Stradale"
+            data-surgir="subir"
             width={64}
             height={40}
             className="h-9 w-auto md:h-10"
           />
         </div>
 
-        <p className="font-heading text-sm font-thin uppercase italic tracking-[0.35em] text-[#D07748] md:text-base">
+        <p data-surgir="subir" className="font-heading text-sm font-thin uppercase italic tracking-[0.35em] text-[#D07748] md:text-base">
           {rotulo}
         </p>
 
-        <h2 className="mx-auto mt-6 max-w-4xl font-heading text-3xl font-light uppercase italic leading-tight tracking-wider text-white md:text-4xl lg:text-5xl">
+        <h2 data-surgir="subir" className="mx-auto mt-6 max-w-4xl font-heading text-3xl font-light uppercase italic leading-tight tracking-wider text-white md:text-4xl lg:text-5xl">
           {titulo}
         </h2>
 
         {frase && (
-          <p className="mx-auto mt-6 max-w-2xl font-body text-base font-light leading-relaxed text-white/85 md:text-lg">
+          <p data-surgir="subir" className="mx-auto mt-6 max-w-2xl font-body text-base font-light leading-relaxed text-white/85 md:text-lg">
             {frase}
           </p>
         )}

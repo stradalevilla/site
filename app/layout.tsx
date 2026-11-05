@@ -4,6 +4,8 @@ import { Providers } from '@/components/providers';
 import { FundoDoSite } from '@/components/fundo-curvas';
 import { getConfigDoFundo } from '@/lib/config-fundo';
 import { PrepararMapa } from '@/components/preparar-mapa';
+import { AnimacoesDeEntrada } from '@/components/animacoes-de-entrada';
+import { TransicaoDePagina } from '@/components/transicao-de-pagina';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://villastradale.com'),
@@ -15,7 +17,7 @@ export const metadata: Metadata = {
      alguém manda o link no WhatsApp. Está montado a partir da copy que já está
      no ar nas páginas internas, para não inventar número nem promessa. */
   description:
-    'Uma península na represa de Piracaia, entre a Serra da Mantiqueira e as águas do Sistema Cantareira: 275.951 m² com lotes voltados à água, casa clube, marina e heliponto.',
+    'Uma península na represa de Piracaia, entre a Serra da Mantiqueira e as águas do Sistema Cantareira: 275.951 m² com lotes voltados à água, casa-clube, marina e heliponto.',
   keywords: [
     'Villa Stradale',
     'lotes em Piracaia',
@@ -32,13 +34,13 @@ export const metadata: Metadata = {
     siteName: 'Villa Stradale',
     title: 'Villa Stradale — uma península irreplicável',
     description:
-      'Entre a Serra da Mantiqueira e as águas do Sistema Cantareira, 275.951 m² de península com lotes voltados à água, casa clube, marina e heliponto.',
+      'Entre a Serra da Mantiqueira e as águas do Sistema Cantareira, 275.951 m² de península com lotes voltados à água, casa-clube, marina e heliponto.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Villa Stradale — uma península irreplicável',
     description:
-      'Entre a Serra da Mantiqueira e as águas do Sistema Cantareira, 275.951 m² de península com lotes voltados à água, casa clube, marina e heliponto.',
+      'Entre a Serra da Mantiqueira e as águas do Sistema Cantareira, 275.951 m² de península com lotes voltados à água, casa-clube, marina e heliponto.',
   },
   robots: {
     index: true,
@@ -63,8 +65,18 @@ export default async function RootLayout({
   const configDoFundo = await getConfigDoFundo();
 
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
+        {/* Antes da primeira pintura: sem isto, o que entra com a rolagem
+            piscaria visível antes de se esconder. Quem pede menos movimento, o
+            painel e navegador sem IntersectionObserver ficam sem a classe, e a
+            página simplesmente aparece inteira. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&location.pathname.indexOf('/admin')!==0)document.documentElement.classList.add('surgir')}catch(e){}})()",
+          }}
+        />
         <link rel="stylesheet" href="https://use.typekit.net/hap2dqc.css" />
         {/* O mapa da região sai destes dois: abrir a conexão desde já poupa o
             aperto de mão quando o visitante chega em Localização. */}
@@ -82,6 +94,8 @@ export default async function RootLayout({
         <Providers>
           {children}
         </Providers>
+        <AnimacoesDeEntrada />
+        <TransicaoDePagina />
       </body>
     </html>
   );

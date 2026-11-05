@@ -144,8 +144,7 @@ export function MapaRegiao3D({
       mapa = new Mapa({
         container: el,
         style: estilo,
-        center: camera.centro,
-        zoom: camera.zoom,
+        ...enquadramentoDoQuadro(camera, pinos, el.clientWidth),
         bearing: camera.giro,
         pitch: camera.inclinacao,
         maxPitch: 80,
@@ -276,9 +275,11 @@ export function MapaRegiao3D({
 
         // os pinos, na tipografia do site
         for (const pino of pinos) {
-          new Marker({ element: criarPino(pino), anchor: 'bottom' })
+          const marcador = new Marker({ element: criarPino(pino), anchor: 'bottom' })
             .setLngLat([pino.lng, pino.lat])
             .addTo(mapa);
+          // no celular outra cidade pode cair em cima do logotipo: ele fica na frente
+          if (pino.marca) marcador.getElement().style.zIndex = '1';
         }
       });
 
@@ -339,13 +340,12 @@ export function MapaRegiao3D({
 
   const voltarAoEnquadramento = useCallback(() => {
     mapaRef.current?.easeTo({
-      center: camera.centro,
-      zoom: camera.zoom,
+      ...enquadramentoDoQuadro(camera, pinos, caixa.current?.clientWidth ?? 0),
       bearing: camera.giro,
       pitch: camera.inclinacao,
       duration: 1400,
     });
-  }, [camera]);
+  }, [camera, pinos]);
 
   const salvarEnquadramento = useCallback(async () => {
     if (!cameraAtual) return;
@@ -474,6 +474,30 @@ export function MapaRegiao3D({
 }
 
 /** O pino no desenho da arte: rótulo terracota, haste fina e o ponto no lugar */
+/** na câmera salva, quantos pixels separam o empreendimento da cidade na tela */
+const PINOS_DISTANTES_PX = 364;
+/** o que sobra nas pontas para os rótulos não baterem na borda do quadro */
+const FOLGA_DOS_ROTULOS_PX = 100;
+
+/**
+ * O enquadramento salvo foi feito num quadro largo. No celular o quadro tem um
+ * terço da largura e cortava o pino do empreendimento: lá a câmera mira o ponto
+ * entre ele e a cidade e abre o zoom o bastante para os dois caberem.
+ */
+function enquadramentoDoQuadro(camera: CameraMapa, pinos: PinoMapa[], largura: number) {
+  const empreendimento = pinos.find((p) => p.marca);
+  const cidade = pinos.find((p) => !p.marca);
+  if (largura >= 700 || !empreendimento || !cidade) {
+    return { center: camera.centro, zoom: camera.zoom };
+  }
+  const centro: [number, number] = [
+    (empreendimento.lng + cidade.lng) / 2,
+    (empreendimento.lat + cidade.lat) / 2,
+  ];
+  const cabe = Math.max(largura - FOLGA_DOS_ROTULOS_PX, 120);
+  return { center: centro, zoom: camera.zoom - Math.log2(PINOS_DISTANTES_PX / cabe) };
+}
+
 function criarPino(pino: PinoMapa) {
   const raiz = document.createElement('div');
   raiz.className = 'flex flex-col items-center';

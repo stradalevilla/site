@@ -28,17 +28,17 @@ export default async function MasterplanPage() {
             abre a folga da barra fixa do topo, que tem 112px no desktop. */}
         <section
           id="masterplan"
-          className="relative z-10 scroll-mt-28 overflow-hidden pt-32 md:pt-40 lg:pt-44"
+          className="relative z-10 scroll-mt-28 overflow-hidden pt-20 md:pt-40 lg:pt-44"
         >
           <div className="container mx-auto px-4 md:px-8">
             {/* Sem folga embaixo: o mapa fecha o container encostado na base, e a
                 moldura dourada termina mais acima, emoldurando por cima da
                 imagem — o respiro de baixo é a faixa de mapa que sobra sob o fio
                 dourado, em vez de uma barra branca. */}
-            <div className="relative bg-white px-4 pt-12 md:px-12 md:pt-16 lg:px-16">
+            <div className="relative bg-white px-4 py-4 md:px-12 md:pb-0 md:pt-16 lg:px-16">
               <div className="relative z-10">
                 <div className="relative">
-                  <div className="pointer-events-none absolute bottom-12 left-0 right-0 top-0 z-50 border-2 border-[#D07748]/50 md:bottom-16" />
+                  <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 z-50 border-2 border-[#D07748]/50 md:bottom-16" />
 
                   {/* Título e subtítulo, na parte branca, fora do mapa */}
                   <div className="px-4 py-12 md:px-12 md:py-16 lg:px-16 lg:py-20">
@@ -48,26 +48,27 @@ export default async function MasterplanPage() {
                         alt="Villa Stradale"
                         width={40}
                         height={40}
+                        data-surgir="subir"
                         className="h-8 w-auto opacity-90 md:h-10"
                       />
                     </div>
 
                     {/* Sem banner, é aqui que a página se apresenta */}
                     <div className="mb-10 space-y-3 text-center md:mb-12">
-                      <h1 className="font-heading text-3xl font-light uppercase italic leading-tight text-navy md:text-4xl lg:text-5xl">
+                      <h1 data-surgir="subir" className="font-heading text-3xl font-light uppercase italic leading-tight text-navy md:text-4xl lg:text-5xl">
                         Masterplan
                       </h1>
-                      <h2 className="font-heading text-2xl font-light uppercase italic leading-relaxed text-navy/80 md:text-3xl lg:text-4xl">
+                      <h2 data-surgir="subir" className="font-heading text-2xl font-light uppercase italic leading-relaxed text-navy/80 md:text-3xl lg:text-4xl">
                         Terreno de 275.951 m²
                       </h2>
                     </div>
 
-                    <p className="mb-10 text-center font-body text-base leading-relaxed text-[#D07748] md:mb-12 md:text-lg">
+                    <p data-surgir="subir" className="mb-10 text-center font-body text-base leading-relaxed text-[#D07748] md:mb-12 md:text-lg">
                       São {TOTAL_LOTES} lotes voltados à água.
                     </p>
 
                     <div className="mx-auto max-w-4xl text-center">
-                      <p className="font-body text-base leading-relaxed text-gray-700 md:text-lg">
+                      <p data-surgir="subir" className="font-body text-base leading-relaxed text-gray-700 md:text-lg">
                         Com casa-clube, marina, heliponto, quadras esportivas e infraestrutura
                         subterrânea, em um território protegido por segurança 24h por terra e por
                         água.{' '}
@@ -86,12 +87,12 @@ export default async function MasterplanPage() {
                       cada lote viraria um risco impossível de tocar. A 760px a
                       mediana do lote ainda dava 27px de largura: abaixo do dedo.
                       A 1250px ela chega aos 44px, ao custo de mais arrasto. */}
-                  <div className="relative -mx-4 overflow-x-auto md:-mx-12 lg:-mx-16 lg:overflow-x-visible">
+                  <div data-surgir="fade" className="relative overflow-x-auto md:-mx-12 lg:-mx-16 lg:overflow-x-visible">
                     <div className="min-w-[1250px] md:min-w-[1000px] lg:min-w-0">
                       <MapaImplantacao contornos={contornos} />
                     </div>
                   </div>
-                  <p className="px-4 pt-4 text-center font-body text-[11px] uppercase tracking-[0.25em] text-navy/50 md:px-12 lg:hidden">
+                  <p data-surgir="fade" className="px-4 pb-4 pt-4 text-center md:pb-0 font-body text-[11px] uppercase tracking-[0.25em] text-navy/50 md:px-12 lg:hidden">
                     Arraste para o lado para percorrer a península
                   </p>
                 </div>

@@ -22,6 +22,7 @@ export function FaixaParallax({
   return (
     <section
       aria-label={rotulo}
+      data-surgir="cortina"
       className={`relative w-full bg-cover bg-center lg:bg-fixed ${altura}`}
       style={{ backgroundImage: `url('${imagem}')` }}
     />

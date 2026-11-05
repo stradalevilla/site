@@ -78,10 +78,10 @@ export function LoteVisualizacao({
       {/* Rótulo da seção + alternador de visualização, na mesma linha */}
       <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="font-heading text-2xl uppercase tracking-wide text-navy md:text-4xl">
+          <p data-surgir="subir" className="font-heading text-2xl uppercase tracking-wide text-navy md:text-4xl">
             Lote {numero}
           </p>
-          <p className="font-body text-[11px] uppercase tracking-wide text-gray-500">
+          <p data-surgir="subir" className="font-body text-[11px] uppercase tracking-wide text-gray-500">
             {area ? `${area}M²` : 'Detalhe do lote'}
           </p>
         </div>
@@ -97,6 +97,7 @@ export function LoteVisualizacao({
                   role="tab"
                   aria-selected={ativo}
                   onClick={() => setVista(id)}
+                  data-surgir="subir"
                   className="group relative flex min-h-[44px] items-end pb-3 font-body text-[11px] uppercase tracking-[0.2em] transition-colors duration-300"
                 >
                   <span className="text-navy">{label}</span>
@@ -118,7 +119,7 @@ export function LoteVisualizacao({
             com a largura exibida: em 375px os números saíam com 5px de altura.
             Então ele guarda um tamanho mínimo de leitura e a faixa rola para o
             lado, como o mapa do masterplan faz. */}
-        <div className="overflow-x-auto xl:overflow-x-visible">
+        <div data-surgir="fade" className="overflow-x-auto xl:overflow-x-visible">
         <div className="relative w-full min-w-[700px] xl:min-w-0">
           {/* As duas camadas ficam empilhadas; só a opacidade muda, então o
               crossfade acontece entre elas, sem passar pelo fundo branco. */}
@@ -154,7 +155,7 @@ export function LoteVisualizacao({
         </div>
         </div>
 
-        <p className="mt-3 text-center font-body text-[11px] uppercase tracking-[0.25em] text-navy/50 xl:hidden">
+        <p data-surgir="fade" className="mt-3 text-center font-body text-[11px] uppercase tracking-[0.25em] text-navy/50 xl:hidden">
           Arraste para o lado para ver o desenho inteiro
         </p>
 

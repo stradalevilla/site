@@ -56,8 +56,8 @@ const emblemMaskStyle = {
 function SectionLabel({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div className="mb-5">
-      <p className="font-heading text-2xl uppercase tracking-wide text-navy md:text-4xl">{title}</p>
-      <p className="font-body text-[11px] uppercase tracking-wide text-gray-500">{subtitle}</p>
+      <p data-surgir="subir" className="font-heading text-2xl uppercase tracking-wide text-navy md:text-4xl">{title}</p>
+      <p data-surgir="subir" className="font-body text-[11px] uppercase tracking-wide text-gray-500">{subtitle}</p>
     </div>
   );
 }
@@ -116,7 +116,7 @@ export default async function LotePage({
       <Navbar />
       <MobileNav />
 
-      <main className="relative overflow-hidden pt-28 pb-20 lg:pt-40 lg:pb-28">
+      <main className="relative overflow-hidden pt-20 pb-20 md:pt-28 lg:pt-40 lg:pb-28">
         <div className="container mx-auto px-4 md:px-8">
           {/* Container branco (padrão das seções) */}
           <div className="relative bg-white p-4 md:p-10 lg:p-12">
@@ -127,8 +127,8 @@ export default async function LotePage({
               <div className="relative z-10 px-3 py-10 sm:px-6 md:px-14 md:py-16">
                 {/* Cabeçalho: emblema + título do lote */}
                 <div className="flex items-center justify-between gap-4 border-b border-[#D07748]/40 pb-6">
-                  <span aria-hidden className="block h-16 w-32 bg-gold-dark md:h-24 md:w-48" style={emblemMaskStyle} />
-                  <h1 className="font-heading text-xl italic uppercase text-gold-dark md:text-3xl">
+                  <span aria-hidden data-surgir="subir" className="block h-16 w-32 bg-gold-dark md:h-24 md:w-48" style={emblemMaskStyle} />
+                  <h1 data-surgir="subir" className="font-heading text-xl italic uppercase text-gold-dark md:text-3xl">
                     Lote {pad} {data?.area ? `- ${data.area}M²` : ''}
                   </h1>
                 </div>
@@ -143,6 +143,7 @@ export default async function LotePage({
                         width={data.masterplan.width}
                         height={data.masterplan.height}
                         alt={`Masterplan com o lote ${pad} sinalizado`}
+                        data-surgir="fade"
                         className="h-auto w-full"
                         sizes="(max-width: 1024px) 100vw, 900px"
                         priority
@@ -164,7 +165,7 @@ export default async function LotePage({
                       ) : (
                         <>
                           <SectionLabel title={`Lote ${pad}`} subtitle="Metragem e área construtiva" />
-                          <p className="py-10 text-center font-body text-sm leading-relaxed text-gray-500 md:py-16">
+                          <p data-surgir="subir" className="py-10 text-center font-body text-sm leading-relaxed text-gray-500 md:py-16">
                             As plantas com a metragem e a área construtiva deste lote
                             <br className="hidden sm:block" /> estão sendo preparadas e
                             estarão disponíveis em breve.
@@ -183,11 +184,12 @@ export default async function LotePage({
                   </>
                 ) : (
                   <div className="py-16 text-center md:py-24">
-                    <p className="mx-auto max-w-md font-body text-sm leading-relaxed text-gray-600 md:text-base">
+                    <p data-surgir="subir" className="mx-auto max-w-md font-body text-sm leading-relaxed text-gray-600 md:text-base">
                       As informações deste lote estão sendo preparadas e estarão disponíveis em breve.
                     </p>
                     <Link
                       href="/lotes"
+                      data-surgir="subir"
                       className="group mt-10 inline-flex h-12 items-center justify-center gap-3 rounded-sm border border-navy/50 px-6 text-navy transition-all duration-300 ease-out hover:border-navy hover:bg-navy hover:text-white"
                     >
                       <svg

@@ -72,6 +72,7 @@ function LinhaDoAcordeao({
         onClick={() => setAberta((estava) => !estava)}
         aria-expanded={aberta}
         aria-controls={idDoConteudo}
+        data-surgir="subir"
         className="group flex w-full items-center justify-between gap-6 py-6 text-left"
       >
         <span>
@@ -142,23 +143,24 @@ export function DiferenciaisSection() {
             <Image
               src="/logos/Icone-VillaStradale escuro.svg"
               alt="Villa Stradale"
+              data-surgir="subir"
               width={64}
               height={40}
               className="h-9 w-auto md:h-10"
             />
           </div>
-          <span className="mb-6 block font-heading text-sm font-thin uppercase italic tracking-[0.3em] text-[#D07748] md:text-base">
+          <span data-surgir="subir" className="mb-6 block font-heading text-sm font-thin uppercase italic tracking-[0.3em] text-[#D07748] md:text-base">
             Segurança e infraestrutura
           </span>
-          <h3 className="mb-8 font-heading text-2xl font-light uppercase italic leading-snug text-navy md:text-3xl lg:text-4xl">
+          <h3 data-surgir="subir" className="mb-8 font-heading text-2xl font-light uppercase italic leading-snug text-navy md:text-3xl lg:text-4xl">
             Diferenciais
           </h3>
           <div className="max-w-md space-y-5">
-            <p className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
+            <p data-surgir="subir" className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
               O invisível é o que sustenta o lugar. Nada disto aparece nos renders, e é o que faz a
               diferença no dia em que chove forte, no dia em que falta luz e em todos os outros.
             </p>
-            <p className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
+            <p data-surgir="subir" className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
               Cada detalhe visível foi pensado para encantar. Cada detalhe invisível, para durar.
             </p>
           </div>
@@ -210,10 +212,10 @@ export function DiferenciaisSection() {
           </LinhaDoAcordeao>
 
           {/* A portaria, que fecha a coluna */}
-          <div className="relative mt-12 aspect-[16/9] w-full border border-[#D07748]/40 md:mt-14">
+          <div data-surgir="imagem" className="relative mt-12 aspect-[16/9] w-full border border-[#D07748]/40 md:mt-14">
             <Image
-              src="/images/portaria/portaria-entrada.jpg"
-              alt="A portaria do Villa Stradale, em pedra e madeira, com o espelho de água"
+              src="/images/renders/portaria-entrada.jpg"
+              alt="O muro de pedra com o nome Villa Stradale na entrada da portaria, com a represa ao lado"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"

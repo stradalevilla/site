@@ -50,10 +50,10 @@ export default function VillaStradale() {
         {/* ================= O PROJETO ================= */}
         <section
           id="o-projeto"
-          className="relative z-10 scroll-mt-28 overflow-hidden pt-20 md:pt-32"
+          className="relative z-10 scroll-mt-28 overflow-hidden pt-4 md:pt-32"
         >
           <div className="container relative z-10 mx-auto px-4 md:px-8">
-            <div className="relative bg-white px-4 py-12 md:px-12 md:py-16 lg:px-16">
+            <div className="relative bg-white px-4 py-4 md:px-12 md:py-16 lg:px-16">
               <div className="relative z-10">
                 <div className="relative">
                   <div className="pointer-events-none absolute inset-0 z-50 border-2 border-[#D07748]/50" />
@@ -66,6 +66,7 @@ export default function VillaStradale() {
                       <Image
                         src="/logos/Icone-VillaStradale escuro.svg"
                         alt="Villa Stradale"
+                        data-surgir="subir"
                         width={40}
                         height={40}
                         className="h-8 w-auto opacity-90 md:h-10"
@@ -73,42 +74,41 @@ export default function VillaStradale() {
                     </div>
 
                     <div className="mb-10 space-y-2 text-center md:mb-12">
-                      <h2 className="font-heading text-2xl font-light uppercase italic leading-relaxed text-navy md:text-3xl lg:text-4xl">
+                      <h2 data-surgir="subir" className="font-heading text-2xl font-light uppercase italic leading-relaxed text-navy md:text-3xl lg:text-4xl">
                         Casa-Clube:
                       </h2>
-                      <h2 className="font-heading text-2xl font-light uppercase italic leading-relaxed text-navy md:text-3xl lg:text-4xl">
+                      <h2 data-surgir="subir" className="font-heading text-2xl font-light uppercase italic leading-relaxed text-navy md:text-3xl lg:text-4xl">
                         o coração do projeto
                       </h2>
                     </div>
 
                     {/* Subtítulo terracota, como no book — em uma linha só */}
-                    <p className="mb-10 text-center font-body text-base leading-relaxed text-[#D07748] md:mb-12 md:text-lg">
+                    <p data-surgir="subir" className="mb-10 text-center font-body text-base leading-relaxed text-[#D07748] md:mb-12 md:text-lg">
                       Mais do que um clube, uma casa para ser vivida.
                     </p>
 
                     <div className="mx-auto max-w-4xl space-y-6 text-center">
-                      <p className="font-body text-base leading-relaxed text-gray-700 md:text-lg">
+                      <p data-surgir="subir" className="font-body text-base leading-relaxed text-gray-700 md:text-lg">
                         Um mirante voltado para a represa, onde o lazer assume o tom de lar.
-                        Piscina, bangalôs, spa, capela, brinquedoteca, restaurante e bar, todos
+                        Piscina, bangalôs, spa, brinquedoteca, restaurante e bar, todos
                         voltados à vista da água.
                       </p>
-                      <p className="font-body text-base leading-relaxed text-gray-700 md:text-lg">
+                      <p data-surgir="subir" className="font-body text-base leading-relaxed text-gray-700 md:text-lg">
                         Aqui, o bem-estar nasce da convivência. É o ponto de encontro entre quem
                         compartilha os mesmos valores e ritmo de vida. O privilégio de estar
                         juntos, sem pressa, em harmonia com o lugar.
                       </p>
                     </div>
 
-                    {/* A casa clube logo abaixo do texto: imagem limpa, sem véu e
+                    {/* A casa-clube logo abaixo do texto: imagem limpa, sem véu e
                         sem título. As margens negativas cancelam o padding do
                         conteúdo E o do cartão branco, então a imagem avança além
                         das linhas douradas e ocupa a largura inteira do container.
-                        Único render dessa elevação frontal — vem da pasta de
-                        abril, porque FINAIS MAIO não tem equivalente. */}
-                    <div className="relative -mx-12 mt-12 h-[400px] md:-mx-24 md:mt-16 md:h-[500px] lg:-mx-32 lg:mt-20 lg:h-[600px]">
+                        A elevação frontal é o render noturno da pasta final. */}
+                    <div data-surgir="imagem" className="relative -mx-4 mt-12 h-[400px] md:-mx-24 md:mt-16 md:h-[500px] lg:-mx-32 lg:mt-20 lg:h-[600px]">
                       <Image
-                        src="/images/casaclube/casa-clube-c14.jpg"
-                        alt="A casa clube vista de frente: dois pavimentos, brises de madeira, muro de pedra e o espelho de água do wellness"
+                        src="/images/renders/casa-clube-noite.jpg"
+                        alt="A casa-clube vista de frente à noite: dois pavimentos acesos e o espelho de água do wellness"
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
@@ -117,11 +117,11 @@ export default function VillaStradale() {
 
                     {/* A metragem do produto — book p6. Faixa navy encostada na
                         foto, na mesma largura dela, com o texto claro. */}
-                    <div className="relative -mx-12 bg-[#0a1929] px-8 py-14 text-center md:-mx-24 md:px-12 md:py-16 lg:-mx-32 lg:py-20">
-                      <p className="font-body text-xs uppercase tracking-[0.35em] text-[#D07748] md:text-sm">
-                        Náutica, Casa Clube e Reserva
+                    <div className="relative -mx-4 bg-[#0a1929] px-8 py-14 text-center md:-mx-24 md:px-12 md:py-16 lg:-mx-32 lg:py-20">
+                      <p data-surgir="subir" className="font-body text-xs uppercase tracking-[0.35em] text-[#D07748] md:text-sm">
+                        Náutica, Casa-Clube e Reserva
                       </p>
-                      <p className="mt-6 font-heading text-2xl font-light uppercase italic leading-tight text-gold md:text-3xl lg:text-4xl">
+                      <p data-surgir="subir" className="mt-6 font-heading text-2xl font-light uppercase italic leading-tight text-gold md:text-3xl lg:text-4xl">
                         {TOTAL_LOTES} lotes de 2.000 a 4.554 m²
                       </p>
                     </div>

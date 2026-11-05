@@ -1,13 +1,14 @@
 import Image from 'next/image';
 import { DecorativeGraphic } from '@/components/decorative-graphic';
+import { MidiasRotativas } from '@/components/midias-rotativas';
 
 /**
  * Amenities — "Tudo o que existe na península".
  *
  * Veio da página /villa-stradale (book p8/p22/p23, programa p26) e passou a
  * viver na home, no lugar dos três cartões antigos de Racket Club, Garagem
- * Náutica e Heliponto. A Casa Clube ficou de fora da lista: o lema e o texto
- * dela já abrem a seção da casa clube, logo acima, palavra por palavra.
+ * Náutica e Heliponto. A Casa-Clube ficou de fora da lista: o lema e o texto
+ * dela já abrem a seção da casa-clube, logo acima, palavra por palavra.
  *
  * Os paddings e os deslocamentos dos grafismos são os mesmos dos cartões que
  * este bloco substituiu, para o grafismo encostar na linha dourada do cartão
@@ -28,7 +29,8 @@ const amenities = [
       'Trilha de 3 km para corrida, caminhada ou bicicleta',
       'Pista de cooper',
     ],
-    imagem: '/images/galeria/racket-club.jpg',
+    imagem: '/images/renders/racket-club.jpg',
+    filmes: ['/videos/racket-club-quadra', '/videos/racket-club-casal'],
     alt: 'As quadras do Racket Club vistas do alto, com a península e a represa ao fundo',
   },
   {
@@ -36,14 +38,20 @@ const amenities = [
     nome: 'Garagem Náutica',
     lema: 'O acesso do Villa Stradale à represa.',
     texto:
-      'Garagem náutica para aproximadamente 30 embarcações, conectando o dia a dia da comunidade à represa. Do píer, o caminho segue para a Casa Clube pela água.',
+      'Garagem náutica para aproximadamente 30 embarcações, conectando o dia a dia da comunidade à represa. Do píer, o caminho segue para a Casa-Clube pela água.',
     programa: [
       'Garagem para aproximadamente 30 embarcações',
       'Apoio náutico',
-      'Píer para acesso à Casa Clube',
+      'Píer para acesso à Casa-Clube',
     ],
-    imagem: '/images/amenities/marina.jpg',
-    alt: 'Enseada da marina com veleiro e píeres de madeira',
+    imagem: '/images/renders/nautica.jpg',
+    filmes: [
+      '/videos/nautica-veleiro',
+      '/videos/nautica-wake',
+      '/videos/nautica-pier',
+      '/videos/nautica-jet-ski',
+    ],
+    alt: 'Lancha na represa, diante da encosta arborizada da península',
   },
   {
     overline: 'Acesso pelo ar',
@@ -53,6 +61,7 @@ const amenities = [
       'Três spots de pouso integrados à paisagem, recuados em relação ao centro de convivência. A linha de silêncio mantém o heliponto afastado e resguarda as quadras.',
     programa: ['Três spots de pouso', 'Recuado do centro de convivência'],
     imagem: '/images/amenities/heliponto.jpg',
+    filmes: ['/videos/heliponto-helicoptero'],
     alt: 'Heliponto na beira da represa com helicóptero pousado',
   },
 ];
@@ -64,27 +73,28 @@ export function AmenitiesSection() {
         <Image
           src="/logos/Icone-VillaStradale escuro.svg"
           alt="Villa Stradale"
+          data-surgir="subir"
           width={64}
           height={40}
           className="h-9 w-auto md:h-10"
         />
       </div>
-      <span className="mb-6 block font-heading text-sm font-thin uppercase italic tracking-[0.3em] text-[#D07748] md:text-base">
+      <span data-surgir="subir" className="mb-6 block font-heading text-sm font-thin uppercase italic tracking-[0.3em] text-[#D07748] md:text-base">
         Amenities
       </span>
-      <h3 className="mb-6 font-heading text-2xl font-light uppercase italic leading-snug text-navy md:text-3xl lg:text-4xl">
+      <h3 data-surgir="subir" className="mb-6 font-heading text-2xl font-light uppercase italic leading-snug text-navy md:text-3xl lg:text-4xl">
         Tudo o que existe
         <br />
         na península
       </h3>
-      <p className="mb-14 max-w-xl font-body text-sm leading-relaxed text-navy/80 md:mb-20 md:text-base">
+      <p data-surgir="subir" className="mb-14 max-w-xl font-body text-sm leading-relaxed text-navy/80 md:mb-20 md:text-base">
         Cada estrutura foi posicionada onde a península pedia.
         <br />
         Aqui, uma a uma, com o programa de cada uma.
       </p>
 
       <div className="space-y-10 md:space-y-14">
-        {amenities.map(({ overline, nome, lema, texto, programa, imagem, alt }, i) => {
+        {amenities.map(({ overline, nome, lema, texto, programa, imagem, filmes, alt }, i) => {
           const imagemEsquerda = i % 2 === 1;
           return (
             <div key={nome} className="relative grid w-full grid-cols-1 bg-[#EFEBE3] lg:grid-cols-2">
@@ -93,16 +103,16 @@ export function AmenitiesSection() {
                   imagemEsquerda ? 'order-1 lg:order-2' : ''
                 }`}
               >
-                <span className="mb-4 font-heading text-sm font-thin uppercase italic tracking-[0.3em] text-[#D07748] md:text-base">
+                <span data-surgir="subir" className="mb-4 font-heading text-sm font-thin uppercase italic tracking-[0.3em] text-[#D07748] md:text-base">
                   {overline}
                 </span>
-                <h4 className="mb-5 font-heading text-2xl font-light uppercase italic text-navy md:text-3xl lg:text-4xl">
+                <h4 data-surgir="subir" className="mb-5 font-heading text-2xl font-light uppercase italic text-navy md:text-3xl lg:text-4xl">
                   {nome}
                 </h4>
-                <p className="mb-5 font-heading text-lg font-light italic text-[#D07748] md:text-xl">
+                <p data-surgir="subir" className="mb-5 font-heading text-lg font-light italic text-[#D07748] md:text-xl">
                   {lema}
                 </p>
-                <p className="max-w-md font-body text-sm leading-relaxed text-gray-700 md:text-base">
+                <p data-surgir="subir" className="max-w-md font-body text-sm leading-relaxed text-gray-700 md:text-base">
                   {texto}
                 </p>
 
@@ -110,6 +120,7 @@ export function AmenitiesSection() {
                   {programa.map((item) => (
                     <li
                       key={item}
+                      data-surgir="subir"
                       className="flex gap-2 font-body text-[11px] leading-snug text-navy/70 md:text-xs"
                     >
                       <span aria-hidden className="text-[#D07748]">
@@ -122,23 +133,32 @@ export function AmenitiesSection() {
               </div>
 
               <div className={`relative p-6 md:p-8 ${imagemEsquerda ? 'order-2 lg:order-1' : ''}`}>
-                <div className="relative h-full min-h-[260px] w-full md:min-h-[340px]">
-                  <Image
-                    src={imagem}
+                {filmes ? (
+                  <MidiasRotativas
+                    filmes={filmes}
+                    imagem={imagem}
                     alt={alt}
-                    fill
-                    className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                   />
-                </div>
+                ) : (
+                  <div data-surgir="imagem" className="relative h-full min-h-[260px] w-full md:min-h-[340px]">
+                    <Image
+                      src={imagem}
+                      alt={alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  </div>
+                )}
               </div>
 
               <DecorativeGraphic
                 position={imagemEsquerda ? 'left' : 'right'}
                 className={
                   imagemEsquerda
-                    ? 'left-0 top-1/2 z-20 -translate-x-6 -translate-y-1/2 md:-translate-x-12 lg:-translate-x-16'
-                    : 'right-0 top-1/2 z-20 -translate-y-1/2 translate-x-6 md:translate-x-12 lg:translate-x-16'
+                    ? 'left-0 top-[82%] z-20 -translate-x-4 -translate-y-1/2 md:top-1/2 md:-translate-x-12 lg:-translate-x-16'
+                    : 'right-0 top-[82%] z-20 -translate-y-1/2 translate-x-4 md:top-1/2 md:translate-x-12 lg:translate-x-16'
                 }
               />
             </div>

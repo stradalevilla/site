@@ -120,8 +120,9 @@ export default function Localizacao() {
             </>
           }
           tagline="Piracaia · São Paulo"
-          imagem="/images/imagem da regiao 2.jpg"
-          alt="A represa e a Serra da Mantiqueira ao amanhecer, com neblina baixa sobre os morros"
+          imagem="/images/renders/regiao-peninsula.jpg"
+          filme="/videos/regiao-peninsula"
+          alt="A represa vista do alto ao fim da tarde, com a serra ao fundo"
         />
 
         {/* ================= A REGIÃO — o mapa macro (book p27) =================
@@ -129,21 +130,21 @@ export default function Localizacao() {
             nas outras páginas: 112px no desktop. */}
         <section
           id="a-regiao"
-          className="relative z-10 -mb-16 scroll-mt-28 overflow-hidden pt-20 md:-mb-24 md:pt-32 lg:-mb-28"
+          className="relative z-10 -mb-16 scroll-mt-28 overflow-hidden pt-4 md:-mb-24 md:pt-32 lg:-mb-28"
         >
           <div className="container relative z-10 mx-auto px-4 md:px-8">
             {/* O mapa abre o container encostado no topo, e a moldura dourada
                 começa mais abaixo, emoldurando por cima da imagem: o respiro de
                 cima é a faixa de mapa que sobra acima do fio dourado. */}
-            <div className="relative bg-white px-4 pb-12 md:px-12 md:pb-16 lg:px-16">
+            <div className="relative bg-white px-4 py-4 md:px-12 md:pb-16 md:pt-0 lg:px-16">
               <div className="relative">
-                <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-12 z-50 border-2 border-[#D07748]/50 md:top-16" />
+                <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 z-50 border-2 border-[#D07748]/50 md:top-16" />
 
                 {/* O mapa na largura do container, atrás das linhas douradas. No
                     desktop entra inteiro, na proporção da arte, para nenhum pino
                     ficar de fora; no celular é um recorte do centro, onde estão a
                     península e Piracaia. */}
-                <div className="relative -mx-6 h-[420px] md:-mx-12 md:h-[560px] lg:-mx-16 lg:aspect-[1832/1077] lg:h-auto">
+                <div data-surgir="fade" className="relative h-[420px] md:-mx-12 md:h-[560px] lg:-mx-16 lg:aspect-[1832/1077] lg:h-auto">
                   <MapaRegiao3D
                     pinos={pinosDoMapa}
                     camera={cameraDaRegiao}
@@ -163,18 +164,18 @@ export default function Localizacao() {
                 {/* O texto do book, no bloco navy colado ao mapa. Respiro largo:
                     o bloco tem altura de sobra e a lista das vizinhas anda com
                     espaço entre os fios, sem apertar a informação. */}
-                <div className="relative -mx-6 bg-[#0a1929] px-14 py-20 md:-mx-12 md:px-24 md:py-28 lg:-mx-16 lg:px-32 lg:py-36">
+                <div className="relative bg-[#0a1929] px-4 py-20 md:-mx-12 md:px-24 md:py-28 lg:-mx-16 lg:px-32 lg:py-36">
                   <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1.1fr_1fr] lg:gap-28">
                     <div>
-                      <span className="mb-8 block font-heading text-sm font-thin uppercase italic tracking-[0.35em] text-[#D07748] md:text-base">
+                      <span data-surgir="subir" className="mb-8 block font-heading text-sm font-thin uppercase italic tracking-[0.35em] text-[#D07748] md:text-base">
                         No entorno
                       </span>
-                      <h2 className="mb-8 max-w-2xl font-heading text-2xl font-light uppercase italic leading-tight text-white md:text-3xl lg:text-4xl">
+                      <h2 data-surgir="subir" className="mb-8 max-w-2xl font-heading text-2xl font-light uppercase italic leading-tight text-white md:text-3xl lg:text-4xl">
                         No centro de tudo, um
                         <br />
                         paraíso à beira d’água
                       </h2>
-                      <p className="max-w-md font-body text-sm leading-loose text-white/80 md:text-base">
+                      <p data-surgir="subir" className="max-w-md font-body text-sm leading-loose text-white/80 md:text-base">
                         O Villa Stradale fica em Piracaia, com Bragança Paulista, Atibaia e
                         Joanópolis como vizinhas, ampliando as opções de gastronomia, serviços e
                         infraestrutura no entorno.
@@ -183,7 +184,7 @@ export default function Localizacao() {
 
                     <ul className="grid grid-cols-1 gap-x-12 gap-y-10 sm:grid-cols-2">
                       {vizinhas.map(({ nome, nota }) => (
-                        <li key={nome} className="border-t border-white/15 pt-5">
+                        <li key={nome} data-surgir="subir" className="border-t border-white/15 pt-5">
                           <span className="block font-heading text-base font-light uppercase italic text-gold md:text-lg">
                             {nome}
                           </span>
@@ -209,15 +210,16 @@ export default function Localizacao() {
                         <Image
                           src="/logos/Icone-VillaStradale escuro.svg"
                           alt="Villa Stradale"
+                          data-surgir="subir"
                           width={64}
                           height={40}
                           className="h-9 w-auto md:h-10"
                         />
                       </div>
-                      <span className="mb-6 block font-heading text-sm font-thin uppercase italic tracking-[0.3em] text-[#D07748] md:text-base">
+                      <span data-surgir="subir" className="mb-6 block font-heading text-sm font-thin uppercase italic tracking-[0.3em] text-[#D07748] md:text-base">
                         A cidade
                       </span>
-                      <h2 className="font-heading text-2xl font-light uppercase italic leading-snug text-navy md:text-3xl lg:text-4xl">
+                      <h2 data-surgir="subir" className="font-heading text-2xl font-light uppercase italic leading-snug text-navy md:text-3xl lg:text-4xl">
                         Piracaia
                         <br />
                         São Paulo
@@ -225,20 +227,20 @@ export default function Localizacao() {
                     </div>
 
                     <div className="space-y-6">
-                      <p className="font-body text-base leading-relaxed text-gray-700 md:text-lg">
+                      <p data-surgir="subir" className="font-body text-base leading-relaxed text-gray-700 md:text-lg">
                         Poucos lugares reúnem natureza, autenticidade e beleza em equilíbrio tão
                         raro. Piracaia é um refúgio serrano do interior paulista, onde a Serra da
                         Mantiqueira se encontra com as águas do Sistema Cantareira, criando uma
                         paisagem viva que combina montanha, horizonte e serenidade.
                       </p>
-                      <p className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
+                      <p data-surgir="subir" className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
                         O antigo vilarejo de Santo Antônio da Cachoeira preserva o que o tempo
                         consagrou: ruas tranquilas, comércio local, vida em torno da praça e uma fé
                         que faz parte da rotina. Esse espírito de comunidade e permanência cria o
                         pano de fundo ideal para um modo de vida mais essencial, onde o tempo corre
                         de outro jeito e cada final de semana se prolonga.
                       </p>
-                      <p className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
+                      <p data-surgir="subir" className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
                         A represa se abre em penínsulas e enseadas perfeitas para esportes náuticos,
                         passeios de barco e contemplação. No alto, o Santo Cruzeiro guarda a cidade;
                         no centro, a Igreja Matriz revela o teto pintado com todos os papas,
@@ -249,9 +251,9 @@ export default function Localizacao() {
                 </div>
 
                 {/* A tira de três fotos — a composição da p28 do book */}
-                <div className="-mx-6 grid grid-cols-1 md:-mx-12 md:grid-cols-3 lg:-mx-16">
+                <div className="grid grid-cols-1 md:-mx-12 md:grid-cols-3 lg:-mx-16">
                   {tiraCidade.map(({ src, alt, legenda }) => (
-                    <figure key={src} className="relative m-0">
+                    <figure key={src} data-surgir="imagem" className="relative m-0">
                       <div className="relative h-[300px] md:h-[380px] lg:h-[440px]">
                         <Image
                           src={src}
@@ -270,7 +272,7 @@ export default function Localizacao() {
 
                 {/* O fecho da página do book */}
                 <div className="px-4 py-14 md:px-12 md:py-16 lg:px-16 lg:py-20">
-                  <p className="mx-auto max-w-3xl text-center font-heading text-xl font-light uppercase italic leading-relaxed text-[#D07748] md:text-2xl lg:text-3xl">
+                  <p data-surgir="subir" className="mx-auto max-w-3xl text-center font-heading text-xl font-light uppercase italic leading-relaxed text-[#D07748] md:text-2xl lg:text-3xl">
                     Piracaia reflete o que o Villa Stradale representa: um território que acolhe,
                     preserva e convida a criar raízes.
                   </p>
@@ -283,6 +285,7 @@ export default function Localizacao() {
         {/* ================= COMO CHEGAR ================= */}
         <DivisorCapitulo
           id="como-chegar"
+          avancoAcima="soNoCelular"
           rotulo="Como chegar"
           titulo={
             <>
@@ -297,7 +300,7 @@ export default function Localizacao() {
         {/* O container avança sobre a faixa azul, como nas outras páginas */}
         <section className="relative z-10 -mt-16 overflow-hidden md:-mt-24 lg:-mt-28">
           <div className="container relative z-10 mx-auto px-4 md:px-8">
-            <div className="relative bg-white px-4 py-12 md:px-12 md:py-16 lg:px-16">
+            <div className="relative bg-white px-4 py-4 md:px-12 md:py-16 lg:px-16">
               <div className="relative">
                 <div className="pointer-events-none absolute inset-0 z-50 border-2 border-[#D07748]/50" />
 
@@ -305,28 +308,28 @@ export default function Localizacao() {
                 <div className="px-4 py-12 md:px-12 md:py-16 lg:px-16 lg:py-20">
                   <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20">
                     <div>
-                      <div className="mb-6 flex items-center gap-2 text-[#D07748]">
+                      <div data-surgir="subir" className="mb-6 flex items-center gap-2 text-[#D07748]">
                         <IconCar size={22} stroke={1.5} />
                         <span className="font-heading text-sm font-thin uppercase italic tracking-[0.3em] md:text-base">
                           Por terra
                         </span>
                       </div>
-                      <h3 className="mb-8 font-heading text-2xl font-light uppercase italic leading-snug text-navy md:text-3xl lg:text-4xl">
+                      <h3 data-surgir="subir" className="mb-8 font-heading text-2xl font-light uppercase italic leading-snug text-navy md:text-3xl lg:text-4xl">
                         Todo o trajeto
                         <br />
                         por rodovia
                       </h3>
                       <div className="max-w-md space-y-5">
-                        <p className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
+                        <p data-surgir="subir" className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
                           O Villa Stradale fica na região bragantina do interior paulista, onde a
                           Serra da Mantiqueira encontra as águas do Sistema Cantareira.
                         </p>
-                        <p className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
+                        <p data-surgir="subir" className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
                           São dois caminhos possíveis a partir da capital, ambos pavimentados.
                         </p>
                       </div>
 
-                      <div className="mt-10 flex items-center gap-3">
+                      <div data-surgir="subir" className="mt-10 flex items-center gap-3">
                         <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#05c8f7] text-white">
                           <IconBrandWaze size={22} stroke={1.5} />
                         </span>
@@ -338,7 +341,7 @@ export default function Localizacao() {
 
                     <ol className="space-y-8 lg:border-l lg:border-navy/15 lg:pl-12 xl:pl-16">
                       {porTerra.map(({ etapa, texto }, i) => (
-                        <li key={etapa} className="flex gap-6">
+                        <li key={etapa} data-surgir="subir" className="flex gap-6">
                           <span className="pt-0.5 font-heading text-sm text-[#D07748] md:text-base">
                             {String(i + 1).padStart(2, '0')}
                           </span>
@@ -357,28 +360,28 @@ export default function Localizacao() {
                 </div>
 
                 {/* Pelo ar — bloco navy */}
-                <div className="relative -mx-6 bg-[#0a1929] px-14 py-16 md:-mx-12 md:px-24 md:py-20 lg:-mx-16 lg:px-32">
+                <div className="relative bg-[#0a1929] px-4 py-16 md:-mx-12 md:px-24 md:py-20 lg:-mx-16 lg:px-32">
                   <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
                     <div className="text-white">
-                      <div className="mb-6 flex items-center gap-2 text-[#D07748]">
+                      <div data-surgir="subir" className="mb-6 flex items-center gap-2 text-[#D07748]">
                         <IconHelicopter size={22} stroke={1.5} />
                         <span className="font-heading text-sm font-thin uppercase italic tracking-[0.35em] md:text-base">
                           Pelo ar
                         </span>
                       </div>
-                      <h3 className="mb-6 font-heading text-2xl font-light uppercase italic leading-tight md:text-3xl lg:text-4xl">
+                      <h3 data-surgir="subir" className="mb-6 font-heading text-2xl font-light uppercase italic leading-tight md:text-3xl lg:text-4xl">
                         Do Helicidade ao
                         <br />
                         heliponto da península
                       </h3>
-                      <p className="max-w-md font-body text-sm leading-relaxed text-white/80 md:text-base">
+                      <p data-surgir="subir" className="max-w-md font-body text-sm leading-relaxed text-white/80 md:text-base">
                         Três spots privativos de pouso, integrados à paisagem e recuados junto à
                         marina. A linha de silêncio mantém o heliponto fora do centro de
                         convivência.
                       </p>
                     </div>
 
-                    <div className="relative h-[280px] w-full md:h-[360px] lg:h-[420px]">
+                    <div data-surgir="imagem" className="relative h-[280px] w-full md:h-[360px] lg:h-[420px]">
                       <Image
                         src="/images/amenities/heliponto.jpg"
                         alt="Heliponto da península, com helicóptero pousado e a represa ao fundo"
@@ -392,7 +395,7 @@ export default function Localizacao() {
 
                 {/* Nota do asterisco */}
                 <div className="px-4 py-10 md:px-12 md:py-12 lg:px-16">
-                  <p className="max-w-2xl font-body text-[11px] leading-relaxed text-gray-500 md:text-xs">
+                  <p data-surgir="fade" className="max-w-2xl font-body text-[11px] leading-relaxed text-gray-500 md:text-xs">
                     * Quilometragem aproximada, medida por rodovia a partir da cidade de São Paulo.
                     As distâncias variam conforme o ponto de partida e a rota escolhida.
                   </p>

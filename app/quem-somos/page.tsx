@@ -33,14 +33,14 @@ export default function QuemSomos() {
         {/* A faixa fecha o capítulo dos stakeholders e abre o dos autores: os
             dois containers avançam 112px sobre ela, um de cada lado. */}
         <FaixaParallax
-          imagem="/images/galeria/patio-das-palmeiras.jpg"
-          rotulo="O pátio das palmeiras da casa clube"
+          imagem="/images/renders/patio-das-palmeiras.jpg"
+          rotulo="O pátio das palmeiras da casa-clube"
         />
 
         {/* ================= ARQUITETURA E PAISAGISMO ================= */}
         <section className="relative z-10 -mt-16 overflow-hidden md:-mt-24 lg:-mt-28">
           <div className="container relative z-10 mx-auto px-4 md:px-8">
-            <div className="relative bg-white px-4 py-12 md:px-12 md:py-16 lg:px-16">
+            <div className="relative bg-white px-4 py-4 md:px-12 md:py-16 lg:px-16">
               <div className="relative z-10">
                 <div className="relative">
                   {/* A moldura dourada */}

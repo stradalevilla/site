@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { vez } from '@/lib/abertura';
 
 export function MobileHeroLogo() {
   const [isVisible, setIsVisible] = useState(true);
@@ -16,7 +17,9 @@ export function MobileHeroLogo() {
   }, []);
 
   return (
-    <div 
+    <div
+      data-abertura="fade"
+      style={vez(3)}
       className={`lg:hidden fixed top-[20%] md:top-[23%] left-1/2 -translate-x-1/2 z-40 transition-opacity duration-500 ${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}

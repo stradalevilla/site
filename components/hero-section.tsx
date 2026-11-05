@@ -1,52 +1,133 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { DecorativeGraphic } from './decorative-graphic';
 import { MobileHeroLogo } from './mobile-hero-logo';
+import { vez } from '@/lib/abertura';
 
 /**
- * Os dois estados da península, nesta ordem: primeiro o terreno como ele é
- * hoje, a foto aérea sem marcação de lote nenhuma, e depois o render do
- * empreendimento. Cada um tem as três variantes responsivas, recortadas com a
- * mesma linha de horizonte, para a troca ler como dissolução e não como corte.
+ * Os dois voos sobre a península, nesta ordem. O segundo foi cortado na
+ * conversão para começar em 00:03 da take original.
+ *
+ * Cada slide é uma imagem com um filme por cima, e a imagem é o primeiro quadro
+ * dele. É ela que abre o site, com prioridade, então o hero aparece tão rápido
+ * quanto uma foto: o filme só baixa depois que a página terminou de carregar, e
+ * o segundo só depois de o primeiro estar pronto. Quem pede menos movimento ou
+ * economia de dados fica nas imagens, com a troca pelo relógio.
  */
 const SLIDES = [
   {
-    chave: 'terreno',
-    base: '/images/hero/hero-terreno',
-    alt: 'A península do Villa Stradale vista do alto, o terreno como ele é hoje',
+    chave: 'por-do-sol',
+    imagem: '/images/renders/hero-por-do-sol.jpg',
+    filme: '/videos/hero-por-do-sol',
+    alt: 'A península do Villa Stradale vista do alto ao pôr do sol, com a represa e a serra ao fundo',
   },
   {
-    chave: 'render',
-    base: '/images/hero/hero-peninsula',
+    chave: 'peninsula',
+    imagem: '/images/renders/hero-peninsula.jpg',
+    filme: '/videos/hero-peninsula',
     alt: 'Villa Stradale - Uma península irreplicável',
   },
 ];
 
-/** quanto cada imagem fica parada antes de passar sozinha */
+/** sem filme, quanto cada imagem fica parada antes de passar sozinha */
 const PAUSA = 6000;
+/** o tempo da dissolução, que corre enquanto o filme ainda anda */
+const DISSOLVE_MS = 1800;
+/** filme parado por esse tempo não segura o slide */
+const TRAVOU_MS = 6000;
 
 export function HeroSection() {
+  const caixa = useRef<HTMLElement>(null);
+  const filmes = useRef<(HTMLVideoElement | null)[]>([]);
   const [atual, setAtual] = useState(0);
+  const [tamanho, setTamanho] = useState<720 | 1080 | null>(null);
+  const [primeiroPronto, setPrimeiroPronto] = useState(false);
+  const [naTela, setNaTela] = useState(true);
 
   const ir = useCallback((indice: number) => {
     setAtual((indice + SLIDES.length) % SLIDES.length);
   }, []);
 
-  // passa sozinho; o relógio reinicia a cada troca, inclusive nas manuais
+  // os filmes esperam o site carregar: nada disputa a rede com a primeira tela
   useEffect(() => {
-    const t = setTimeout(() => setAtual((i) => (i + 1) % SLIDES.length), PAUSA);
+    const calmo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const economia = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+    if (calmo || economia) return;
+    const ligar = () => {
+      const largura = (caixa.current?.clientWidth ?? 0) * window.devicePixelRatio;
+      setTamanho(largura > 1400 ? 1080 : 720);
+    };
+    if (document.readyState === 'complete') {
+      ligar();
+      return;
+    }
+    window.addEventListener('load', ligar, { once: true });
+    return () => window.removeEventListener('load', ligar);
+  }, []);
+
+  useEffect(() => {
+    const el = caixa.current;
+    if (!el) return;
+    const tela = new IntersectionObserver(([e]) => setNaTela(e.isIntersecting), { threshold: 0.1 });
+    tela.observe(el);
+    return () => tela.disconnect();
+  }, []);
+
+  // passa sozinho: com filme, quando ele vai acabando; sem filme, pelo relógio.
+  // O relógio reinicia a cada troca, inclusive nas manuais.
+  useEffect(() => {
+    const passar = () => setAtual((i) => (i + 1) % SLIDES.length);
+    const v = tamanho ? filmes.current[atual] : null;
+    if (!naTela) {
+      v?.pause();
+      return;
+    }
+    if (!v) {
+      const t = setTimeout(passar, PAUSA);
+      return () => clearTimeout(t);
+    }
+    // quem volta com a seta logo depois da troca pega o filme no fim
+    if (v.duration - v.currentTime <= DISSOLVE_MS / 1000) v.currentTime = 0;
+    v.play().catch(() => {});
+    let vigia = setTimeout(passar, TRAVOU_MS);
+    const anda = () => {
+      clearTimeout(vigia);
+      vigia = setTimeout(passar, TRAVOU_MS);
+      if (v.duration - v.currentTime <= DISSOLVE_MS / 1000) passar();
+    };
+    v.addEventListener('timeupdate', anda);
+    return () => {
+      clearTimeout(vigia);
+      v.removeEventListener('timeupdate', anda);
+    };
+  }, [atual, tamanho, naTela, primeiroPronto]);
+
+  // o filme que saiu segue andando sob a dissolução; depois para e volta ao início
+  useEffect(() => {
+    const t = setTimeout(() => {
+      filmes.current.forEach((v, i) => {
+        if (v && i !== atual) {
+          v.pause();
+          v.currentTime = 0;
+        }
+      });
+    }, DISSOLVE_MS + 100);
     return () => clearTimeout(t);
   }, [atual]);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden">
+    <section ref={caixa} className="relative h-screen w-full overflow-hidden bg-[#0a1929]">
       {/* Logo branco no hero - Mobile/Tablet */}
       <MobileHeroLogo />
 
       {/* As camadas: todas montadas, só a atual visível. A troca é na
-          opacidade, então uma dissolve na outra em vez de pular. */}
+          opacidade, então uma dissolve na outra em vez de pular. Os dois
+          invólucros são da abertura: a cortina revela de cima para baixo, sobre
+          o navy da seção, e o miolo encolhe dentro dela. */}
+      <div className="absolute inset-0" data-abertura="cortina">
+      <div className="absolute inset-0" data-miolo>
       {SLIDES.map((slide, i) => (
         <div
           key={slide.chave}
@@ -55,45 +136,44 @@ export function HeroSection() {
             i === atual ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          {/* Desktop */}
           <Image
-            src={`${slide.base}-desk.jpg`}
+            src={slide.imagem}
             alt={i === atual ? slide.alt : ''}
             fill
-            priority
+            priority={i === 0}
             quality={90}
-            className="object-cover hidden lg:block"
+            className="object-cover"
             sizes="100vw"
           />
 
-          {/* Tablet */}
-          <Image
-            src={`${slide.base}-tablet.jpg`}
-            alt=""
-            fill
-            priority
-            quality={90}
-            className="object-cover hidden md:block lg:hidden"
-            sizes="100vw"
-          />
-
-          {/* Mobile */}
-          <Image
-            src={`${slide.base}-mobile.jpg`}
-            alt=""
-            fill
-            priority
-            quality={90}
-            className="object-cover block md:hidden"
-            sizes="100vw"
-          />
+          {/* Transparente até ter quadro: a imagem de baixo segura o lugar */}
+          {tamanho && (i === 0 || primeiroPronto) && (
+            <video
+              ref={(el) => {
+                filmes.current[i] = el;
+              }}
+              src={`${slide.filme}-${tamanho}.mp4`}
+              onCanPlayThrough={i === 0 ? () => setPrimeiroPronto(true) : undefined}
+              className="absolute inset-0 h-full w-full object-cover"
+              muted
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+              tabIndex={-1}
+              disablePictureInPicture
+            />
+          )}
         </div>
       ))}
+      </div>
+      </div>
 
-      {/* Overlay Gradient — a lente de baixo, somada à vinheta assentada na
-          própria imagem, segura o texto sobre o brilho do sol na água:
-          medido 7:1 no título e 4,1:1 na assinatura dourada */}
+      {/* Overlay Gradient. A segunda camada só escurece a metade de baixo: o
+          reflexo do sol na água passa bem atrás do texto, quase branco, e as
+          fotos antigas traziam uma vinheta embutida que estes filmes não têm.
+          O céu e a península ficam limpos. */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/45" />
+      <div className="absolute inset-x-0 bottom-0 h-[65%] bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
 
       {/* Decorative Graphics - FORA do container com padding */}
       <DecorativeGraphic
@@ -112,19 +192,31 @@ export function HeroSection() {
       <div className="relative h-full flex flex-col items-center justify-end pb-24 px-4 text-center">
 
         {/* Main Content */}
-        <div className="max-w-5xl mx-auto space-y-6 md:space-y-8">
+        <div className="max-w-5xl mx-auto space-y-6 md:space-y-8 [text-shadow:0_1px_14px_rgba(0,0,0,0.5)]">
           {/* Main Title */}
-          <h1 className="font-heading font-light text-4xl md:text-4xl lg:text-5xl text-white tracking-wider italic">
+          <h1
+            data-abertura="subir"
+            style={vez(4)}
+            className="font-heading font-light text-4xl md:text-4xl lg:text-5xl text-white tracking-wider italic"
+          >
             UMA PENÍNSULA<br className="md:hidden" /> IRREPLICÁVEL
           </h1>
 
           {/* Description */}
-          <p className="font-body font-light text-base md:text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed px-4">
+          <p
+            data-abertura="subir"
+            style={vez(5)}
+            className="font-body font-light text-base md:text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed px-4"
+          >
             Cercado pela Serra da Mantiqueira, o Villa Stradale ocupa um dos pontos mais singulares da represa, onde a geografia desenhou, por acaso, o cenário perfeito.
           </p>
 
           {/* Subtitle */}
-          <p className="font-heading font-light text-xl md:text-2xl lg:text-3xl text-gold tracking-[0.3em] mt-8">
+          <p
+            data-abertura="subir"
+            style={vez(6)}
+            className="font-heading font-light text-xl md:text-2xl lg:text-3xl text-gold tracking-[0.3em] mt-8"
+          >
             RARO POR NATUREZA
           </p>
         </div>

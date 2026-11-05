@@ -1,17 +1,37 @@
+import Image from 'next/image';
+import { VideoFaixa } from '@/components/video-faixa';
+
 /**
- * A faixa parallax da represa, que fecha o capítulo do fundador. A imagem é a
- * versão tratada pelo cliente, reduzida para a web: o PNG de origem
- * ("imagem da regiao 2-alta.png", 3356px e 10 MB) não vai para o navegador.
+ * A faixa da represa, que fecha o capítulo do fundador: o filme do voo sobre a
+ * represa, com o primeiro quadro por baixo segurando o lugar.
  *
- * O bg-fixed só vale do desktop para cima: background-attachment fixed quebra
- * no Safari do iPhone.
+ * O parallax das outras faixas vem do background-attachment fixed, que filme
+ * não tem. Aqui a camada é que fica presa à janela, e o clip-path da seção a
+ * recorta: dá o mesmo efeito, da imagem parada com a página rolando por cima.
+ * Só do desktop para cima, como nas outras: no celular ela rola junto.
+ *
+ * O data-faixa-fixa diz ao filme para vigiar a seção. Presa à janela, a camada
+ * está sempre "na tela", e ele baixaria assim que o site abrisse.
  */
 export function RegiaoSection() {
   return (
     <section
       aria-label="Imagem da região"
-      className="relative w-full h-[60vh] md:h-[75vh] lg:h-[85vh] bg-cover bg-center lg:bg-fixed"
-      style={{ backgroundImage: "url('/images/imagem da regiao 2.jpg')" }}
-    />
+      data-faixa-fixa
+      data-surgir="cortina"
+      className="relative h-[60vh] w-full [clip-path:inset(0)] md:h-[75vh] lg:h-[85vh]"
+    >
+      <div className="absolute inset-0 lg:fixed" data-miolo>
+        <Image
+          src="/images/renders/regiao-peninsula.jpg"
+          alt="A represa vista do alto ao fim da tarde, com a serra ao fundo"
+          fill
+          className="object-cover"
+          quality={90}
+          sizes="100vw"
+        />
+        <VideoFaixa base="/videos/regiao-peninsula" />
+      </div>
+    </section>
   );
 }

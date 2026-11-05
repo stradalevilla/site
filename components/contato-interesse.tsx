@@ -7,7 +7,7 @@ export function ContatoInteresse() {
         {/* Coluna esquerda - texto */}
         <div className="text-white">
           {/* Emblema */}
-          <div className="mb-6">
+          <div data-surgir="subir" className="mb-6">
             <Image
               src="/logos/Icone-VillaStradale claro.svg"
               alt="Villa Stradale"
@@ -18,24 +18,24 @@ export function ContatoInteresse() {
           </div>
 
           {/* Overline */}
-          <span className="block font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.35em] mb-6">
+          <span data-surgir="subir" className="block font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.35em] mb-6">
             Contato
           </span>
 
           {/* Título */}
-          <h2 className="font-heading font-light text-2xl md:text-3xl lg:text-4xl italic uppercase leading-tight mb-6">
+          <h2 data-surgir="subir" className="font-heading font-light text-2xl md:text-3xl lg:text-4xl italic uppercase leading-tight mb-6">
             Registre<br />
             o seu interesse
           </h2>
 
           {/* Parágrafo */}
-          <p className="font-body text-sm md:text-base text-white/80 leading-relaxed max-w-xs">
+          <p data-surgir="subir" className="font-body text-sm md:text-base text-white/80 leading-relaxed max-w-xs">
             Cadastre-se e receba o contato do concierge da Bossa Nova Sotheby&apos;s
           </p>
         </div>
 
         {/* Coluna direita - formulário */}
-        <form className="space-y-5">
+        <form data-surgir="subir" className="space-y-5">
           <input
             type="text"
             name="nome"

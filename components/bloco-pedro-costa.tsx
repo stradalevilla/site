@@ -58,7 +58,7 @@ export function BlocoPedroCosta() {
         }`}
       >
         <div className="relative">
-          <div className="relative aspect-[4/5] w-full">
+          <div data-surgir="imagem" className="relative aspect-[4/5] w-full">
             <Image
               src="/images/pessoas/pedro-costa.jpg"
               alt="Pedro Costa, fundador do Villa Stradale"
@@ -71,12 +71,12 @@ export function BlocoPedroCosta() {
               para fora dela */}
           <DecorativeGraphic
             position="right"
-            className="right-0 top-4 z-20 translate-x-5 md:top-6 md:translate-x-6"
+            className="right-0 top-4 z-20 translate-x-4 md:top-6 md:translate-x-6"
           />
         </div>
 
         <div>
-          <p className="font-body text-lg leading-relaxed text-gray-700 lg:text-xl">
+          <p data-surgir="subir" className="font-body text-lg leading-relaxed text-gray-700 lg:text-xl">
             Pedro Costa é o incorporador por trás do Villa Stradale Península. Através de um desejo
             incansável de construir um projeto único, ele escolheu uma península irreplicável às
             margens da represa de Piracaia, com um objetivo: transformar um sonho entre amigos numa
@@ -133,6 +133,7 @@ export function BlocoPedroCosta() {
             aria-expanded={aberto}
             aria-controls={idDoTexto}
             aria-label={aberto ? 'fechar a trajetória de Pedro Costa' : 'saiba mais sobre Pedro Costa'}
+            data-surgir="subir"
             className="group mt-8 flex items-center gap-4"
           >
             <span className="font-body text-sm text-navy md:text-base">

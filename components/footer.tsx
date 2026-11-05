@@ -10,7 +10,7 @@ export function Footer() {
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
           {/* Redes sociais */}
           {/* os alvos têm 44px: a caixa cresce em volta do ícone, que fica do mesmo tamanho */}
-          <div className="-ml-2.5 flex items-center gap-1 text-white/80">
+          <div data-surgir="subir" className="-ml-2.5 flex items-center gap-1 text-white/80">
             <a
               href="#"
               aria-label="Instagram"
@@ -30,7 +30,7 @@ export function Footer() {
           {/* Grupos de logos */}
           <div className="flex flex-col sm:flex-row items-center gap-12 lg:gap-20">
             {/* Comercialização */}
-            <div className="flex flex-col items-center gap-4">
+            <div data-surgir="subir" className="flex flex-col items-center gap-4">
               <span className="font-body text-xs text-white/60 tracking-wide">Comercialização</span>
               <Image
                 src="/images/footer/logo sothebys.png"
@@ -42,7 +42,7 @@ export function Footer() {
             </div>
 
             {/* Realização e Incorporação */}
-            <div className="flex flex-col items-center gap-4">
+            <div data-surgir="subir" className="flex flex-col items-center gap-4">
               <span className="font-body text-xs text-white/60 tracking-wide">
                 Realização e Incorporação
               </span>
@@ -58,22 +58,17 @@ export function Footer() {
         </div>
 
         {/* Texto legal */}
-        <p className="mt-14 md:mt-16 font-body text-[11px] leading-relaxed text-white/50 w-full">
-          O Empreendimento Condomínio Villavista Falésia, constituído na forma da Lei 6766/79,
-          encontra-se registrado sob o R.5 na matrícula n. 3899 do Ofício de Registro de Imóveis da
-          Comarca de Porto Seguro – BA, sob regime de incorporação de Condomínio de Lotes, acompanha
-          de Licença de Implantação nº 00489/2024 Processo 567/2024 e Licença Ambiental – LI
-          0175/2024, ambas expedidas pela Prefeitura de Porto Seguro – BA, das plantas
-          arquitetônicas, do ART nº BA20240869, quadros da Norma Técnica da ABNT NBR 12721, Parecer
-          técnico nº 121/2024/ETPS-BA/PHAN-BA. Imóvel de propriedade do Real Estate Bosso Fundo de
-          Investimento Imobiliário. (CNPJ nº 43.565.147/0001-31). Intermediação e Comercialização:
-          Bossa Nova Sotheby&apos;s International Realty. Alameda Gabriel Monteiro da Silva, 827 -
-          Jardim Europa - CEP 0144-001 - Tel.: 3061-0000 - São Paulo (SP). Creci: 27212. Todas as
-          imagens são meramente ilustrativas.
+        <p data-surgir="fade" className="mt-14 md:mt-16 font-body text-[11px] leading-relaxed text-white/50 w-full">
+          VILLA STRADALE PENÍNSULA. Loteamento registrado sob o R.07 da matrícula nº 24.816 do
+          Registro de Imóveis da Comarca de Piracaia – SP. Loteadora: Stradale Empreendimentos
+          Imobiliários SPE Ltda. – CNPJ nº 41.344.921/0001-59. Intermediação: Bossa Nova
+          Sotheby’s International Realty, nome fantasia de X3 Real Estate Imobiliária e
+          Participação Ltda. – CNPJ nº 19.834.438/0001-01 – CRECI/SP nº 027212-J. Comercialização
+          não exclusiva. Imagens meramente ilustrativas.
         </p>
 
         {/* Rodapé inferior */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div data-surgir="fade" className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <a
             href="#"
             className="inline-flex min-h-[44px] items-center font-body text-xs text-white/60 transition-colors hover:text-white"

@@ -59,7 +59,8 @@ export function MapaImplantacao({
           observer.disconnect();
         }
       },
-      { threshold: 0.35 }
+      // no celular o mapa rola de lado e só um quarto dele cabe no quadro
+      { threshold: window.innerWidth < 768 ? 0.15 : 0.35 }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -95,7 +96,8 @@ export function MapaImplantacao({
               aria-label={`Ver o lote ${pad(numero)}`}
               className="group"
               onClick={(e) => {
-                if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+                // defaultPrevented: a cortina de página já assumiu esta navegação
+                if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
                 e.preventDefault();
                 router.push(destino);
               }}

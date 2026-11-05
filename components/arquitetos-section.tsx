@@ -26,7 +26,7 @@ const autores = [
   {
     tag: 'Arquitetura',
     nome: 'AO / Greg Bousquet',
-    retrato: '/images/casaclube/arquitetos/AO-Greg Bousquet.png',
+    retrato: '/images/casaclube/arquitetos/greg-bousquet.jpg',
     apresentacao:
       'Arquiteto formado na École de Paris, com mestrados pela ENSA Paris-La Villette e pela Sorbonne. Co-fundador da Triptyque, acumulou 23 anos de trajetória internacional antes de fundar, em 2021, a Architects Office (AO).',
     paragrafos: [
@@ -38,7 +38,7 @@ const autores = [
   {
     tag: 'Paisagismo',
     nome: 'Orsini',
-    retrato: '/images/casaclube/arquitetos/orsini.png',
+    retrato: '/images/casaclube/arquitetos/luiz-carlos-orsini.jpg',
     apresentacao:
       'Luiz Carlos Orsini é paisagista mineiro, de Belo Horizonte, formado em 1984 na Escuela de Jardinería y Paisajismo “Castillo de Batres” (Madri). Atua desde 1979 e se tornou um dos nomes centrais do paisagismo brasileiro contemporâneo.',
     paragrafos: [
@@ -67,17 +67,18 @@ function CardAutor({ autor, invertido }: { autor: Autor; invertido: boolean }) {
           invertido ? 'lg:order-2 lg:justify-self-end' : ''
         }`}
       >
-        <div className="relative aspect-[4/5] w-full">
+        <div data-surgir="imagem" className="relative aspect-[4/5] w-full">
           <Image
             src={autor.retrato}
             alt={autor.nome}
             fill
             className="object-cover"
+            quality={90}
             sizes="(max-width: 1024px) 100vw, 460px"
           />
           {/* O nome sobre a foto, com o fio, como no book */}
           <div className="absolute inset-x-0 bottom-0 flex items-center gap-4 bg-gradient-to-t from-black/55 to-transparent px-5 pb-4 pt-12">
-            <span className="shrink-0 font-body text-[11px] uppercase tracking-[0.2em] text-white">
+            <span data-surgir="subir" className="shrink-0 font-body text-[11px] uppercase tracking-[0.2em] text-white">
               {autor.nome}
             </span>
             <span aria-hidden className="h-px flex-1 bg-white/50" />
@@ -89,27 +90,27 @@ function CardAutor({ autor, invertido }: { autor: Autor; invertido: boolean }) {
         {invertido ? (
           <DecorativeGraphic
             position="right"
-            className="right-0 top-[45%] z-20 -translate-y-1/2 translate-x-[38%]"
+            className="right-0 top-[45%] z-20 -translate-y-1/2 translate-x-4 md:translate-x-[38%]"
           />
         ) : (
           <DecorativeGraphic
             position="left"
-            className="left-0 top-[58%] z-20 -translate-x-[38%] -translate-y-1/2"
+            className="left-0 top-[58%] z-20 -translate-x-4 -translate-y-1/2 md:-translate-x-[38%]"
           />
         )}
       </div>
 
       {/* O texto */}
       <div className={invertido ? 'lg:order-1' : ''}>
-        <p className="font-body text-xs uppercase tracking-[0.35em] text-[#D07748] md:text-sm">
+        <p data-surgir="subir" className="font-body text-xs uppercase tracking-[0.35em] text-[#D07748] md:text-sm">
           {autor.tag}
         </p>
 
-        <h3 className="mt-6 font-heading text-3xl font-light uppercase italic text-[#D07748] md:text-4xl lg:text-[2.6rem]">
+        <h3 data-surgir="subir" className="mt-6 font-heading text-3xl font-light uppercase italic text-[#D07748] md:text-4xl lg:text-[2.6rem]">
           {autor.nome}
         </h3>
 
-        <p className="mt-7 text-left font-body text-sm leading-relaxed text-gray-700 md:text-base md:text-justify">
+        <p data-surgir="subir" className="mt-7 text-left font-body text-sm leading-relaxed text-gray-700 md:text-base md:text-justify">
           {autor.apresentacao}
         </p>
 
@@ -149,6 +150,7 @@ function CardAutor({ autor, invertido }: { autor: Autor; invertido: boolean }) {
           aria-expanded={aberto}
           aria-controls={idDoTexto}
           aria-label={aberto ? `fechar ${autor.nome}` : `saiba mais sobre ${autor.nome}`}
+          data-surgir="subir"
           className="group mt-8 flex items-center gap-4"
         >
           <span className="font-body text-sm text-navy md:text-base">
@@ -199,6 +201,7 @@ export function ArquitetosSection() {
           <Image
             src="/logos/Icone-VillaStradale escuro.svg"
             alt="Villa Stradale"
+            data-surgir="subir"
             width={64}
             height={40}
             className="h-10 w-auto"
@@ -206,18 +209,18 @@ export function ArquitetosSection() {
         </div>
 
         {/* Overline */}
-        <span className="block font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.3em] mb-6">
+        <span data-surgir="subir" className="block font-heading italic font-thin text-sm md:text-base text-[#D07748] uppercase tracking-[0.3em] mb-6">
           Arquitetos
         </span>
 
         {/* Título */}
-        <h2 className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-navy italic uppercase leading-snug mb-6">
+        <h2 data-surgir="subir" className="font-heading font-light text-2xl md:text-3xl lg:text-4xl text-navy italic uppercase leading-snug mb-6">
           Arquitetura em estado de pouso.<br />
           Paisagismo como moldura viva
         </h2>
 
         {/* Subtítulo */}
-        <p className="font-body text-sm md:text-base text-navy/80 leading-relaxed mb-14 md:mb-20">
+        <p data-surgir="subir" className="font-body text-sm md:text-base text-navy/80 leading-relaxed mb-14 md:mb-20">
           Cada detalhe visível foi pensado para encantar.<br />
           Cada detalhe invisível foi pensado para durar.
         </p>

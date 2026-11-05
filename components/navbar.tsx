@@ -1,5 +1,6 @@
 'use client';
 
+import { vez } from '@/lib/abertura';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -66,6 +67,8 @@ export function Navbar() {
 
   return (
     <nav
+      data-abertura="descer"
+      style={vez(1)}
       className={`hidden lg:block fixed top-0 left-0 right-0 z-50 backdrop-blur-sm transition-all duration-500 ease-out ${
         scrolled ? 'bg-[#0a1929]/95 shadow-lg shadow-black/20' : 'bg-[#0a1929]/95'
       }`}

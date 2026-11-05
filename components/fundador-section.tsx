@@ -13,7 +13,7 @@ import { TOTAL_LOTES } from '@/lib/lotes';
  * recebe 112px do bloco de cima e reserva 224px para este container descer
  * sobre ela, e separar um do outro quebraria a conta.
  *
- * Vive em dois lugares: na home, encaixado entre o cartão laranja e a faixa
+ * Vive em dois lugares: na home, encaixado entre a arte da casa-clube e a faixa
  * da represa, e sozinho em /quem-somos. As duas props acertam os avanços para
  * cada caso, já que fora da home não há faixa nenhuma para avançar.
  *
@@ -56,7 +56,7 @@ export function FundadorSection({
           }`}
         >
           <div className="container relative z-10 mx-auto px-4 md:px-8">
-            <div className="relative bg-white px-4 py-12 md:px-12 md:py-16 lg:px-16">
+            <div className="relative bg-white px-4 py-4 md:px-12 md:py-16 lg:px-16">
               <div className="relative z-10">
                 <div className="relative">
                   <div className="pointer-events-none absolute inset-0 z-50 border-2 border-[#D07748]/50" />
@@ -64,25 +64,26 @@ export function FundadorSection({
                   <BlocoPedroCosta />
 
                   {/* Stradale Inc. e comercialização — book p35 */}
-                  <div className="relative -mx-6 bg-[#0a1929] px-14 py-16 md:-mx-12 md:px-24 md:py-20 lg:-mx-16 lg:px-32">
-                    <div className="mb-12 max-w-3xl text-white md:mb-16">
+                  <div className="relative bg-[#0a1929] px-4 py-16 md:-mx-12 md:px-24 md:py-20 lg:-mx-16 lg:px-32">
+                    <div className="max-w-3xl text-white md:mb-16">
                       <div className="mb-6">
                         <Image
                           src="/logos/Icone-VillaStradale claro.svg"
                           alt="Villa Stradale"
+                          data-surgir="subir"
                           width={64}
                           height={40}
                           className="h-9 w-auto md:h-10"
                         />
                       </div>
-                      <span className="mb-6 block font-heading text-sm font-thin uppercase italic tracking-[0.35em] text-[#D07748] md:text-base">
+                      <span data-surgir="subir" className="mb-6 block font-heading text-sm font-thin uppercase italic tracking-[0.35em] text-[#D07748] md:text-base">
                         Realização e incorporação
                       </span>
-                      <h3 className="mb-8 font-heading text-2xl font-light uppercase italic leading-tight md:text-3xl lg:text-4xl">
+                      <h3 data-surgir="subir" className="mb-8 font-heading text-2xl font-light uppercase italic leading-tight md:text-3xl lg:text-4xl">
                         Stradale Inc.
                       </h3>
                       <div className="space-y-5">
-                        <p className="font-body text-sm leading-relaxed text-white/80 md:text-base">
+                        <p data-surgir="subir" className="font-body text-sm leading-relaxed text-white/80 md:text-base">
                           A Stradale Inc. nasceu em 2019 para ocupar um espaço muito específico no
                           mercado imobiliário: criar projetos de segunda residência com a mesma
                           precisão, cuidado e sofisticação de uma marca de luxo. Cada
@@ -91,14 +92,14 @@ export function FundadorSection({
                           fazer sentido para quem escolhe viver ali e consolidar um legado familiar
                           que atravessa gerações.
                         </p>
-                        <p className="font-body text-sm leading-relaxed text-white/80 md:text-base">
+                        <p data-surgir="subir" className="font-body text-sm leading-relaxed text-white/80 md:text-base">
                           A lógica é boutique, guiada por escassez planejada, comunidade por
                           afinidade e pertencimento real. Cada projeto surge como edição limitada,
                           com número restrito de unidades e desenho arquitetônico integrado ao
                           território, para criar um círculo de proprietários que compartilham
                           valores, visão de mundo e estilo de vida, sempre em escala humana.
                         </p>
-                        <p className="font-body text-sm leading-relaxed text-white/80 md:text-base">
+                        <p data-surgir="subir" className="font-body text-sm leading-relaxed text-white/80 md:text-base">
                           Villa Stradale Península, em Piracaia, representa o primeiro manifesto
                           dessa visão.
                         </p>
@@ -108,21 +109,21 @@ export function FundadorSection({
                   </div>
 
                   {/* Marcello */}
-                  <div className="px-6 pb-16 pt-16 md:px-12 md:pb-20 md:pt-20 lg:px-16 lg:pt-24">
+                  <div className="px-4 pb-16 pt-16 md:px-12 md:pb-20 md:pt-20 lg:px-16 lg:pt-24">
                     <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
                       <div>
-                        <span className="mb-6 block font-heading text-sm font-thin uppercase italic tracking-[0.3em] text-[#D07748] md:text-base">
+                        <span data-surgir="subir" className="mb-6 block font-heading text-sm font-thin uppercase italic tracking-[0.3em] text-[#D07748] md:text-base">
                           Desenvolvimento e produto
                         </span>
-                        <h3 className="mb-8 font-heading text-2xl font-light uppercase italic leading-snug text-navy md:text-3xl lg:text-4xl">
+                        <h3 data-surgir="subir" className="mb-8 font-heading text-2xl font-light uppercase italic leading-snug text-navy md:text-3xl lg:text-4xl">
                           Marcello Romero
                         </h3>
                         <div className="max-w-md space-y-5">
-                          <p className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
+                          <p data-surgir="subir" className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
                             Marcello responde pelo desenvolvimento do produto e pelo redesenho dos
                             lotes, com revisão atrás de revisão do masterplan.
                           </p>
-                          <p className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
+                          <p data-surgir="subir" className="font-body text-sm leading-relaxed text-gray-700 md:text-base">
                             Cada um dos {TOTAL_LOTES} terrenos precisava ter a sua vista, a sua
                             frente de água ou o seu recuo de mata. Nenhum lote sobra para fechar
                             conta.
@@ -131,7 +132,7 @@ export function FundadorSection({
                       </div>
 
                       <div className="relative w-full border border-[#D07748]/40 p-5">
-                        <div className="relative h-[280px] md:h-[360px] lg:h-[400px]">
+                        <div data-surgir="imagem" className="relative h-[280px] md:h-[360px] lg:h-[400px]">
                           <Image
                             src="/images/pessoas/marcello-romero.jpg"
                             alt="Marcello Romero, responsável pelo desenvolvimento do produto"
@@ -142,7 +143,7 @@ export function FundadorSection({
                         </div>
                         <DecorativeGraphic
                           position="right"
-                          className="right-0 top-1/2 z-20 -translate-y-1/2 translate-x-6 md:translate-x-12 lg:translate-x-16"
+                          className="right-0 top-1/2 z-20 -translate-y-1/2 translate-x-4 md:translate-x-12 lg:translate-x-16"
                         />
                       </div>
                     </div>
