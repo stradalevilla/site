@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { usuarioLogado } from '@/lib/acesso';
+import { comoChamar, nomeDe, papelDe } from '@/lib/usuarios';
 
 const cards = [
   {
@@ -16,8 +18,9 @@ const cards = [
   {
     href: '/admin/usuarios',
     titulo: 'Usuários',
-    desc: 'Gerenciar quem tem acesso ao painel.',
+    desc: 'Convidar pessoas e gerenciar quem tem acesso ao painel.',
     ativo: true,
+    soAdministrador: true,
   },
   {
     href: '/admin/lotes',
@@ -39,18 +42,22 @@ const cards = [
   },
 ];
 
-export default function AdminInicio() {
+export default async function AdminInicio() {
+  const user = await usuarioLogado();
+  const administrador = user ? papelDe(user) === 'administrador' : false;
+  const nome = user ? comoChamar(nomeDe(user)) : '';
+
   return (
     <div className="p-8 md:p-10">
       <h1 className="font-heading text-2xl uppercase tracking-wide text-navy md:text-3xl">
         Gestão do site
       </h1>
       <p className="mt-1 font-body text-sm text-gray-500">
-        Escolha uma área para gerenciar.
+        {nome ? `Olá, ${nome}. Escolha` : 'Escolha'} uma área para gerenciar.
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {cards.map((c) =>
+        {cards.filter((c) => !c.soAdministrador || administrador).map((c) =>
           c.ativo ? (
             <Link
               key={c.titulo}

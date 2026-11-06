@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { criarSupabaseNavegador } from '@/lib/supabase/client';
+import type { Papel } from '@/lib/usuarios';
 
 const links = [
   { href: '/admin', label: 'Início', exato: true },
@@ -10,11 +11,11 @@ const links = [
   { href: '/admin/implantacao', label: 'Implantação' },
   { href: '/admin/lotes', label: 'Lotes' },
   { href: '/admin/grafismo', label: 'Grafismo de fundo' },
-  { href: '/admin/usuarios', label: 'Usuários' },
-  { href: '/admin/senha', label: 'Trocar senha' },
+  { href: '/admin/usuarios', label: 'Usuários', soAdministrador: true },
+  { href: '/admin/senha', label: 'Minha conta' },
 ];
 
-export function AdminShell({ email, children }: { email: string; children: React.ReactNode }) {
+export function AdminShell({ email, papel, children }: { email: string; papel: Papel; children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -37,7 +38,7 @@ export function AdminShell({ email, children }: { email: string; children: React
         </div>
 
         <nav className="flex-1 p-3">
-          {links.map((l) => {
+          {links.filter((l) => !l.soAdministrador || papel === 'administrador').map((l) => {
             const ativo = l.exato ? pathname === l.href : pathname.startsWith(l.href);
             return (
               <Link

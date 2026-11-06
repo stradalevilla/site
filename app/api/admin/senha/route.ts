@@ -1,6 +1,8 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
+import { avisarSenhaAlterada, semSessao, SENHA_VAZADA, senhaVazada } from '@/lib/acesso';
+import { enderecoDoSite } from '@/lib/pedido';
 import { criarSupabaseServidor } from '@/lib/supabase/server';
-import { criarSupabaseAdmin } from '@/lib/supabase/admin';
+import { erroDaSenha } from '@/lib/usuarios';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,10 +11,9 @@ export async function POST(req: Request) {
   const supabase = await criarSupabaseServidor();
   const {
     data: { user },
+    error: erroDaSessao,
   } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ ok: false, error: 'nao autenticado' }, { status: 401 });
-  }
+  if (!user) return semSessao(erroDaSessao);
 
   let body: { atual?: string; nova?: string };
   try {
@@ -22,8 +23,9 @@ export async function POST(req: Request) {
   }
   const atual = body.atual ?? '';
   const nova = body.nova ?? '';
-  if (nova.length < 8) {
-    return NextResponse.json({ ok: false, error: 'a nova senha precisa ter ao menos 8 caracteres' }, { status: 400 });
+  const problema = erroDaSenha(nova);
+  if (problema) {
+    return NextResponse.json({ ok: false, error: problema }, { status: 400 });
   }
 
   // Confirma a senha atual antes de trocar.
@@ -31,14 +33,28 @@ export async function POST(req: Request) {
     email: user.email!,
     password: atual,
   });
+  if (erroLogin?.code === 'invalid_credentials') {
+    return NextResponse.json({ ok: false, error: 'Senha atual incorreta.' }, { status: 400 });
+  }
   if (erroLogin) {
-    return NextResponse.json({ ok: false, error: 'senha atual incorreta' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'Não foi possível trocar a senha agora.' }, { status: 503 });
   }
 
-  const admin = criarSupabaseAdmin();
-  const { error } = await admin.auth.admin.updateUserById(user.id, { password: nova });
-  if (error) {
-    return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+  if (await senhaVazada(nova)) {
+    return NextResponse.json({ ok: false, error: SENHA_VAZADA }, { status: 400 });
   }
+
+  // pela sessão da própria pessoa o Supabase derruba as outras sessões e mantém esta
+  const { error } = await supabase.auth.updateUser({ password: nova });
+  if (error?.code === 'same_password') {
+    return NextResponse.json({ ok: false, error: 'A nova senha precisa ser diferente da atual.' }, { status: 400 });
+  }
+  if (error) {
+    console.error('senha nao trocada:', error.message);
+    return NextResponse.json({ ok: false, error: 'Não foi possível trocar a senha agora.' }, { status: 500 });
+  }
+
+  const base = enderecoDoSite(req);
+  after(() => avisarSenhaAlterada(user, base));
   return NextResponse.json({ ok: true });
 }

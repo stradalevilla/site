@@ -49,7 +49,11 @@ function Formulario() {
       setErro(
         semConexao
           ? 'Não foi possível falar com o servidor de login. Não é a sua senha: o serviço está fora do ar.'
-          : 'E-mail ou senha incorretos.'
+          : error.code === 'user_banned'
+            ? 'Não foi possível entrar. Confira os dados ou fale com quem administra o painel.'
+            : error.code === 'over_request_rate_limit'
+              ? 'Muitas tentativas. Aguarde alguns minutos e tente de novo.'
+              : 'E-mail ou senha incorretos.'
       );
       setEntrando(false);
       return;

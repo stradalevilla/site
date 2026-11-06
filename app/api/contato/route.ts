@@ -3,6 +3,7 @@ import { criarSupabaseAdmin } from '@/lib/supabase/admin';
 import { TEXTO_DO_ACEITE, type Contato } from '@/lib/contato';
 import { enviarAoCrm } from '@/lib/crm';
 import { classificarOrigem } from '@/lib/origem';
+import { doProprioSite } from '@/lib/pedido';
 
 export const dynamic = 'force-dynamic';
 /** O envio ao CRM roda depois da resposta, dentro deste tempo: até três tentativas de oito segundos */
@@ -33,17 +34,6 @@ function local(req: Request, cabecalho: string) {
     return decodeURIComponent(valor);
   } catch {
     return valor;
-  }
-}
-
-/** Pedido de outro site é recusado. Navegador sempre manda Origin em POST, script simples não. */
-function doProprioSite(req: Request) {
-  const origem = req.headers.get('origin');
-  if (!origem) return false;
-  try {
-    return new URL(origem).host === req.headers.get('host');
-  } catch {
-    return false;
   }
 }
 

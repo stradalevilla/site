@@ -2,11 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { criarSupabaseNavegador } from '@/lib/supabase/client';
 
 /**
- * Pedido de recuperação de senha. O Supabase manda um e-mail com um link que
- * leva a /admin/nova-senha já com a sessão de recuperação aberta.
+ * Pedido de recuperação de senha. O site manda um e-mail com um link para
+ * /admin/nova-senha, que vale em qualquer navegador.
  *
  * A resposta é a mesma havendo ou não conta com aquele e-mail: dizer "este
  * e-mail não existe" entrega para qualquer um a lista de quem tem acesso ao
@@ -23,26 +22,17 @@ export default function RecuperarSenha() {
     setErro('');
     setEnviando(true);
 
-    const supabase = criarSupabaseNavegador();
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/admin/nova-senha`,
-    });
-
-    if (error) {
-      const semConexao =
-        error.name === 'AuthRetryableFetchError' ||
-        !error.status ||
-        /fetch|network|failed to/i.test(error.message);
-      setErro(
-        semConexao
-          ? 'Não foi possível falar com o servidor. O serviço de login está fora do ar.'
-          : 'Não foi possível enviar o e-mail agora. Tente de novo em instantes.'
-      );
-      setEnviando(false);
-      return;
+    try {
+      const resposta = await fetch('/api/admin/recuperar', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (resposta.ok) setEnviado(true);
+      else setErro(resposta.status === 400 ? 'Confira o e-mail.' : 'Não foi possível enviar agora. Tente de novo em instantes.');
+    } catch {
+      setErro('Não foi possível falar com o servidor. Tente de novo em instantes.');
     }
-
-    setEnviado(true);
     setEnviando(false);
   };
 

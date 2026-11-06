@@ -3,46 +3,39 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { criarSupabaseNavegador } from '@/lib/supabase/client';
+
+type Tipo = 'invite' | 'recovery';
 
 /**
- * Onde o link do e-mail cai. O Supabase abre uma sessão de recuperação ao
- * chegar aqui, e com ela a pessoa troca a própria senha.
- *
- * Sem sessão não adianta mostrar o formulário: o link expirou ou foi aberto
- * fora do e-mail, e a troca ia falhar depois de a pessoa digitar duas vezes.
+ * Onde o link do e-mail cai, tanto de convite quanto de recuperação. O código vem depois
+ * do # e só é gasto quando a pessoa envia a senha. Por isso a página não sabe de antemão
+ * se o link ainda vale: se não valer, avisa ao enviar, e a senha digitada não é perdida
+ * à toa, porque a mesma página oferece pedir outro link.
  */
 export default function NovaSenha() {
   const router = useRouter();
+  const [link, setLink] = useState<{ codigo: string; tipo: Tipo } | null>(null);
   const [pronto, setPronto] = useState(false);
-  const [temSessao, setTemSessao] = useState(false);
+  const [linkVencido, setLinkVencido] = useState(false);
   const [senha, setSenha] = useState('');
   const [repetida, setRepetida] = useState('');
   const [erro, setErro] = useState('');
   const [salvando, setSalvando] = useState(false);
 
   useEffect(() => {
-    const supabase = criarSupabaseNavegador();
-
-    // o link do e-mail chega como evento PASSWORD_RECOVERY
-    const { data: assinatura } = supabase.auth.onAuthStateChange((_evento, sessao) => {
-      if (sessao) {
-        setTemSessao(true);
-        setPronto(true);
-      }
-    });
-
-    supabase.auth
-      .getSession()
-      .then(({ data }) => {
-        if (data.session) setTemSessao(true);
-      })
-      .catch(() => {
-        /* servidor fora do ar: cai no aviso de link inválido */
-      })
-      .finally(() => setPronto(true));
-
-    return () => assinatura.subscription.unsubscribe();
+    // colar um link novo na mesma aba só muda o que vem depois do #, e a página não recarrega
+    const lerLink = () => {
+      const dados = new URLSearchParams(window.location.hash.slice(1));
+      const codigo = dados.get('t');
+      const tipo = dados.get('tipo');
+      setLink(codigo && (tipo === 'invite' || tipo === 'recovery') ? { codigo, tipo } : null);
+      setLinkVencido(false);
+      setErro('');
+      setPronto(true);
+    };
+    lerLink();
+    window.addEventListener('hashchange', lerLink);
+    return () => window.removeEventListener('hashchange', lerLink);
   }, []);
 
   const salvar = async (e: React.FormEvent) => {
@@ -59,26 +52,27 @@ export default function NovaSenha() {
     }
 
     setSalvando(true);
-    const supabase = criarSupabaseNavegador();
-    const { error } = await supabase.auth.updateUser({ password: senha });
-
-    if (error) {
-      const semConexao =
-        error.name === 'AuthRetryableFetchError' ||
-        !error.status ||
-        /fetch|network|failed to/i.test(error.message);
-      setErro(
-        semConexao
-          ? 'Não foi possível falar com o servidor. O serviço de login está fora do ar.'
-          : 'Não foi possível trocar a senha. O link pode ter expirado.'
-      );
-      setSalvando(false);
-      return;
+    try {
+      const resposta = await fetch('/api/admin/definir-senha', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ ...link, senha }),
+      });
+      const j = await resposta.json();
+      if (j.ok) {
+        router.replace('/admin');
+        router.refresh();
+        return;
+      }
+      if (j.error === 'link') setLinkVencido(true);
+      else setErro(j.error);
+    } catch {
+      setErro('Não foi possível falar com o servidor. Tente de novo em instantes.');
     }
-
-    router.replace('/admin');
-    router.refresh();
+    setSalvando(false);
   };
+
+  const convite = link?.tipo === 'invite';
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-100 px-4">
@@ -86,17 +80,19 @@ export default function NovaSenha() {
         <div className="text-center">
           <p className="font-heading text-2xl uppercase tracking-wide text-navy">Villa Stradale</p>
           <p className="mt-1 font-body text-xs uppercase tracking-[0.2em] text-gray-500">
-            Nova senha
+            {convite ? 'Crie a sua senha' : 'Nova senha'}
           </p>
         </div>
 
         {!pronto ? (
           <p className="text-center font-body text-sm text-gray-500">abrindo…</p>
-        ) : !temSessao ? (
+        ) : !link || linkVencido ? (
           <>
             <p className="text-center font-body text-sm leading-relaxed text-gray-600">
-              Este link não vale mais. Peça um novo e abra direto do e-mail, sem
-              copiar e colar o endereço.
+              Este link não vale mais. Ele dura 24 horas e só funciona uma vez.
+              {convite
+                ? ' Peça um novo convite a quem chamou você, ou use o botão abaixo.'
+                : ' Peça outro e abra direto do e-mail mais recente.'}
             </p>
             <Link
               href="/admin/recuperar"
@@ -107,11 +103,16 @@ export default function NovaSenha() {
           </>
         ) : (
           <form onSubmit={salvar} className="space-y-5">
+            <p className="text-center font-body text-sm leading-relaxed text-gray-600">
+              {convite ? 'Bem-vindo ao painel. Crie a senha que você vai usar para entrar.' : 'Crie uma senha nova para a sua conta.'}{' '}
+              Use ao menos 8 caracteres: uma frase curta é fácil de lembrar e difícil de adivinhar.
+            </p>
+
             <input
               type="password"
               required
               autoComplete="new-password"
-              placeholder="Nova senha"
+              placeholder="Nova senha (mín. 8)"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               className="w-full rounded border border-navy/20 px-4 py-3 font-body text-sm outline-none focus:border-gold-dark"
