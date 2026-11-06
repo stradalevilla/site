@@ -1,11 +1,12 @@
-import { dataDoContato, resumoDaOrigem, type Contato } from '@/lib/contato';
+import { dataDoContato, resumoDaOrigem, situacaoNoCrm, type Contato } from '@/lib/contato';
+import { ROTULO_DA_ORIGEM } from '@/lib/origem';
 
-const COLUNAS = ['Data e hora', 'Nome', 'E-mail', 'Telefone', 'Origem', 'Enviou em', 'Aparelho', 'Local'];
+const COLUNAS = ['Data e hora', 'Nome', 'E-mail', 'Telefone', 'Origem', 'CRM', 'Enviou em', 'Aparelho', 'Local'];
 
 export function TabelaDeContatos({ contatos }: { contatos: Contato[] }) {
   return (
     <div className="mt-6 overflow-x-auto rounded border border-neutral-200 bg-white">
-      <table className="w-full min-w-[960px] text-left font-body text-sm text-navy">
+      <table className="w-full min-w-[1080px] text-left font-body text-sm text-navy">
         <thead className="border-b border-neutral-200 text-[11px] uppercase tracking-wider text-gray-500">
           <tr>
             {COLUNAS.map((titulo) => (
@@ -35,9 +36,11 @@ export function TabelaDeContatos({ contatos }: { contatos: Contato[] }) {
               </td>
               <td className="whitespace-nowrap px-4 py-3 tabular-nums">{c.telefone}</td>
               <td className="px-4 py-3">
-                {resumoDaOrigem(c)}
+                <span className="font-medium">{c.origem ? (ROTULO_DA_ORIGEM[c.origem] ?? c.origem) : '-'}</span>
+                {c.origem !== 'direto' && <span className="block text-xs text-gray-500">{resumoDaOrigem(c)}</span>}
                 {c.entrada && <span className="block text-xs text-gray-500">entrou em {c.entrada.split('?')[0]}</span>}
               </td>
+              <td className="px-4 py-3">{situacaoNoCrm(c)}</td>
               <td className="px-4 py-3">{c.pagina ?? '-'}</td>
               <td className="px-4 py-3">{c.dispositivo ?? '-'}</td>
               <td className="px-4 py-3">{[c.cidade, c.estado, c.pais].filter(Boolean).join(', ') || '-'}</td>

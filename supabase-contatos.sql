@@ -34,3 +34,14 @@ alter table public.contatos enable row level security;
 create index if not exists contatos_criado_em_idx on public.contatos (criado_em desc);
 
 comment on table public.contatos is 'Contatos do formulário do site, com origem e horário. Ficam guardados mesmo depois de ligar o CRM.';
+
+-- A origem do acesso (organico, direto, social, IA, referencia ou pago) e a entrega
+-- ao CRM da Sotheby's pelo webhook do Zapier. Origem sem lista fechada de valores de
+-- propósito: um valor novo no código nunca pode custar a gravação de um contato.
+-- crm_pendente só nasce ligado em produção: o localhost grava neste mesmo banco, e o
+-- reenvio diário não pode mandar um teste daqui para a Sotheby's.
+alter table public.contatos
+  add column if not exists origem text,
+  add column if not exists crm_pendente boolean not null default false,
+  add column if not exists crm_enviado_em timestamptz,
+  add column if not exists crm_erro text;

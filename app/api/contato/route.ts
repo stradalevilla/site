@@ -1,15 +1,19 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
 import { criarSupabaseAdmin } from '@/lib/supabase/admin';
-import { TEXTO_DO_ACEITE } from '@/lib/contato';
+import { TEXTO_DO_ACEITE, type Contato } from '@/lib/contato';
+import { enviarAoCrm } from '@/lib/crm';
+import { classificarOrigem } from '@/lib/origem';
 
 export const dynamic = 'force-dynamic';
+/** O envio ao CRM roda depois da resposta, dentro deste tempo: até três tentativas de oito segundos */
+export const maxDuration = 60;
 
 /** Formulário que passa disso em dez minutos é robô. Para um lançamento, é folga de sobra. */
 const TETO_EM_10_MINUTOS = 30;
 
 function texto(valor: unknown, limite: number) {
-  // o Postgres recusa o caractere nulo, e o contato se perderia por causa de uma UTM
-  return typeof valor === 'string' ? valor.replace(/\0/g, '').trim().slice(0, limite) || null : null;
+  // o Postgres recusa o caractere nulo e o emoji cortado ao meio, e o contato se perderia por causa de uma UTM
+  return typeof valor === 'string' ? valor.replace(/\0/g, '').trim().slice(0, limite).toWellFormed() || null : null;
 }
 
 /** O iPad moderno se apresenta como Mac: quem denuncia é a tela de toque */
@@ -64,9 +68,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: 'pedido invalido' }, { status: 400 });
   }
 
-  const paginaDoEnvio = new URL(req.headers.get('referer') ?? '/', req.url).pathname;
-  const voltar = (resultado: string) =>
-    NextResponse.redirect(new URL(`${paginaDoEnvio}?${resultado}=1#contato`, req.url), 303);
+  const enderecoDoEnvio = new URL(req.headers.get('referer') ?? '/', req.url);
+  const paginaDoEnvio = enderecoDoEnvio.pathname;
+  const voltar = (resultado: string) => {
+    // a campanha continua no endereço: sem JavaScript, a próxima tentativa só tem ela
+    const destino = new URL(paginaDoEnvio + enderecoDoEnvio.search, req.url);
+    destino.searchParams.delete('erro');
+    destino.searchParams.delete('enviado');
+    destino.searchParams.set(resultado, '1');
+    destino.hash = 'contato';
+    return NextResponse.redirect(destino, 303);
+  };
   const responder = () => (json ? NextResponse.json({ ok: true }) : voltar('enviado'));
 
   // campo invisível: só robô preenche. Ele recebe "ok" e nada é gravado.
@@ -91,10 +103,24 @@ export async function POST(req: Request) {
     return json ? NextResponse.json({ ok: false, error: 'muitos envios' }, { status: 429 }) : voltar('erro');
   }
 
-  const origem = (typeof corpo.origem === 'object' && corpo.origem ? corpo.origem : {}) as Record<string, unknown>;
+  // sem JavaScript não há origem guardada: sobra a campanha no endereço da página do envio
+  const visita = (typeof corpo.origem === 'object' && corpo.origem
+    ? corpo.origem
+    : { ...Object.fromEntries(enderecoDoEnvio.searchParams), entrada: paginaDoEnvio + enderecoDoEnvio.search, referencia: null }) as Record<string, unknown>;
+  const dadosDaVisita = {
+    entrada: texto(visita.entrada, 600),
+    referencia: texto(visita.referencia, 600),
+    utm_source: texto(visita.utm_source, 200),
+    utm_medium: texto(visita.utm_medium, 200),
+    utm_campaign: texto(visita.utm_campaign, 200),
+    utm_term: texto(visita.utm_term, 200),
+    utm_content: texto(visita.utm_content, 200),
+    gclid: texto(visita.gclid, 300),
+    fbclid: texto(visita.fbclid, 300),
+  };
   const navegador = texto(req.headers.get('user-agent'), 300) ?? '';
 
-  const { error } = await banco
+  const { data: contato, error } = await banco
     .from('contatos')
     .insert({
       nome,
@@ -102,26 +128,25 @@ export async function POST(req: Request) {
       telefone,
       aceite_texto: TEXTO_DO_ACEITE,
       pagina: texto(corpo.pagina, 300) ?? paginaDoEnvio,
-      entrada: texto(origem.entrada, 600),
-      referencia: texto(origem.referencia, 600),
-      utm_source: texto(origem.utm_source, 200),
-      utm_medium: texto(origem.utm_medium, 200),
-      utm_campaign: texto(origem.utm_campaign, 200),
-      utm_term: texto(origem.utm_term, 200),
-      utm_content: texto(origem.utm_content, 200),
-      gclid: texto(origem.gclid, 300),
-      fbclid: texto(origem.fbclid, 300),
+      ...dadosDaVisita,
+      origem: classificarOrigem({ ...dadosDaVisita, navegador }),
+      crm_pendente: Boolean(process.env.CRM_WEBHOOK_URL),
       dispositivo: dispositivo(navegador, corpo.toques),
       navegador,
       cidade: local(req, 'x-vercel-ip-city'),
       estado: local(req, 'x-vercel-ip-country-region'),
       pais: local(req, 'x-vercel-ip-country'),
-    });
+    })
+    .select()
+    .single();
 
   if (error) {
     console.error('contato nao gravado:', error.message);
     return json ? NextResponse.json({ ok: false, error: 'nao gravado' }, { status: 500 }) : voltar('erro');
   }
+
+  // depois da resposta: quem preenche não espera pelo Zapier, e o contato já está guardado
+  after(() => enviarAoCrm(contato as Contato));
 
   return responder();
 }

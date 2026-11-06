@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, type FormEvent } from 'react';
-import { guardarOrigem, lerOrigem, TEXTO_DO_ACEITE } from '@/lib/contato';
+import { guardarOrigem, origemDoEnvio, TEXTO_DO_ACEITE } from '@/lib/contato';
 
 const CAMPO =
   // 16px no celular: abaixo disso o iPhone amplia a página ao tocar no campo
@@ -38,7 +38,7 @@ export function FormularioInteresse() {
           aceite: dados.get('aceite') === 'on',
           site: dados.get('site'),
           pagina: window.location.pathname,
-          origem: lerOrigem(),
+          origem: origemDoEnvio(),
           toques: navigator.maxTouchPoints,
         }),
       });

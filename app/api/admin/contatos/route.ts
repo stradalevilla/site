@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { criarSupabaseServidor } from '@/lib/supabase/server';
 import { criarSupabaseAdmin } from '@/lib/supabase/admin';
-import { dataDoContato, resumoDaOrigem, type Contato } from '@/lib/contato';
+import { dataDoContato, resumoDaOrigem, situacaoNoCrm, type Contato } from '@/lib/contato';
+import { ROTULO_DA_ORIGEM } from '@/lib/origem';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,7 +21,9 @@ const COLUNAS: [string, (c: Contato) => string | null][] = [
   ['Nome', (c) => c.nome],
   ['E-mail', (c) => c.email],
   ['Telefone', (c) => telefoneDaPlanilha(c.telefone)],
-  ['Origem', resumoDaOrigem],
+  ['Origem', (c) => (c.origem ? (ROTULO_DA_ORIGEM[c.origem] ?? c.origem) : null)],
+  ['Detalhe da origem', resumoDaOrigem],
+  ['CRM', situacaoNoCrm],
   ['Página de entrada', (c) => c.entrada],
   ['Enviou em', (c) => c.pagina],
   ['Veio de', (c) => c.referencia],
