@@ -2,6 +2,12 @@ import Link from 'next/link';
 
 const cards = [
   {
+    href: '/admin/contatos',
+    titulo: 'Contatos',
+    desc: 'Quem preencheu o formulário do site, com origem e horário.',
+    ativo: true,
+  },
+  {
     href: '/admin/implantacao',
     titulo: 'Implantação',
     desc: 'Ajustar as marcações dos lotes sobre a imagem aérea.',
