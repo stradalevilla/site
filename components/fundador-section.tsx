@@ -25,9 +25,12 @@ export function FundadorSection({
   avancoAcima = 'normal',
   /** o container branco desce sobre uma faixa logo abaixo (idem) */
   avancaNaFaixaAbaixo = true,
+  /** a seção abre a página, como em Quem somos: o título dela é o h1 */
+  tituloPrincipal = false,
 }: {
   avancoAcima?: 'nenhum' | 'normal';
   avancaNaFaixaAbaixo?: boolean;
+  tituloPrincipal?: boolean;
 } = {}) {
   return (
     <>
@@ -35,6 +38,7 @@ export function FundadorSection({
         <DivisorCapitulo
           id="stakeholders"
           avancoAcima={avancoAcima}
+          tituloPrincipal={tituloPrincipal}
           avancoDoProximo="grande"
           rotulo="Fundador"
           titulo={

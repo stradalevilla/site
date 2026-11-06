@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { FormularioInteresse } from '@/components/formulario-interesse';
 
 export function ContatoInteresse() {
   return (
@@ -35,47 +36,7 @@ export function ContatoInteresse() {
         </div>
 
         {/* Coluna direita - formulário */}
-        <form data-surgir="subir" className="space-y-5">
-          <input
-            type="text"
-            name="nome"
-            placeholder="Nome"
-            className="w-full bg-transparent border border-white/30 text-white placeholder:text-white/50 font-body text-sm md:text-base px-5 py-4 outline-none focus:border-[#D07748] transition-colors"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="E-mail"
-            className="w-full bg-transparent border border-white/30 text-white placeholder:text-white/50 font-body text-sm md:text-base px-5 py-4 outline-none focus:border-[#D07748] transition-colors"
-          />
-          <input
-            type="tel"
-            name="telefone"
-            placeholder="Telefone"
-            className="w-full bg-transparent border border-white/30 text-white placeholder:text-white/50 font-body text-sm md:text-base px-5 py-4 outline-none focus:border-[#D07748] transition-colors"
-          />
-
-          {/* Consentimento */}
-          <label className="flex items-start gap-3 cursor-pointer pt-1">
-            <input
-              type="checkbox"
-              name="consentimento"
-              className="mt-0.5 h-4 w-4 shrink-0 accent-[#D07748]"
-            />
-            <span className="font-body text-xs text-white/60 leading-relaxed">
-              Declaro que li e concordo com a Política de Privacidade e os Termos de Uso, incluindo
-              consulta ao SCR.
-            </span>
-          </label>
-
-          {/* Botão */}
-          <button
-            type="submit"
-            className="w-full bg-[#D07748] hover:bg-[#b8623a] text-white font-body text-base py-4 transition-colors"
-          >
-            Enviar
-          </button>
-        </form>
+        <FormularioInteresse />
       </div>
     </div>
   );

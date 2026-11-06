@@ -1,3 +1,5 @@
+import { DadosEstruturados } from '@/components/dados-estruturados';
+import { cartaoDoLink, DADOS_DA_LOCALIZACAO, PENINSULA } from '@/lib/seo';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { IconCar, IconHelicopter, IconBrandWaze } from '@tabler/icons-react';
@@ -11,10 +13,13 @@ import { DecorativeGraphic } from '@/components/decorative-graphic';
 import { Footer } from '@/components/footer';
 import enquadramento from '@/lib/enquadramento-mapa.json';
 
+const DESCRICAO =
+  'Piracaia, a 96 km de São Paulo: a região no mapa, o antigo vilarejo de Santo Antônio da Cachoeira e o acesso por terra e pelo ar.';
+
 export const metadata: Metadata = {
   title: 'Localização',
-  description:
-    'Piracaia, a 96 km de São Paulo: a região no mapa, o antigo vilarejo de Santo Antônio da Cachoeira e o acesso por terra e pelo ar.',
+  description: DESCRICAO,
+  ...cartaoDoLink('Localização | Villa Stradale', DESCRICAO),
 };
 
 /**
@@ -36,7 +41,6 @@ export const metadata: Metadata = {
  * 854,76 m. As cidades são as mesmas da arte do book (p27), com coordenada do
  * centro de cada uma.
  */
-const PENINSULA = { lat: -22.975994, lng: -46.380169 };
 
 const pinosDoMapa = [
   { nome: 'Villa Stradale', marca: true, ...PENINSULA },
@@ -107,6 +111,7 @@ const porTerra = [
 export default function Localizacao() {
   return (
     <>
+      <DadosEstruturados dados={DADOS_DA_LOCALIZACAO} />
       <Navbar />
       <MobileNav />
 

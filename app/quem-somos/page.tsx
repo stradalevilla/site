@@ -2,15 +2,19 @@ import type { Metadata } from 'next';
 import { Navbar } from '@/components/navbar';
 import { MobileNav } from '@/components/mobile-nav';
 import { FundadorSection } from '@/components/fundador-section';
+import { cartaoDoLink } from '@/lib/seo';
 import { FaixaParallax } from '@/components/faixa-parallax';
 import { ArquitetosSection } from '@/components/arquitetos-section';
 import { ContatoSection } from '@/components/contato-section';
 import { Footer } from '@/components/footer';
 
+const DESCRICAO =
+  'Pedro Costa, a Stradale Inc., Marcello Romero e os autores do projeto: quem está por trás do Villa Stradale Península, em Piracaia.';
+
 export const metadata: Metadata = {
   title: 'Quem somos',
-  description:
-    'Pedro Costa, a Stradale Inc., Marcello Romero e os autores do projeto: quem está por trás do Villa Stradale Península, em Piracaia.',
+  description: DESCRICAO,
+  ...cartaoDoLink('Quem somos | Villa Stradale', DESCRICAO),
 };
 
 /**
@@ -28,7 +32,7 @@ export default function QuemSomos() {
       <MobileNav />
 
       <main>
-        <FundadorSection avancoAcima="nenhum" />
+        <FundadorSection avancoAcima="nenhum" tituloPrincipal />
 
         {/* A faixa fecha o capítulo dos stakeholders e abre o dos autores: os
             dois containers avançam 112px sobre ela, um de cada lado. */}

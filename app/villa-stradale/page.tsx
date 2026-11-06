@@ -1,3 +1,4 @@
+import { cartaoDoLink } from '@/lib/seo';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Navbar } from '@/components/navbar';
@@ -7,10 +8,13 @@ import { ContatoSection } from '@/components/contato-section';
 import { Footer } from '@/components/footer';
 import { TOTAL_LOTES } from '@/lib/lotes';
 
+const DESCRICAO =
+  'Um condomínio pé na água de edição limitada: 54 lotes de 2.000 a 4.554 m² numa península irreplicável em Piracaia, assinado por Greg Bousquet (AO) e Luiz Carlos Orsini.';
+
 export const metadata: Metadata = {
-  title: 'Villa Stradale',
-  description:
-    'Um condomínio pé na água de edição limitada: 54 lotes de 2.000 a 4.554 m² numa península irreplicável em Piracaia, assinado por Greg Bousquet (AO) e Luiz Carlos Orsini.',
+  title: { absolute: 'Villa Stradale' },
+  description: DESCRICAO,
+  ...cartaoDoLink('Villa Stradale', DESCRICAO),
 };
 
 /**

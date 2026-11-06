@@ -6,8 +6,8 @@ import { getConfigDoFundo } from '@/lib/config-fundo';
 import { PrepararMapa } from '@/components/preparar-mapa';
 import { AnimacoesDeEntrada } from '@/components/animacoes-de-entrada';
 import { TransicaoDePagina } from '@/components/transicao-de-pagina';
+import { cartaoDoLink, DESCRICAO_DO_SITE, SITE } from '@/lib/seo';
 
-const SITE = 'https://www.villastradale.com.br';
 const TAG_MANAGER = 'GTM-MBN9W4ZF';
 
 export const metadata: Metadata = {
@@ -16,11 +16,9 @@ export const metadata: Metadata = {
     default: 'Villa Stradale',
     template: '%s | Villa Stradale',
   },
-  /* Este é o texto que o Google mostra abaixo do título e que aparece quando
-     alguém manda o link no WhatsApp. Está montado a partir da copy que já está
-     no ar nas páginas internas, para não inventar número nem promessa. */
-  description:
-    'Uma península na represa de Piracaia, entre a Serra da Mantiqueira e as águas do Sistema Cantareira: 275.951 m² com lotes voltados à água, casa-clube, marina e heliponto.',
+  description: DESCRICAO_DO_SITE,
+  // cada página aponta para o próprio endereço; os lotes corrigem /lotes/7 para /lotes/07
+  alternates: { canonical: './' },
   keywords: [
     'Villa Stradale',
     'lotes em Piracaia',
@@ -30,21 +28,10 @@ export const metadata: Metadata = {
     'casa de campo na água',
   ],
   authors: [{ name: 'Villa Stradale' }],
-  openGraph: {
-    type: 'website',
-    locale: 'pt_BR',
-    url: SITE,
-    siteName: 'Villa Stradale',
-    title: 'Villa Stradale — uma península irreplicável',
-    description:
-      'Entre a Serra da Mantiqueira e as águas do Sistema Cantareira, 275.951 m² de península com lotes voltados à água, casa-clube, marina e heliponto.',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Villa Stradale — uma península irreplicável',
-    description:
-      'Entre a Serra da Mantiqueira e as águas do Sistema Cantareira, 275.951 m² de península com lotes voltados à água, casa-clube, marina e heliponto.',
-  },
+  ...cartaoDoLink(
+    'Villa Stradale — uma península irreplicável',
+    'Entre a Serra da Mantiqueira e as águas do Sistema Cantareira, 275.951 m² de península com lotes voltados à água, casa-clube, marina e heliponto.'
+  ),
   robots: {
     index: true,
     follow: true,
@@ -72,12 +59,13 @@ export default async function RootLayout({
       <head>
         {/* Antes da primeira pintura: sem isto, o que entra com a rolagem
             piscaria visível antes de se esconder. Quem pede menos movimento, o
-            painel e navegador sem IntersectionObserver ficam sem a classe, e a
-            página simplesmente aparece inteira. */}
+            painel, navegador sem IntersectionObserver e robôs de busca ficam sem
+            a classe, e a página simplesmente aparece inteira: o robô não rola, e
+            o texto de baixo ficaria invisível para ele. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "(function(){try{if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&location.pathname.indexOf('/admin')!==0)document.documentElement.classList.add('surgir')}catch(e){}})()",
+              "(function(){try{if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&location.pathname.indexOf('/admin')!==0&&!/bot|crawl|spider|slurp|Google-InspectionTool|GoogleOther/i.test(navigator.userAgent))document.documentElement.classList.add('surgir')}catch(e){}})()",
           }}
         />
         {/* O código é o que o Google entrega, no alto do head como ele pede, só

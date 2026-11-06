@@ -1,3 +1,5 @@
+import { DadosEstruturados } from '@/components/dados-estruturados';
+import { cartaoDoLink, DESCRICAO_DO_SITE, trilhaDoLote } from '@/lib/seo';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -37,8 +39,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { numero } = await params;
   const n = parseLote(numero);
+  if (!n) return { title: 'Lote não encontrado' };
+
+  // /lotes/7 e /lotes/007 também abrem: o endereço que vale é sempre este
+  const lote = String(n).padStart(2, '0');
+  const caminho = `/lotes/${lote}`;
   return {
-    title: n ? `Lote ${String(n).padStart(2, '0')}` : 'Lote não encontrado',
+    title: `Lote ${lote}`,
+    alternates: { canonical: caminho },
+    ...cartaoDoLink(`Lote ${lote} | Villa Stradale`, DESCRICAO_DO_SITE, caminho),
   };
 }
 
@@ -113,6 +122,7 @@ export default async function LotePage({
 
   return (
     <>
+      <DadosEstruturados dados={trilhaDoLote(pad)} />
       <Navbar />
       <MobileNav />
 
@@ -217,7 +227,9 @@ export default async function LotePage({
           </div>
 
           {/* Contato - colado no container branco */}
-          <ContatoInteresse />
+          <div id="contato" className="scroll-mt-28">
+            <ContatoInteresse />
+          </div>
         </div>
       </main>
 

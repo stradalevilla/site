@@ -1,3 +1,4 @@
+import { cartaoDoLink } from '@/lib/seo';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Navbar } from '@/components/navbar';
@@ -8,9 +9,12 @@ import { Footer } from '@/components/footer';
 import { TOTAL_LOTES } from '@/lib/lotes';
 import { getContornos } from '@/lib/getContornos';
 
+const DESCRICAO = `O masterplan do Villa Stradale: terreno de 275.951 m² e ${TOTAL_LOTES} lotes voltados à água, com casa-clube, marina, heliponto e quadras.`;
+
 export const metadata: Metadata = {
   title: 'Masterplan',
-  description: `O masterplan do Villa Stradale: terreno de 275.951 m² e ${TOTAL_LOTES} lotes voltados à água, com casa-clube, marina, heliponto e quadras.`,
+  description: DESCRICAO,
+  ...cartaoDoLink('Masterplan | Villa Stradale', DESCRICAO),
 };
 
 export default async function MasterplanPage() {

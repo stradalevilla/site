@@ -41,6 +41,7 @@ export function DivisorCapitulo({
   frase,
   avancoDoProximo = 'normal',
   avancoAcima = 'nenhum',
+  tituloPrincipal = false,
 }: {
   id: string;
   rotulo: string;
@@ -48,7 +49,11 @@ export function DivisorCapitulo({
   frase?: string;
   avancoDoProximo?: keyof typeof RESERVA_DO_AVANCO;
   avancoAcima?: keyof typeof RESERVA_DO_AVANCO_ACIMA;
+  /** Quando a faixa abre a página: o título dela é o h1, com a mesma aparência */
+  tituloPrincipal?: boolean;
 }) {
+  const Titulo = tituloPrincipal ? 'h1' : 'h2';
+
   return (
     <section
       id={id}
@@ -94,9 +99,9 @@ export function DivisorCapitulo({
           {rotulo}
         </p>
 
-        <h2 data-surgir="subir" className="mx-auto mt-6 max-w-4xl font-heading text-3xl font-light uppercase italic leading-tight tracking-wider text-white md:text-4xl lg:text-5xl">
+        <Titulo data-surgir="subir" className="mx-auto mt-6 max-w-4xl font-heading text-3xl font-light uppercase italic leading-tight tracking-wider text-white md:text-4xl lg:text-5xl">
           {titulo}
-        </h2>
+        </Titulo>
 
         {frase && (
           <p data-surgir="subir" className="mx-auto mt-6 max-w-2xl font-body text-base font-light leading-relaxed text-white/85 md:text-lg">

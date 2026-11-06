@@ -12,6 +12,8 @@ import { RegiaoSection } from '@/components/regiao-section';
 import { LocalizacaoSection } from '@/components/localizacao-section';
 import { ContatoSection } from '@/components/contato-section';
 import { Footer } from '@/components/footer';
+import { DadosEstruturados } from '@/components/dados-estruturados';
+import { DADOS_DA_HOME } from '@/lib/seo';
 
 /**
  * Os depoimentos dos primeiros proprietários voltam quando as falas e as fotos
@@ -25,6 +27,8 @@ const MOSTRAR_PROPRIETARIOS = false;
 export default function Home() {
   return (
     <>
+      <DadosEstruturados dados={DADOS_DA_HOME} />
+
       {/* Navbar Desktop */}
       <Navbar />
 

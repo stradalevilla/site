@@ -120,7 +120,11 @@ export function MapaRegiao3D({
     let observador: ResizeObserver | null = null;
 
     (async () => {
-      const { Map: Mapa, Marker } = await import('maplibre-gl');
+      const { Map: Mapa, Marker, getVersion, setWorkerUrl } = await import('maplibre-gl');
+      // O build troca o endereço que o MapLibre usa para achar o próprio worker por
+      // um caminho de arquivo. Sem worker não há relevo nem água, só o satélite plano.
+      // Ao atualizar o pacote, copiar os dois .mjs de node_modules para a pasta nova.
+      setWorkerUrl(`/maplibre/${getVersion()}/maplibre-gl-worker.mjs`);
       if (!vivo) return;
 
       const estilo =
