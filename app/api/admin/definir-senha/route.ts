@@ -1,7 +1,7 @@
 import { after, NextResponse } from 'next/server';
 import { isAuthRetryableFetchError } from '@supabase/supabase-js';
 import { avisarConviteAceito, avisarSenhaAlterada, SEM_RESPOSTA, SENHA_VAZADA, senhaVazada } from '@/lib/acesso';
-import { doProprioSite, enderecoDoSite } from '@/lib/pedido';
+import { destinoDosLinks, doProprioSite } from '@/lib/pedido';
 import { criarSupabaseServidor } from '@/lib/supabase/server';
 import { erroDaSenha } from '@/lib/usuarios';
 
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
   }
 
   const usuario = data.user;
-  const base = enderecoDoSite(req);
-  after(() => (tipo === 'invite' ? avisarConviteAceito(usuario, base) : avisarSenhaAlterada(usuario, base)));
+  const destino = destinoDosLinks(req);
+  after(() => (tipo === 'invite' ? avisarConviteAceito(usuario, destino) : avisarSenhaAlterada(usuario, destino)));
   return NextResponse.json({ ok: true });
 }

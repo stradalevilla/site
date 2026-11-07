@@ -8,7 +8,7 @@ import { vez } from '@/lib/abertura';
 
 /**
  * Os dois voos sobre a península, nesta ordem. O segundo foi cortado na
- * conversão para começar em 00:03 da take original.
+ * conversão para começar em 00:03 da take corrigida, e sobram 3 segundos.
  *
  * Cada slide é uma imagem com um filme por cima, e a imagem é o primeiro quadro
  * dele. É ela que abre o site, com prioridade, então o hero aparece tão rápido
@@ -19,7 +19,19 @@ import { vez } from '@/lib/abertura';
  * No celular em pé, imagem e filme têm versão vertical, com o mesmo enquadramento
  * central, recortada do 4K: o arquivo horizontal ficaria ampliado 3,5 vezes ali.
  */
-const SLIDES = [
+type Slide = {
+  chave: string;
+  imagem: string;
+  imagemEmPe: string;
+  filme: string;
+  alt: string;
+  /** tem a versão de 2560px, para telas grandes e tablets */
+  tem1440?: boolean;
+  /** segundos antes do fim em que a dissolução começa, em filme curto demais para o padrão */
+  saida?: number;
+};
+
+const SLIDES: Slide[] = [
   {
     chave: 'por-do-sol',
     imagem: '/images/renders/hero-por-do-sol.jpg',
@@ -29,10 +41,14 @@ const SLIDES = [
   },
   {
     chave: 'peninsula',
-    imagem: '/images/renders/hero-peninsula.jpg',
-    imagemEmPe: '/images/renders/hero-peninsula-retrato.jpg',
-    filme: '/videos/hero-peninsula',
+    imagem: '/images/renders/hero-peninsula-v2.jpg',
+    imagemEmPe: '/images/renders/hero-peninsula-v2-retrato.jpg',
+    filme: '/videos/hero-peninsula-v2',
     alt: 'Villa Stradale - Uma península irreplicável',
+    tem1440: true,
+    // com 3 segundos, o padrão deixaria o filme sozinho na tela por pouco mais de 1 segundo:
+    // assim ele corre quase inteiro, e o último quadro segura o fim da dissolução
+    saida: 0.6,
   },
 ];
 
@@ -47,7 +63,7 @@ const DISSOLVE_MS = 1800;
 const TRAVOU_MS = 6000;
 
 /** next/image não troca de arquivo conforme a tela: quem faz isso é o <picture> */
-function FotoDoSlide({ slide, alt, prioridade }: { slide: (typeof SLIDES)[number]; alt: string; prioridade: boolean }) {
+function FotoDoSlide({ slide, alt, prioridade }: { slide: Slide; alt: string; prioridade: boolean }) {
   const comum = { alt, fill: true, sizes: '100vw', quality: 90, priority: prioridade, className: 'object-cover' };
   const emPe = getImageProps({ ...comum, src: slide.imagemEmPe }).props;
   const deitada = getImageProps({ ...comum, src: slide.imagem }).props;
@@ -65,7 +81,7 @@ export function HeroSection() {
   const caixa = useRef<HTMLElement>(null);
   const filmes = useRef<(HTMLVideoElement | null)[]>([]);
   const [atual, setAtual] = useState(0);
-  const [tamanho, setTamanho] = useState<720 | 1080 | 'retrato' | null>(null);
+  const [tamanho, setTamanho] = useState<720 | 1080 | 1440 | 'retrato' | null>(null);
   const [primeiroPronto, setPrimeiroPronto] = useState(false);
   const [naTela, setNaTela] = useState(true);
 
@@ -80,8 +96,13 @@ export function HeroSection() {
     if (calmo || economia) return;
     const emPe = window.matchMedia(CELULAR_EM_PE);
     const ligar = () => {
-      const largura = (caixa.current?.clientWidth ?? 0) * window.devicePixelRatio;
-      setTamanho(emPe.matches ? 'retrato' : largura > 1400 ? 1080 : 720);
+      // o filme cobre a caixa: num tablet em pé quem manda é a altura. Acima de 2x a tela
+      // do celular não mostra mais detalhe, e o arquivo maior só gastaria dados.
+      const densidade = Math.min(window.devicePixelRatio, 2);
+      const largura = (caixa.current?.clientWidth ?? 0) * densidade;
+      const altura = (caixa.current?.clientHeight ?? 0) * densidade;
+      const necessario = Math.max(largura, (altura * 16) / 9);
+      setTamanho(emPe.matches ? 'retrato' : necessario > 2200 ? 1440 : necessario > 1400 ? 1080 : 720);
     };
     // quem gira o celular troca de arquivo: o vertical deitado ficaria todo cortado
     const aoCarregar = () => {
@@ -117,14 +138,15 @@ export function HeroSection() {
       const t = setTimeout(passar, PAUSA);
       return () => clearTimeout(t);
     }
+    const saida = SLIDES[atual].saida ?? DISSOLVE_MS / 1000;
     // quem volta com a seta logo depois da troca pega o filme no fim
-    if (v.duration - v.currentTime <= DISSOLVE_MS / 1000) v.currentTime = 0;
+    if (v.duration - v.currentTime <= saida) v.currentTime = 0;
     v.play().catch(() => {});
     let vigia = setTimeout(passar, TRAVOU_MS);
     const anda = () => {
       clearTimeout(vigia);
       vigia = setTimeout(passar, TRAVOU_MS);
-      if (v.duration - v.currentTime <= DISSOLVE_MS / 1000) passar();
+      if (v.duration - v.currentTime <= saida) passar();
     };
     v.addEventListener('timeupdate', anda);
     return () => {
@@ -173,7 +195,7 @@ export function HeroSection() {
               ref={(el) => {
                 filmes.current[i] = el;
               }}
-              src={`${slide.filme}-${tamanho}.mp4`}
+              src={`${slide.filme}-${tamanho === 1440 && !slide.tem1440 ? 1080 : tamanho}.mp4`}
               onCanPlayThrough={i === 0 ? () => setPrimeiroPronto(true) : undefined}
               className="absolute inset-0 h-full w-full object-cover"
               muted

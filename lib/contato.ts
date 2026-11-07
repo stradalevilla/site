@@ -126,6 +126,15 @@ export function dataDoContato(iso: string) {
   }).format(new Date(iso));
 }
 
+/** O número para o link do WhatsApp: quem digitou + ou 00 já trouxe o país, e o resto é brasileiro */
+export function telefoneNoWhatsapp(telefone: string) {
+  const digitos = telefone.replace(/\D/g, '');
+  if (/^\s*\+/.test(telefone)) return digitos;
+  if (digitos.startsWith('00')) return digitos.slice(2);
+  const nacional = digitos.replace(/^0+/, '');
+  return nacional.length === 10 || nacional.length === 11 ? `55${nacional}` : nacional;
+}
+
 /** Se o contato já chegou ao CRM da Sotheby's */
 export function situacaoNoCrm(c: Contato) {
   if (c.crm_enviado_em) return `Enviado em ${dataDoContato(c.crm_enviado_em)}`;

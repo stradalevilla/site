@@ -1,6 +1,6 @@
 import { after, NextResponse } from 'next/server';
 import type { User } from '@supabase/supabase-js';
-import { enderecoDeSenha, exigirAdministrador, SEM_RESPOSTA } from '@/lib/acesso';
+import { exigirAdministrador, SEM_RESPOSTA } from '@/lib/acesso';
 import { enviarEmail } from '@/lib/email';
 import {
   emailDeAcessoDesativado,
@@ -10,7 +10,7 @@ import {
   emailDePapelAlterado,
   emailDeRecuperacao,
 } from '@/lib/modelos-de-email';
-import { enderecoDoSite } from '@/lib/pedido';
+import { destinoDosLinks, doProprioSite } from '@/lib/pedido';
 import { criarSupabaseAdmin } from '@/lib/supabase/admin';
 import { emailValido, limparNome, nomeDe, papelDe, resumoDoUsuario, ROTULO_DO_PAPEL, situacaoDe, type Papel } from '@/lib/usuarios';
 
@@ -21,8 +21,8 @@ export const maxDuration = 30;
 const PARA_SEMPRE = '876000h';
 
 const O_QUE_O_PAPEL_FAZ: Record<Papel, string> = {
-  administrador: 'Além de usar o painel, agora você também convida e gerencia os usuários.',
-  equipe: 'Você continua usando o painel, e a gestão de usuários fica com os administradores.',
+  administrador: 'Além de usar a plataforma, agora você também convida e gerencia os usuários.',
+  equipe: 'Você continua usando a plataforma, e a gestão de usuários fica com os administradores.',
 };
 
 const papelValido = (valor: unknown): valor is Papel => valor === 'administrador' || valor === 'equipe';
@@ -47,7 +47,7 @@ export async function GET() {
 
 /** Manda o convite. Se o e-mail não sair, devolve o link para ir por outro canal. */
 async function enviarConvite(req: Request, usuario: User, quem: User, codigo: string) {
-  const endereco = enderecoDeSenha(enderecoDoSite(req), codigo, 'invite');
+  const endereco = destinoDosLinks(req).senha(codigo, 'invite');
   const envio = await enviarEmail({
     tipo: 'convite',
     para: usuario.email!,
@@ -59,6 +59,7 @@ async function enviarConvite(req: Request, usuario: User, quem: User, codigo: st
 
 /** Convida uma pessoa. Ela cria a própria senha: nenhuma senha passa por aqui. */
 export async function POST(req: Request) {
+  if (!doProprioSite(req)) return recusa('origem invalida', 403);
   const { user: quem, resposta } = await exigirAdministrador();
   if (resposta) return resposta;
 
@@ -86,6 +87,7 @@ export async function POST(req: Request) {
 
 /** Tudo o que se faz com um usuário que já existe. */
 export async function PATCH(req: Request) {
+  if (!doProprioSite(req)) return recusa('origem invalida', 403);
   const { user: quem, resposta } = await exigirAdministrador();
   if (resposta) return resposta;
 
@@ -100,7 +102,7 @@ export async function PATCH(req: Request) {
   if (!data.user?.email) return recusa('Usuário não encontrado.', 404);
   const alvo = data.user;
   const email = alvo.email!;
-  const base = enderecoDoSite(req);
+  const destino = destinoDosLinks(req);
 
   if (acao === 'reenviar_convite') {
     if (situacaoDe(alvo) !== 'convite') return recusa('Esta pessoa já criou a senha.');
@@ -115,7 +117,7 @@ export async function PATCH(req: Request) {
     if (situacaoDe(alvo) === 'desativado') return recusa('Reative a conta antes de enviar uma nova senha.');
     const link = await admin.auth.admin.generateLink({ type: 'recovery', email });
     if (link.error) return recusa('Não foi possível gerar o link.', 500);
-    const endereco = enderecoDeSenha(base, link.data.properties.hashed_token, 'recovery');
+    const endereco = destino.senha(link.data.properties.hashed_token, 'recovery');
     const envio = await enviarEmail({
       tipo: 'recuperacao',
       para: email,
@@ -147,7 +149,7 @@ export async function PATCH(req: Request) {
             nome: nomeDe(alvo),
             papel: ROTULO_DO_PAPEL[papel],
             descricao: O_QUE_O_PAPEL_FAZ[papel],
-            enderecoDeEntrada: `${base}/admin/login`,
+            enderecoDeEntrada: destino.entrada,
           }),
         })
       );
@@ -180,7 +182,7 @@ export async function PATCH(req: Request) {
           : {
               tipo: 'acesso_reativado',
               para: email,
-              mensagem: emailDeAcessoReativado({ nome: nomeDe(alvo), enderecoDeEntrada: `${base}/admin/login` }),
+              mensagem: emailDeAcessoReativado({ nome: nomeDe(alvo), enderecoDeEntrada: destino.entrada }),
             }
       )
     );
@@ -192,6 +194,7 @@ export async function PATCH(req: Request) {
 
 /** Remove um usuário pelo id. */
 export async function DELETE(req: Request) {
+  if (!doProprioSite(req)) return recusa('origem invalida', 403);
   const { user: quem, resposta } = await exigirAdministrador();
   if (resposta) return resposta;
 

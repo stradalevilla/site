@@ -1,0 +1,23 @@
+{
+  "id": "/",
+  "name": "Villa Stradale",
+  "short_name": "Villa Stradale",
+  "description": "A plataforma do Villa Stradale: contatos, apresentações e gestão de usuários.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a1929",
+  "theme_color": "#0a1929",
+  "icons": [
+    { "src": "/aplicativo/icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/aplicativo/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/aplicativo/icone-mascara-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/aplicativo/icone-mascara-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Contatos", "url": "/contatos", "icons": [{ "src": "/aplicativo/icone-192.png", "sizes": "192x192" }] },
+    { "name": "Apresentações", "url": "/apresentacoes", "icons": [{ "src": "/aplicativo/icone-192.png", "sizes": "192x192" }] }
+  ]
+}

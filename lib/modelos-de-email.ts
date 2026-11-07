@@ -1,5 +1,5 @@
 /**
- * Os e-mails automáticos do painel. O HTML é o que todo programa de e-mail entende: tabelas,
+ * Os e-mails automáticos da plataforma. O HTML é o que todo programa de e-mail entende: tabelas,
  * estilo na própria tag e fonte do sistema. Imagens vêm bloqueadas em muitas caixas, então
  * o nome da marca e o botão são texto, e o endereço do botão aparece escrito logo abaixo.
  */
@@ -71,7 +71,7 @@ function montar({ assunto, resumo, titulo, paragrafos, botao, observacao }: Cont
       ${nota}
     </td></tr>
     <tr><td align="center" style="padding:20px 24px;">
-      <p style="margin:0;font-family:${TEXTO};font-size:12px;line-height:18px;color:#6b7480;">Mensagem automática do painel de gestão do site Villa Stradale.</p>
+      <p style="margin:0;font-family:${TEXTO};font-size:12px;line-height:18px;color:#6b7480;">Mensagem automática da plataforma Villa Stradale.</p>
     </td></tr>
   </table>
   <!--[if mso]></td></tr></table><![endif]-->
@@ -86,7 +86,7 @@ function montar({ assunto, resumo, titulo, paragrafos, botao, observacao }: Cont
     ...paragrafos.flatMap((p) => [p, '']),
     ...(botao ? [`${botao.rotulo}: ${botao.endereco}`, ''] : []),
     ...(observacao ? [observacao, ''] : []),
-    'Mensagem automática do painel de gestão do site Villa Stradale.',
+    'Mensagem automática da plataforma Villa Stradale.',
   ].join('\n');
 
   return { assunto, html, texto };
@@ -96,12 +96,12 @@ const VALIDADE = 'O link vale por 24 horas e só funciona uma vez.';
 
 export const emailDeConvite = (p: { nome: string; quemConvidou: string; endereco: string }) =>
   montar({
-    assunto: 'Seu acesso ao painel Villa Stradale',
-    resumo: 'Crie a sua senha para entrar no painel de gestão do site.',
-    titulo: 'Seu acesso ao painel',
+    assunto: 'Seu acesso à plataforma Villa Stradale',
+    resumo: 'Crie a sua senha para entrar na plataforma.',
+    titulo: 'Seu acesso à plataforma',
     paragrafos: [
       saudacao(p.nome),
-      `${p.quemConvidou} convidou você para o painel de gestão do site Villa Stradale. Para entrar, crie a sua senha.`,
+      `${p.quemConvidou} convidou você para a plataforma Villa Stradale. Para entrar, crie a sua senha.`,
       VALIDADE,
     ],
     botao: { rotulo: 'Criar minha senha', endereco: p.endereco },
@@ -110,45 +110,45 @@ export const emailDeConvite = (p: { nome: string; quemConvidou: string; endereco
 
 export const emailDeBoasVindas = (p: { nome: string; enderecoDeEntrada: string }) =>
   montar({
-    assunto: 'Sua conta no painel Villa Stradale está pronta',
+    assunto: 'Sua conta na plataforma Villa Stradale está pronta',
     resumo: 'Você já pode entrar com o seu e-mail e a senha que criou.',
     titulo: 'Sua conta está pronta',
     paragrafos: [
       saudacao(p.nome),
-      'Sua senha foi criada. A partir de agora, você entra no painel de gestão do site Villa Stradale com o seu e-mail e essa senha.',
+      'Sua senha foi criada. A partir de agora, você entra na plataforma Villa Stradale com o seu e-mail e essa senha.',
       'Se um dia esquecer a senha, use o link "esqueci minha senha" na tela de entrada e você recebe um novo acesso por e-mail.',
     ],
-    botao: { rotulo: 'Entrar no painel', endereco: p.enderecoDeEntrada },
+    botao: { rotulo: 'Entrar na plataforma', endereco: p.enderecoDeEntrada },
   });
 
 export const emailDeConviteAceito = (p: { nome: string; pessoa: string; enderecoDeUsuarios: string }) =>
   montar({
-    assunto: `${p.pessoa} entrou no painel Villa Stradale`,
+    assunto: `${p.pessoa} entrou na plataforma Villa Stradale`,
     resumo: 'O convite que você enviou foi aceito.',
     titulo: 'Convite aceito',
-    paragrafos: [saudacao(p.nome), `${p.pessoa} criou a senha e já tem acesso ao painel de gestão do site Villa Stradale.`],
+    paragrafos: [saudacao(p.nome), `${p.pessoa} criou a senha e já tem acesso à plataforma Villa Stradale.`],
     botao: { rotulo: 'Ver usuários', endereco: p.enderecoDeUsuarios },
   });
 
 export const emailDePapelAlterado = (p: { nome: string; papel: string; descricao: string; enderecoDeEntrada: string }) =>
   montar({
-    assunto: 'Seu papel no painel Villa Stradale mudou',
+    assunto: 'Seu papel na plataforma Villa Stradale mudou',
     resumo: `Agora o seu papel é ${p.papel}.`,
     titulo: 'Papel alterado',
-    paragrafos: [saudacao(p.nome), `O seu papel no painel de gestão do site Villa Stradale agora é ${p.papel}.`, p.descricao],
-    botao: { rotulo: 'Entrar no painel', endereco: p.enderecoDeEntrada },
+    paragrafos: [saudacao(p.nome), `O seu papel na plataforma Villa Stradale agora é ${p.papel}.`, p.descricao],
+    botao: { rotulo: 'Entrar na plataforma', endereco: p.enderecoDeEntrada },
   });
 
 export const emailDeRecuperacao = (p: { nome: string; endereco: string; quemPediu?: string }) =>
   montar({
-    assunto: 'Crie uma nova senha para o painel Villa Stradale',
+    assunto: 'Crie uma nova senha para a plataforma Villa Stradale',
     resumo: 'Use o link desta mensagem para criar uma nova senha.',
     titulo: 'Nova senha',
     paragrafos: [
       saudacao(p.nome),
       p.quemPediu
-        ? `${p.quemPediu} enviou a você um link para criar uma nova senha no painel Villa Stradale.`
-        : 'Recebemos um pedido para criar uma nova senha na sua conta do painel Villa Stradale.',
+        ? `${p.quemPediu} enviou a você um link para criar uma nova senha na plataforma Villa Stradale.`
+        : 'Recebemos um pedido para criar uma nova senha na sua conta da plataforma Villa Stradale.',
       VALIDADE,
     ],
     botao: { rotulo: 'Criar nova senha', endereco: p.endereco },
@@ -157,12 +157,12 @@ export const emailDeRecuperacao = (p: { nome: string; endereco: string; quemPedi
 
 export const emailDeSenhaAlterada = (p: { nome: string; quando: string; enderecoDeRecuperacao: string }) =>
   montar({
-    assunto: 'Sua senha do painel Villa Stradale foi alterada',
+    assunto: 'Sua senha da plataforma Villa Stradale foi alterada',
     resumo: 'Se foi você, não precisa fazer nada.',
     titulo: 'Senha alterada',
     paragrafos: [
       saudacao(p.nome),
-      `A senha da sua conta no painel Villa Stradale foi alterada em ${p.quando}.`,
+      `A senha da sua conta na plataforma Villa Stradale foi alterada em ${p.quando}.`,
       'Se foi você, não precisa fazer nada. Se não foi, crie uma nova senha agora.',
     ],
     botao: { rotulo: 'Criar nova senha', endereco: p.enderecoDeRecuperacao },
@@ -170,33 +170,33 @@ export const emailDeSenhaAlterada = (p: { nome: string; quando: string; endereco
 
 export const emailDeAcessoDesativado = (p: { nome: string }) =>
   montar({
-    assunto: 'Seu acesso ao painel Villa Stradale foi desativado',
-    resumo: 'Sua conta não entra mais no painel de gestão.',
+    assunto: 'Seu acesso à plataforma Villa Stradale foi desativado',
+    resumo: 'Sua conta não entra mais na plataforma.',
     titulo: 'Acesso desativado',
     paragrafos: [
       saudacao(p.nome),
-      'Um administrador desativou o seu acesso ao painel de gestão do site Villa Stradale.',
-      'Se isso for um engano, fale com quem administra o painel.',
+      'Um administrador desativou o seu acesso à plataforma Villa Stradale.',
+      'Se isso for um engano, fale com quem administra a plataforma.',
     ],
   });
 
 export const emailDeAcessoReativado = (p: { nome: string; enderecoDeEntrada: string }) =>
   montar({
-    assunto: 'Seu acesso ao painel Villa Stradale foi reativado',
+    assunto: 'Seu acesso à plataforma Villa Stradale foi reativado',
     resumo: 'Você já pode entrar de novo com a sua senha.',
     titulo: 'Acesso reativado',
-    paragrafos: [saudacao(p.nome), 'O seu acesso ao painel de gestão do site Villa Stradale foi reativado. Você entra com a mesma senha.'],
-    botao: { rotulo: 'Entrar no painel', endereco: p.enderecoDeEntrada },
+    paragrafos: [saudacao(p.nome), 'O seu acesso à plataforma Villa Stradale foi reativado. Você entra com a mesma senha.'],
+    botao: { rotulo: 'Entrar na plataforma', endereco: p.enderecoDeEntrada },
   });
 
 export const emailDeAcessoRemovido = (p: { nome: string }) =>
   montar({
-    assunto: 'Seu acesso ao painel Villa Stradale foi removido',
-    resumo: 'Sua conta foi retirada do painel de gestão.',
+    assunto: 'Seu acesso à plataforma Villa Stradale foi removido',
+    resumo: 'Sua conta foi retirada da plataforma.',
     titulo: 'Acesso removido',
     paragrafos: [
       saudacao(p.nome),
-      'A sua conta foi removida do painel de gestão do site Villa Stradale.',
-      'Se isso for um engano, fale com quem administra o painel.',
+      'A sua conta foi removida da plataforma Villa Stradale.',
+      'Se isso for um engano, fale com quem administra a plataforma.',
     ],
   });

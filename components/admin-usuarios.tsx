@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Confirmacao, type PedidoDeConfirmacao } from '@/components/admin-confirmacao';
-import { ROTULO_DA_SITUACAO, ROTULO_DO_PAPEL, type Papel, type ResumoDoUsuario, type SituacaoDoUsuario } from '@/lib/usuarios';
+import { useState } from 'react';
+import { Confirmacao } from '@/components/admin-confirmacao';
+import { usarGestaoDeUsuarios } from '@/hooks/usar-gestao-de-usuarios';
+import { ROTULO_DA_SITUACAO, ROTULO_DO_PAPEL, type Papel, type SituacaoDoUsuario } from '@/lib/usuarios';
 
 const CAMPO =
   'rounded border border-navy/20 px-3 py-2 font-body text-sm outline-none focus:border-gold-dark disabled:opacity-50';
@@ -14,112 +15,22 @@ const COR_DA_SITUACAO: Record<SituacaoDoUsuario, string> = {
   desativado: 'bg-neutral-200 text-neutral-700',
 };
 
-type Aviso = { texto: string; ok: boolean; link?: string };
-
 const data = (valor: string | null) => (valor ? new Date(valor).toLocaleDateString('pt-BR') : '—');
 
 export function GestaoDeUsuarios({ meuId }: { meuId: string }) {
-  const [usuarios, setUsuarios] = useState<ResumoDoUsuario[]>([]);
-  const [carregando, setCarregando] = useState(true);
+  const g = usarGestaoDeUsuarios();
+  const { usuarios, carregando, ocupado, aviso, copiado, pedido, setPedido, agir, mudarPapel, desativar, remover, copiar } = g;
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [papel, setPapel] = useState<Papel>('equipe');
-  const [ocupado, setOcupado] = useState(false);
-  const [aviso, setAviso] = useState<Aviso | null>(null);
-  const [copiado, setCopiado] = useState(false);
-  const [pedido, setPedido] = useState<PedidoDeConfirmacao | null>(null);
-
-  const carregar = async () => {
-    const j = await fetch('/api/admin/usuarios')
-      .then((r) => r.json())
-      .catch(() => null);
-    if (j?.ok) setUsuarios(j.usuarios);
-    else setAviso({ texto: 'Não foi possível carregar a lista.', ok: false });
-    setCarregando(false);
-  };
-
-  useEffect(() => {
-    carregar();
-  }, []);
-
-  /** Toda ação passa por aqui: o e-mail pode falhar sem a ação ter falhado, e o link fica à mão */
-  const executar = async (pedido: Promise<Response>, sucesso: string) => {
-    setOcupado(true);
-    setAviso(null);
-    setCopiado(false);
-    try {
-      const j = await (await pedido).json();
-      await carregar();
-      if (!j.ok) setAviso({ texto: j.error, ok: false });
-      else if (j.emailEnviado === false) {
-        setAviso({ texto: 'O e-mail não saiu. Copie o link abaixo e mande por outro canal. Ele vale por 24 horas.', ok: false, link: j.link });
-      } else setAviso({ texto: sucesso, ok: true });
-      return Boolean(j.ok);
-    } catch {
-      setAviso({ texto: 'Não foi possível falar com o servidor.', ok: false });
-      return false;
-    } finally {
-      setOcupado(false);
-    }
-  };
-
-  const json = (metodo: string, corpo: object) =>
-    fetch('/api/admin/usuarios', {
-      method: metodo,
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(corpo),
-    });
 
   const convidar = (e: React.FormEvent) => {
     e.preventDefault();
-    // e-mail digitado errado volta como devolução, e poucas devoluções já fazem o Resend pausar o envio
-    setPedido({
-      titulo: 'Enviar o convite?',
-      texto: `O convite vai para ${email}. Confira se o endereço está certo.`,
-      rotulo: 'enviar convite',
-      confirmar: async () => {
-        const certo = await executar(json('POST', { nome, email, papel }), `Convite enviado para ${email}.`);
-        if (certo) {
-          setNome('');
-          setEmail('');
-          setPapel('equipe');
-        }
-      },
+    g.convidar({ nome, email, papel }, () => {
+      setNome('');
+      setEmail('');
+      setPapel('equipe');
     });
-  };
-
-  const agir = (u: ResumoDoUsuario, acao: string, sucesso: string, extra: object = {}) =>
-    executar(json('PATCH', { id: u.id, acao, ...extra }), sucesso);
-
-  const mudarPapel = (u: ResumoDoUsuario, novo: Papel) =>
-    setPedido({
-      titulo: 'Mudar o papel?',
-      texto: `${u.email} passa a ser ${ROTULO_DO_PAPEL[novo]}.`,
-      rotulo: 'mudar papel',
-      confirmar: () => agir(u, 'papel', `Papel de ${u.email} alterado.`, { papel: novo }),
-    });
-
-  const desativar = (u: ResumoDoUsuario) =>
-    setPedido({
-      titulo: 'Desativar o acesso?',
-      texto: `${u.email} para de entrar na hora e recebe um aviso por e-mail. Você pode reativar depois.`,
-      rotulo: 'desativar',
-      perigoso: true,
-      confirmar: () => agir(u, 'desativar', `${u.email} foi desativado.`),
-    });
-
-  const remover = (u: ResumoDoUsuario) =>
-    setPedido({
-      titulo: 'Remover do painel?',
-      texto: `Isso não tem volta: para ${u.email} entrar de novo, só com outro convite.`,
-      rotulo: 'remover',
-      perigoso: true,
-      confirmar: () => executar(fetch(`/api/admin/usuarios?id=${u.id}`, { method: 'DELETE' }), `${u.email} foi removido.`),
-    });
-
-  const copiar = async (link: string) => {
-    await navigator.clipboard.writeText(link);
-    setCopiado(true);
   };
 
   return (

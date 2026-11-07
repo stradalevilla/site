@@ -1,6 +1,6 @@
 import { after, NextResponse } from 'next/server';
 import { avisarSenhaAlterada, semSessao, SENHA_VAZADA, senhaVazada } from '@/lib/acesso';
-import { enderecoDoSite } from '@/lib/pedido';
+import { destinoDosLinks, doProprioSite } from '@/lib/pedido';
 import { criarSupabaseServidor } from '@/lib/supabase/server';
 import { erroDaSenha } from '@/lib/usuarios';
 
@@ -8,6 +8,7 @@ export const dynamic = 'force-dynamic';
 
 /** Troca a senha do usuário logado. */
 export async function POST(req: Request) {
+  if (!doProprioSite(req)) return NextResponse.json({ ok: false, error: 'origem invalida' }, { status: 403 });
   const supabase = await criarSupabaseServidor();
   const {
     data: { user },
@@ -54,7 +55,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: 'Não foi possível trocar a senha agora.' }, { status: 500 });
   }
 
-  const base = enderecoDoSite(req);
-  after(() => avisarSenhaAlterada(user, base));
+  const destino = destinoDosLinks(req);
+  after(() => avisarSenhaAlterada(user, destino));
   return NextResponse.json({ ok: true });
 }

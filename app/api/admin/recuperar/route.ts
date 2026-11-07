@@ -1,6 +1,6 @@
 import { after, NextResponse } from 'next/server';
 import { enviarRecuperacao } from '@/lib/acesso';
-import { doProprioSite, enderecoDoSite } from '@/lib/pedido';
+import { destinoDosLinks, doProprioSite } from '@/lib/pedido';
 import { emailValido } from '@/lib/usuarios';
 
 export const dynamic = 'force-dynamic';
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: 'e-mail invalido' }, { status: 400 });
   }
 
-  const base = enderecoDoSite(req);
-  after(() => enviarRecuperacao(email, base));
+  const destino = destinoDosLinks(req);
+  after(() => enviarRecuperacao(email, destino));
   return NextResponse.json({ ok: true });
 }
