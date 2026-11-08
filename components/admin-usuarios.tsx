@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Confirmacao } from '@/components/admin-confirmacao';
-import { usarGestaoDeUsuarios } from '@/hooks/usar-gestao-de-usuarios';
+import { useGestaoDeUsuarios } from '@/hooks/usar-gestao-de-usuarios';
 import { ROTULO_DA_SITUACAO, ROTULO_DO_PAPEL, type Papel, type SituacaoDoUsuario } from '@/lib/usuarios';
 
 const CAMPO =
@@ -18,7 +18,7 @@ const COR_DA_SITUACAO: Record<SituacaoDoUsuario, string> = {
 const data = (valor: string | null) => (valor ? new Date(valor).toLocaleDateString('pt-BR') : '—');
 
 export function GestaoDeUsuarios({ meuId }: { meuId: string }) {
-  const g = usarGestaoDeUsuarios();
+  const g = useGestaoDeUsuarios();
   const { usuarios, carregando, ocupado, aviso, copiado, pedido, setPedido, agir, mudarPapel, desativar, remover, copiar } = g;
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');

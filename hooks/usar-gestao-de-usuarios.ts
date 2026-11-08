@@ -7,7 +7,7 @@ import { ROTULO_DO_PAPEL, type Papel, type ResumoDoUsuario } from '@/lib/usuario
 export type Aviso = { texto: string; ok: boolean; link?: string };
 
 /** Tudo o que a tela de usuários faz, no painel e no app. Só o desenho muda entre os dois. */
-export function usarGestaoDeUsuarios() {
+export function useGestaoDeUsuarios() {
   const [usuarios, setUsuarios] = useState<ResumoDoUsuario[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [ocupado, setOcupado] = useState(false);

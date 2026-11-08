@@ -23,11 +23,16 @@ export function MapaImplantacao({
   contornos = contornosLotes,
   pontos = pontosInteresse,
   prioridade = false,
+  aoEscolherLote,
+  loteEscolhido = null,
 }: {
   contornos?: LoteContorno[];
   pontos?: PontoInteresse[];
   /** carrega a imagem com prioridade (quando o mapa abre a página) */
   prioridade?: boolean;
+  /** na apresentação, o lote escolhido fica na tela em vez de abrir a página dele */
+  aoEscolherLote?: (numero: number) => void;
+  loteEscolhido?: number | null;
 }) {
   const router = useRouter();
   const quadroRef = useRef<HTMLDivElement>(null);
@@ -96,6 +101,12 @@ export function MapaImplantacao({
               aria-label={`Ver o lote ${pad(numero)}`}
               className="group"
               onClick={(e) => {
+                if (aoEscolherLote) {
+                  e.preventDefault();
+                  setInteragiu(true);
+                  aoEscolherLote(numero);
+                  return;
+                }
                 // defaultPrevented: a cortina de página já assumiu esta navegação
                 if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
                 e.preventDefault();
@@ -116,14 +127,18 @@ export function MapaImplantacao({
               <polygon
                 points={contorno}
                 onPointerEnter={() => setInteragiu(true)}
-                className="cursor-pointer fill-transparent transition-[fill] duration-300 ease-out group-hover:fill-[rgba(6,82,138,0.82)]"
+                className={`cursor-pointer transition-[fill] duration-300 ease-out group-hover:fill-[rgba(6,82,138,0.82)] ${
+                  loteEscolhido === numero ? 'fill-[rgba(6,82,138,0.82)]' : 'fill-transparent'
+                }`}
               />
               <text
                 x={centroide[0]}
                 y={centroide[1]}
                 textAnchor="middle"
                 dominantBaseline="central"
-                className="pointer-events-none select-none fill-white font-body opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                className={`pointer-events-none select-none fill-white font-body transition-opacity duration-300 group-hover:opacity-100 ${
+                  loteEscolhido === numero ? 'opacity-100' : 'opacity-0'
+                }`}
                 style={{ fontSize: 22, letterSpacing: 1.5 }}
               >
                 {pad(numero)}

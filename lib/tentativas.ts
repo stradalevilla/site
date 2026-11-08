@@ -13,14 +13,15 @@ const POR_ENDERECO = 30;
  * dono da conta; quem divide a rede com ele pode, por 15 minutos, e aí "Esqueci minha senha"
  * resolve. Guarda só o resumo, nunca o e-mail ou o IP.
  */
-export async function reservarTentativa(req: Request, email: string) {
+export async function reservarTentativa(req: Request, email: string, espaco = '') {
   const ip = req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'local';
   const resumo = (texto: string) => createHash('sha256').update(texto).digest('hex');
   const pessoa = `p:${resumo(`${email}|${ip}`)}`;
 
   const { data, error } = await criarSupabaseAdmin().rpc('reservar_tentativa', {
     pessoa,
-    endereco: `e:${resumo(ip)}`,
+    // o book pelo link conta à parte: senha errada lá não tira a vez de ninguém no login do app
+    endereco: `e:${espaco}${resumo(ip)}`,
     limite_pessoa: POR_PESSOA,
     limite_endereco: POR_ENDERECO,
   });

@@ -90,7 +90,7 @@ export const config = {
     '/admin/:path*',
     // no www o middleware continua só em /admin: as páginas do site não pagam por isto
     {
-      source: '/((?!_next/static|_next/image|api/|sw\\.js$|app\\.webmanifest$|offline\\.html$|aplicativo/|images/|videos/|logos/).*)',
+      source: '/((?!_next/static|_next/image|api/|sw\\.js$|app\\.webmanifest$|offline\\.html$|aplicativo/|images/|videos/|logos/|midia/).*)',
       has: [{ type: 'host', value: 'app\\.(villastradale\\.com\\.br|localhost)' }],
     },
   ],

@@ -37,6 +37,14 @@ const nextConfig: NextConfig = {
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
       },
       {
+        // o book pelo link de um usuário: fora do Google, e o endereço com o código não vaza para outros sites
+        source: '/book/:caminho*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+          { key: 'Referrer-Policy', value: 'same-origin' },
+        ],
+      },
+      {
         // o navegador precisa reler o service worker para o app receber atualização
         source: '/sw.js',
         headers: [

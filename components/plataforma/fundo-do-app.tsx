@@ -10,7 +10,7 @@ export function FundoDoApp() {
         alt=""
         fill
         priority
-        sizes="100vw"
+        sizes="(max-width: 767px) 100vw, 1px"
         quality={75}
         className="object-cover object-top md:hidden"
       />
@@ -18,7 +18,7 @@ export function FundoDoApp() {
         src="/images/renders/hero-peninsula-v2.jpg"
         alt=""
         fill
-        sizes="100vw"
+        sizes="(min-width: 768px) 100vw, 1px"
         quality={75}
         className="hidden object-cover md:block"
       />

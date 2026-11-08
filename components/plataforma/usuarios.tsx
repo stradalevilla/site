@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, UserPlus } from 'lucide-react';
 import { Confirmacao } from '@/components/admin-confirmacao';
 import { BOTAO, BOTAO_SECUNDARIO, CAMPO, CARTAO } from '@/components/plataforma/estilos';
-import { usarGestaoDeUsuarios } from '@/hooks/usar-gestao-de-usuarios';
+import { useGestaoDeUsuarios } from '@/hooks/usar-gestao-de-usuarios';
 import { ROTULO_DA_SITUACAO, ROTULO_DO_PAPEL, type Papel, type SituacaoDoUsuario } from '@/lib/usuarios';
 
 const COR_DA_SITUACAO: Record<SituacaoDoUsuario, string> = {
@@ -26,7 +26,7 @@ function Escolha({ className = '', ...resto }: React.ComponentProps<'select'>) {
 }
 
 export function UsuariosDoApp({ meuId }: { meuId: string }) {
-  const g = usarGestaoDeUsuarios();
+  const g = useGestaoDeUsuarios();
   const { usuarios, carregando, ocupado, aviso, copiado, pedido, setPedido, agir, mudarPapel, desativar, remover, copiar } = g;
   const [abrirConvite, setAbrirConvite] = useState(false);
   const [nome, setNome] = useState('');
