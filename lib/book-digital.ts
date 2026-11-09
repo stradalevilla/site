@@ -33,6 +33,11 @@ export type ImagemDaTela = {
   fixa?: boolean;
   /** mostra a parte da imagem que cai dentro desta caixa, como uma máscara do book */
   recorte?: Caixa;
+  /**
+   * Faixa panorâmica: quando ganha largura com a tela, cresce também na altura, na mesma
+   * proporção, até a margem do book. Assim o render fica inteiro em vez de perder o alto e o pé.
+   */
+  faixa?: boolean;
   /** as beiras do desenho que se desfazem no papel quando a tela passa da página, em vez de acabar num corte */
   esfuma?: Lado[];
   /** pode abrir em tela cheia, com zoom */
@@ -71,6 +76,12 @@ export type Texto = {
    * no canto de uma foto que sangra fica no canto da tela, por mais larga que ela seja.
    */
   beira?: Lado[];
+  /** anda metade da sobra lateral: fica no meio de um cartão que cresce só para a direita */
+  meioDaSobra?: boolean;
+  /** desce junto com o pé de uma faixa panorâmica que cresceu, como a legenda no canto dela */
+  naFaixa?: Caixa;
+  /** sombra bem leve, para a legenda branca não sumir quando cai numa parte clara da foto */
+  sombra?: boolean;
 };
 
 export type Titulo = { linhas: string[]; cx: number; y: number; claro?: boolean; emblema?: boolean; tamanho?: number };

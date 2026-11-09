@@ -72,8 +72,8 @@ function posicao([x0, y0, x1, y1]: Caixa, beira: Lado[] = []): React.CSSProperti
 }
 
 /** O ponto de um texto, medido da beira da tela nos lados em `beira` */
-function pontoNaBeira(x: number, y: number, beira: Lado[] = []) {
-  const dx = beira.includes('esquerda') ? ' - var(--mx)' : beira.includes('direita') ? ' + var(--mx)' : '';
+function pontoNaBeira(x: number, y: number, beira: Lado[] = [], meioDaSobra = false) {
+  const dx = beira.includes('esquerda') ? ' - var(--mx)' : beira.includes('direita') ? ' + var(--mx)' : meioDaSobra ? ' + var(--mx) / 2' : '';
   const dy = beira.includes('topo') ? ' - var(--my)' : beira.includes('base') ? ' + var(--my)' : '';
   return { left: dx ? `calc(${px(x)}${dx})` : px(x), top: dy ? `calc(${py(y)}${dy})` : py(y) };
 }
@@ -190,13 +190,15 @@ function TextoDeitado({ texto }: { texto: Texto }) {
   const tamanho = texto.tamanho ?? 10;
   const entrelinha = texto.entrelinha ?? tamanho * 1.2;
   const acima = texto.emblemaAcima ?? 27;
-  const ponto = pontoNaBeira(texto.x, texto.y, texto.beira);
+  const ponto = pontoNaBeira(texto.x, texto.y, texto.beira, texto.meioDaSobra);
+  if (texto.naFaixa) ponto.top = `calc(${ponto.top} + ${crescimentoDaFaixa(texto.naFaixa).abaixo})`;
   const estilo: React.CSSProperties = {
     left: ponto.left,
     top: texto.emblema ? `calc(${ponto.top} - ${pt(acima)})` : ponto.top,
     fontSize: pt(tamanho),
     lineHeight: pt(entrelinha),
     color: texto.cor ?? NAVY,
+    textShadow: texto.sombra ? '0 0 3px rgba(0, 0, 0, 0.5)' : undefined,
     letterSpacing: texto.espaco ? `${texto.espaco}em` : undefined,
     width: texto.largura ? px(texto.largura) : undefined,
   };
@@ -259,11 +261,30 @@ function CaixaDaImagem({ imagem, ativa, prioridade }: { imagem: ImagemDaTela; at
       </div>
     );
   }
+  const caixa = posicao(imagem.caixa, imagem.faixa ? imagem.sangra?.filter((l) => l === 'esquerda' || l === 'direita') : imagem.sangra);
+  if (imagem.faixa) {
+    const [, y0, , y1] = imagem.caixa;
+    const { acima, abaixo } = crescimentoDaFaixa(imagem.caixa);
+    caixa.top = `calc(${py(y0)} - ${acima})`;
+    caixa.height = `calc(${py(y1 - y0)} + ${acima} + ${abaixo})`;
+  }
   return (
-    <div className="absolute overflow-hidden" style={{ ...posicao(imagem.caixa, imagem.sangra), ...esfumado(imagem.esfuma) }}>
+    <div className="absolute overflow-hidden" style={{ ...caixa, ...esfumado(imagem.esfuma) }}>
       {conteudo}
     </div>
   );
+}
+
+/**
+ * O quanto uma faixa panorâmica cresce para cima e para baixo quando ganha largura com a tela:
+ * a altura acompanha a largura na proporção da própria caixa, e para na margem do book.
+ */
+function crescimentoDaFaixa([x0, y0, x1, y1]: Caixa) {
+  const ganho = `var(--mx) / ${((x1 - x0) / (y1 - y0)).toFixed(4)}`;
+  return {
+    acima: `min(calc(${ganho}), calc(${py(y0 - 39.7)} + var(--my)))`,
+    abaixo: `min(calc(${ganho}), calc(${py(924.1 - y1)} + var(--my)))`,
+  };
 }
 
 /** Masterplan: os números na imagem e a legenda acendem juntos, no toque ou no mouse */
@@ -688,7 +709,7 @@ function EmPe({ tela, ativa, prioridade, implantacao }: { tela: Tela; ativa: boo
 
   // abertura de capítulo: o cartão creme com o título no meio e o desenho no pé
   if (tela.retrato === 'capitulo') {
-    const desenho = tela.imagens.find((m) => m.recorte);
+    const desenho = tela.imagens.find((m) => m.recorte) ?? tela.imagens[0];
     return (
       <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundColor: '#f7f5f2', backgroundImage: `url(${PASTA}/cartao.jpg)` }}>
         <div className="absolute inset-x-0 top-[30%] px-6">

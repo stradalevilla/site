@@ -11,7 +11,8 @@ const R = '/images/renders';
 const TODA: Caixa = [0, 0, LARGURA, ALTURA];
 const SANGRA_TUDO: Lado[] = ['esquerda', 'direita', 'topo', 'base'];
 const MOLDURA: Caixa = [38.6, 39.7, 1322.1, 772.3];
-const CARTAO: ImagemDaTela = { src: `${PASTA}/cartao.jpg`, alt: '', caixa: [38.5, 35.9, 1322.1, 925.3], fixa: true };
+// o cartão branco ocupa a tela toda, sempre com a margem do book até a beira, como o quadro da tela 37
+const CARTAO: ImagemDaTela = { src: `${PASTA}/cartao.jpg`, alt: '', caixa: [38.5, 35.9, 1322.1, 925.3], fixa: true, sangra: SANGRA_TUDO };
 const COBRE = '#d28455';
 const NAVY = '#152f4e';
 const CREME = '#f9f2e2';
@@ -45,10 +46,26 @@ const perspectiva = (n: number, src: string, nome: string, alt: string, caixa: C
   capitulo: 'Perspectivas',
   fundo: 'azul',
   retrato: 'perspectiva',
-  imagens: [{ src, alt, caixa, foco: '50% 50%', ampliavel: true, filme }],
-  textos: [{ x: 65.8, y: caixa[3] - 32.5, fonte: 'swiss', tamanho: 6, cor: '#fff', linhas: [`Perspectiva ilustrada ${nome}`], papel: 'legenda' }],
-  // as linhas encostam na foto, como no book: presas à página, e não à beira da tela
-  linhas: [DA_MARGEM, caixa[3] > 870 ? { ...SAIDA_DIREITA, ate: LARGURA } : SAIDA_DIREITA],
+  // a foto ocupa a tela, com a margem do book até a beira (decisão do Gustavo, 09/11): nas telas
+  // largas perde um pouco em cima e embaixo, no lugar de sobrar papel azul dos lados
+  // as faixas panorâmicas (43, 51, 53) crescem também na altura, para o render não perder o alto e o pé
+  imagens: [{ src, alt, caixa, foco: '50% 50%', ampliavel: true, filme, sangra: SANGRA_TUDO, faixa: caixa[1] > 100 }],
+  textos: [
+    {
+      x: 65.8,
+      y: caixa[3] - 32.5,
+      fonte: 'swiss',
+      tamanho: 6,
+      cor: '#fff',
+      linhas: [`Perspectiva ilustrada ${nome}`],
+      papel: 'legenda',
+      // no canto de baixo da foto, que agora vai até a margem da tela
+      ...(caixa[1] > 100 ? { beira: ['esquerda'] as Lado[], naFaixa: caixa } : { beira: ['esquerda', 'base'] as Lado[] }),
+      sombra: true,
+    },
+  ],
+  // a foto vai até a margem da tela, então as linhas saem da beira da tela com o comprimento do book e encostam nela
+  linhas: [MARGEM, SAIDA_DIREITA],
 });
 
 export const TELAS: Tela[] = [
@@ -360,9 +377,19 @@ export const TELAS: Tela[] = [
     fundo: 'azul',
     retrato: 'capitulo',
     imagens: [
-      { src: `${PASTA}/desenho-projeto.jpg`, alt: 'Desenho a lápis da casa-clube entre as árvores', caixa: [395.2, 0, 1360.6, 963.8], recorte: [720, 39.7, 1320.9, 924.1], fixa: true, foco: '50% 100%' },
+      // o cartão vai até a margem da tela; o desenho e o título ficam no meio dele (decisão do Gustavo, 09/11)
+      // o desenho cobre o cartão, preso no pé: no cartão estreito mostra a parte da direita, como
+      // o book; no largo aparece inteiro, no meio do cartão
+      {
+        src: `${PASTA}/desenho-projeto.jpg`,
+        alt: 'Desenho a lápis da casa-clube entre as árvores',
+        caixa: [720, 39.7, 1320.9, 924.1],
+        sangra: ['direita', 'topo', 'base'],
+        fixa: true,
+        foco: '100% 100%',
+      },
     ],
-    textos: [{ x: 1020.5, y: 402.6, centro: true, fonte: 'ivy-reto', tamanho: 21, cor: COBRE, espaco: 0.64, caixaAlta: true, linhas: ['Projeto'], emblema: true, emblemaAcima: 46, papel: 'titulo' }],
+    textos: [{ x: 1020.5, y: 402.6, centro: true, fonte: 'ivy-reto', tamanho: 21, cor: COBRE, espaco: 0.64, caixaAlta: true, linhas: ['Projeto'], emblema: true, emblemaAcima: 46, papel: 'titulo', meioDaSobra: true }],
     linhas: [{ y: 114.3, de: 720, ate: [791.4, 830.8, 846.4, 817.8, 795.6] }],
   },
   {
@@ -414,7 +441,7 @@ export const TELAS: Tela[] = [
       { x: 1163.6, y: 304.9, centro: true, fonte: 'ivy', tamanho: 21, cor: NAVY, caixaAlta: true, linhas: ['Masterplan'], emblema: true, papel: 'titulo' },
       { x: 102.3, y: 849.6, tamanho: 6, cor: '#fff', linhas: ['Perspectiva ilustrada da Implantação'], papel: 'legenda' },
     ],
-    linhas: [{ y: 114.3, de: 0, ate: [57.2, 96.7, 112.3, 83.6, 61.4] }],
+    linhas: [{ y: 114.3, de: 'borda', ate: [57.2, 96.7, 112.3, 83.6, 61.4] }],
   },
   {
     id: 'implantacao',
@@ -424,7 +451,7 @@ export const TELAS: Tela[] = [
     especial: 'implantacao',
     imagens: [CARTAO],
     textos: [{ x: 680.3, y: 92, centro: true, fonte: 'ivy', tamanho: 21, cor: NAVY, caixaAlta: true, linhas: ['Implantação'], emblema: true, papel: 'titulo' }],
-    linhas: [{ y: 114.3, de: 0, ate: [57.2, 96.7, 112.3, 83.6, 61.4] }],
+    linhas: [{ y: 114.3, de: 'borda', ate: [57.2, 96.7, 112.3, 83.6, 61.4] }],
   },
   {
     id: 'arquitetura',
@@ -518,7 +545,8 @@ export const TELAS: Tela[] = [
       { src: `${PASTA}/desenho-diferenciais.jpg`, alt: 'Desenho a lápis da casa-clube entre as árvores', caixa: [0, 0, 1164.6, ALTURA], fixa: true, foco: '50% 50%', esfuma: ['esquerda', 'topo', 'base'] },
       { src: `${PASTA}/desenho-diferenciais-direita-2.jpg`, alt: '', caixa: [1152.6, 0, LARGURA, ALTURA], fixa: true, foco: '0% 50%', esfuma: ['direita', 'topo', 'base'] },
     ],
-    retangulos: [{ caixa: [855.9, 39.7, 1320.9, 924.1], cor: '#002c58' }],
+    // o painel azul vai até a margem da tela, e a lista fica onde está (decisão do Gustavo, 09/11)
+    retangulos: [{ caixa: [855.9, 39.7, 1320.9, 924.1], cor: '#002c58', beira: ['direita', 'topo', 'base'] }],
     emblemaSolto: [252.7, 134.5, 454.5, 179],
     textos: [{ x: 983.9, y: 282.7, fonte: 'ivy', tamanho: 21, cor: CREME, caixaAlta: true, linhas: ['Diferenciais'], papel: 'titulo' }],
     linhas: [{ y: 128.3, de: 855.9, ate: [927.2, 982.1, 1012, 953.6, 931.4] }],
