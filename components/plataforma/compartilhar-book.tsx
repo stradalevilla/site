@@ -67,9 +67,21 @@ export function CompartilharBook({
 
   const mensagem = `Olá! Este é o Book Digital do Villa Stradale:\n${endereco}\n\nSenha: ${senha}`;
 
-  // quem volta para o app vê os acessos que chegaram enquanto estava fora
+  // quem volta para o app depois de um tempo fora vê os acessos que chegaram nesse meio tempo.
+  // Uma olhada rápida em outro app não recarrega a tela, e no máximo uma vez por minuto
   useEffect(() => {
-    const aoVoltar = () => document.visibilityState === 'visible' && router.refresh();
+    let saiuEm = 0;
+    let recarregouEm = Date.now();
+    const aoVoltar = () => {
+      if (document.visibilityState === 'hidden') {
+        saiuEm = Date.now();
+        return;
+      }
+      const agora = Date.now();
+      if (agora - saiuEm < 15_000 || agora - recarregouEm < 60_000) return;
+      recarregouEm = agora;
+      router.refresh();
+    };
     document.addEventListener('visibilitychange', aoVoltar);
     return () => document.removeEventListener('visibilitychange', aoVoltar);
   }, [router]);

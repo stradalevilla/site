@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
 import { isAuthRetryableFetchError } from '@supabase/supabase-js';
 import { SEM_RESPOSTA } from '@/lib/acesso';
 import { doProprioSite } from '@/lib/pedido';
@@ -33,7 +33,8 @@ export async function POST(req: Request) {
   const supabase = await criarSupabaseServidor();
   const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
   if (!error) {
-    await esquecerTentativas(tentativa);
+    // a limpeza das tentativas vai depois da resposta: quem acertou a senha não espera por ela
+    after(() => esquecerTentativas(tentativa));
     return NextResponse.json({ ok: true });
   }
 

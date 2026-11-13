@@ -35,6 +35,9 @@ export default function LayoutDoBookCompartilhado({ children }: { children: Reac
   return (
     <html lang="pt-BR" style={{ backgroundColor: AZUL }}>
       <head>
+        {/* a fonte da marca vem de dois endereços da Adobe, um depois do outro: abrir as duas conexões já no começo */}
+        <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
+        <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
         <link rel="stylesheet" href="https://use.typekit.net/hap2dqc.css" />
       </head>
       <body className="min-h-dvh overscroll-none bg-transparent font-body text-white antialiased [-webkit-tap-highlight-color:transparent]">{children}</body>

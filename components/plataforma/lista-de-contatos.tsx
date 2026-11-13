@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ChevronRight, Search } from 'lucide-react';
 import { CAMPO, CARTAO } from '@/components/plataforma/estilos';
 import { dataDoContato } from '@/lib/contato';
@@ -23,6 +24,7 @@ const limpar = (texto: string) =>
     .toLowerCase();
 
 export function ListaDeContatos({ contatos }: { contatos: ContatoDaLista[] }) {
+  const router = useRouter();
   const [busca, setBusca] = useState('');
   const [origem, setOrigem] = useState<Origem | null>(null);
 
@@ -82,7 +84,13 @@ export function ListaDeContatos({ contatos }: { contatos: ContatoDaLista[] }) {
       <ul className="space-y-2">
         {filtrados.map((c) => (
           <li key={c.id}>
-            <Link href={`/contatos/${c.id}`} className={`${CARTAO} flex items-center gap-3 p-4 transition active:bg-white/[0.12]`}>
+            {/* sem pré-busca de cada linha visível (cada uma ia ao servidor): ela começa quando o dedo encosta */}
+            <Link
+              href={`/contatos/${c.id}`}
+              prefetch={false}
+              onPointerDown={() => router.prefetch(`/contatos/${c.id}`)}
+              className={`${CARTAO} flex items-center gap-3 p-4 transition active:bg-white/[0.12]`}
+            >
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-base font-medium">{c.nome}</span>
                 <span className="mt-0.5 block truncate text-sm text-white/60">

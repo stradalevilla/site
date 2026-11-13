@@ -167,18 +167,35 @@ export function FilmesDeFundo() {
         return;
       }
       liberar(); // um play() de antes do segundo plano pode nunca assentar
-      if (ativa < 0) entrar(0);
+      if (ativa < 0) {
+        if (comecou) entrar(0);
+      }
       else if (esperando) {
         if (seguinteNaFila) entrar(1 - ativa);
       } else videos[ativa].play().catch(() => {});
     };
     document.addEventListener('visibilitychange', aoMudarDeAba);
 
-    carregar(0);
-    entrar(0);
+    // o primeiro filme espera a tela terminar de carregar, e mais um instante: até lá fica a foto,
+    // e o download dele não disputa a rede com o que a pessoa acabou de abrir
+    let comecou = false;
+    let inicio: ReturnType<typeof setTimeout>;
+    const comecar = () => {
+      if (comecou || encerrado) return;
+      comecou = true;
+      carregar(0);
+      entrar(0);
+    };
+    const depoisDaTela = () => {
+      inicio = setTimeout(comecar, 1500);
+    };
+    if (document.readyState === 'complete') depoisDaTela();
+    else window.addEventListener('load', depoisDaTela, { once: true });
 
     return () => {
       encerrado = true;
+      clearTimeout(inicio);
+      window.removeEventListener('load', depoisDaTela);
       clearTimeout(espera);
       clearTimeout(prazo);
       clearTimeout(religar);

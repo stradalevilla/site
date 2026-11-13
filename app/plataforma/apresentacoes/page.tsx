@@ -16,10 +16,9 @@ export const dynamic = 'force-dynamic';
 const ICONE: Record<TipoDeApresentacao, LucideIcon> = { pdf: FileText, video: Video, link: Link2 };
 
 export default async function ApresentacoesPage() {
-  const user = await usuarioLogado();
+  // o login e a lista saem juntos, e nada é mostrado antes de o login ser conferido
+  const [user, { data, error }] = await Promise.all([usuarioLogado(), criarSupabaseAdmin().from('apresentacoes').select('*').order('criado_em', { ascending: false })]);
   if (!user) redirect('/entrar');
-
-  const { data, error } = await criarSupabaseAdmin().from('apresentacoes').select('*').order('criado_em', { ascending: false });
   const lista = (data ?? []) as Apresentacao[];
 
   return (

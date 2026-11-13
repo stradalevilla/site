@@ -41,6 +41,9 @@ export default function LayoutDoApp({ children }: { children: React.ReactNode })
   return (
     <html lang="pt-BR" style={{ backgroundColor: AZUL }}>
       <head>
+        {/* a fonte da marca vem de dois endereços da Adobe, um depois do outro: abrir as duas conexões já no começo */}
+        <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
+        <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
         <link rel="stylesheet" href="https://use.typekit.net/hap2dqc.css" />
         {/* o Android avisa uma vez só que o app pode ser instalado, às vezes antes de a página acordar */}
         <script

@@ -35,12 +35,13 @@ function Item({ rotulo, valor }: { rotulo: string; valor: string | null | undefi
 }
 
 export default async function ContatoPage({ params }: { params: Promise<{ id: string }> }) {
-  if (!(await usuarioLogado())) redirect('/entrar');
-
   const { id } = await params;
-  if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
-
-  const { data, error } = await criarSupabaseAdmin().from('contatos').select('*').eq('id', id).maybeSingle();
+  // o login e o contato saem juntos, e nada é mostrado antes de o login ser conferido
+  const [user, { data, error }] = await Promise.all([
+    usuarioLogado(),
+    /^[0-9a-f-]{36}$/i.test(id) ? criarSupabaseAdmin().from('contatos').select('*').eq('id', id).maybeSingle() : Promise.resolve({ data: null, error: null }),
+  ]);
+  if (!user) redirect('/entrar');
   if (error) {
     return (
       <TelaInterna titulo="Contato" voltar="/contatos">

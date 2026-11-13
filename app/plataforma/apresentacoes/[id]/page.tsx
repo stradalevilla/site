@@ -18,14 +18,14 @@ export const dynamic = 'force-dynamic';
 const VALIDADE_S = 60 * 60 * 3;
 
 export default async function ApresentacaoPage({ params }: { params: Promise<{ id: string }> }) {
-  const user = await usuarioLogado();
-  if (!user) redirect('/entrar');
-
   const { id } = await params;
-  if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
-
   const banco = criarSupabaseAdmin();
-  const { data, error } = await banco.from('apresentacoes').select('*').eq('id', id).maybeSingle();
+  // o login e a apresentação saem juntos, e nada é mostrado antes de o login ser conferido
+  const [user, { data, error }] = await Promise.all([
+    usuarioLogado(),
+    /^[0-9a-f-]{36}$/i.test(id) ? banco.from('apresentacoes').select('*').eq('id', id).maybeSingle() : Promise.resolve({ data: null, error: null }),
+  ]);
+  if (!user) redirect('/entrar');
   if (error) {
     return (
       <TelaInterna titulo="Apresentação" voltar="/apresentacoes">

@@ -10,14 +10,14 @@ import { comoChamar, nomeDe } from '@/lib/usuarios';
 export const dynamic = 'force-dynamic';
 
 export default async function TelaInicial() {
-  const user = await usuarioLogado();
-  if (!user) redirect('/entrar');
-
+  // o login e as contagens saem juntos: nada é mostrado antes de o login ser conferido
   const banco = criarSupabaseAdmin();
-  const [{ count }, { count: apresentacoes }] = await Promise.all([
+  const [user, { count }, { count: apresentacoes }] = await Promise.all([
+    usuarioLogado(),
     banco.from('contatos').select('id', { count: 'exact', head: true }),
     banco.from('apresentacoes').select('id', { count: 'exact', head: true }),
   ]);
+  if (!user) redirect('/entrar');
   const nome = comoChamar(nomeDe(user));
 
   return (

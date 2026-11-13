@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { BookCompartilhado } from '@/components/apresentacao/book-compartilhado';
 import { acessoValido, linkPeloCodigo, nomeDoCookie } from '@/lib/book-compartilhado';
 import { TELAS } from '@/lib/book-digital-telas';
+import { preCarregarCapa } from '@/lib/book-preload';
 import { consultaDoBook } from '@/lib/book-endereco';
 import { getContornos } from '@/lib/getContornos';
 import { lotesDisponiveis, lotesData } from '@/lib/lotes';
@@ -29,5 +30,6 @@ export default async function BookPeloLink({ params, searchParams }: Props) {
   const [contornos, banco] = await Promise.all([getContornos(), getLotesDb().catch(() => new Map())]);
   const areas = Object.fromEntries(lotesDisponiveis.map((n) => [n, banco.get(n)?.area ?? lotesData[n]?.area ?? null]));
 
+  preCarregarCapa(TELAS, busca.tela);
   return <BookCompartilhado codigo={codigo} telas={TELAS} implantacao={{ contornos, areas }} previa={busca.previa === '1'} />;
 }

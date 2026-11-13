@@ -45,6 +45,18 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // Fotos, filmes e logos ficam guardados no aparelho: abrir de novo não pergunta tudo ao
+        // servidor. Um dia valendo, e mais uma semana usando o guardado enquanto confere por trás.
+        // Quem troca um arquivo pelo mesmo nome espera até um dia para todos verem.
+        source: '/:pasta(images|midia|videos|logos|aplicativo)/:caminho*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' }],
+      },
+      {
+        // os renders sempre ganham nome novo quando mudam (por causa do cache da Vercel): nunca expiram
+        source: '/images/renders/:caminho*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
         // o navegador precisa reler o service worker para o app receber atualização
         source: '/sw.js',
         headers: [
@@ -58,6 +70,13 @@ const nextConfig: NextConfig = {
   // que não pede login, buscar o que qualquer pessoa mandar
   images: {
     qualities: [75, 90, 100],
+    // a versão reduzida de cada imagem fica guardada um dia, como o arquivo original
+    minimumCacheTTL: 86400,
+  },
+  experimental: {
+    // voltar a uma tela do app vista há menos de 30 s não pergunta de novo ao servidor. Depois
+    // de salvar algo, as telas já chamam router.refresh, que busca os dados novos na hora
+    staleTimes: { dynamic: 30 },
   },
 };
 

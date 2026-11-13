@@ -46,27 +46,26 @@ export default async function CompartilharBookPage() {
   const user = await usuarioLogado();
   if (!user) redirect('/entrar');
 
-  let link: LinkDoBook;
-  try {
-    link = await linkDoUsuario(user.id);
-  } catch {
+  // o link, as visitas dele e a lista da equipe saem juntos: as visitas vêm pelo dono do link
+  const banco = criarSupabaseAdmin();
+  const [achado, { data: visitas, count }, equipe] = await Promise.all([
+    linkDoUsuario(user.id).catch(() => null),
+    banco
+      .from('visitas_do_book')
+      .select('*, links_do_book!inner(usuario)', { count: 'exact' })
+      .eq('links_do_book.usuario', user.id)
+      .order('criado_em', { ascending: false })
+      .limit(ULTIMAS),
+    papelDe(user) === 'administrador' ? acessosDaEquipe(user.id) : Promise.resolve(null),
+  ]);
+  if (!achado) {
     return (
       <TelaInterna titulo="Compartilhar" voltar="/apresentacoes">
         <p className="pt-8 text-center text-base text-white/70">Não foi possível carregar. Tente de novo em instantes.</p>
       </TelaInterna>
     );
   }
-
-  const banco = criarSupabaseAdmin();
-  const [{ data: visitas, count }, equipe] = await Promise.all([
-    banco
-      .from('visitas_do_book')
-      .select('*', { count: 'exact' })
-      .eq('link', link.id)
-      .order('criado_em', { ascending: false })
-      .limit(ULTIMAS),
-    papelDe(user) === 'administrador' ? acessosDaEquipe(user.id) : Promise.resolve(null),
-  ]);
+  const link: LinkDoBook = achado;
 
   return (
     <TelaInterna titulo="Compartilhar" voltar="/apresentacoes">

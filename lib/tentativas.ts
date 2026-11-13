@@ -39,6 +39,5 @@ export async function devolverTentativa({ ids }: Tentativa) {
 
 /** Senha certa: a pessoa recomeça do zero, mas a conta do endereço de rede segue valendo */
 export async function esquecerTentativas(tentativa: Tentativa) {
-  await devolverTentativa(tentativa);
-  await criarSupabaseAdmin().from('tentativas_de_entrada').delete().eq('chave', tentativa.pessoa);
+  await Promise.all([devolverTentativa(tentativa), criarSupabaseAdmin().from('tentativas_de_entrada').delete().eq('chave', tentativa.pessoa)]);
 }

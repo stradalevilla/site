@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
 import { cookieDeAcesso, DIAS_DE_ACESSO, linkPeloCodigo, nomeDoCookie, senhaConfere } from '@/lib/book-compartilhado';
 import { doProprioSite } from '@/lib/pedido';
 import { devolverTentativa, esquecerTentativas, reservarTentativa } from '@/lib/tentativas';
@@ -41,7 +41,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: 'Senha incorreta.' }, { status: 400 });
   }
 
-  await esquecerTentativas(tentativa);
+  // a limpeza das tentativas vai depois da resposta: quem acertou a senha não espera por ela
+  after(() => esquecerTentativas(tentativa));
   const resposta = NextResponse.json({ ok: true });
   resposta.cookies.set(nomeDoCookie(achado.link.codigo), cookieDeAcesso(achado.link), {
     httpOnly: true,
