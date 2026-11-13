@@ -7,6 +7,27 @@ const CAMPO =
   // 16px no celular: abaixo disso o iPhone amplia a página ao tocar no campo
   'w-full bg-transparent border border-white/30 text-white placeholder:text-white/50 font-body text-base px-5 py-4 outline-none focus:border-[#D07748] transition-colors';
 
+const NOME_DA_POLITICA = 'Política de Privacidade e os Termos de Uso';
+
+/**
+ * O texto aceito, com o nome da política virando link para a página dela. Abre em outra aba,
+ * para quem está preenchendo não perder o que já escreveu. O texto em si não muda: é ele que
+ * fica guardado junto de cada contato.
+ */
+function AceiteComLink() {
+  const [antes, depois] = TEXTO_DO_ACEITE.split(NOME_DA_POLITICA);
+  if (depois === undefined) return <>{TEXTO_DO_ACEITE}</>;
+  return (
+    <>
+      {antes}
+      <a href="/politica-de-privacidade" target="_blank" rel="noopener" className="text-white/80 underline underline-offset-2 transition-colors hover:text-white">
+        {NOME_DA_POLITICA}
+      </a>
+      {depois}
+    </>
+  );
+}
+
 /**
  * O formulário manda por fetch e fica na mesma página. method e action seguem no
  * <form> para o caso de o clique vir antes de o JavaScript carregar: sem eles, o
@@ -85,7 +106,9 @@ export function FormularioInteresse() {
       {/* Consentimento */}
       <label className="flex items-start gap-3 cursor-pointer pt-1">
         <input type="checkbox" name="aceite" required className="mt-0.5 h-4 w-4 shrink-0 accent-[#D07748]" />
-        <span className="font-body text-xs text-white/60 leading-relaxed">{TEXTO_DO_ACEITE}</span>
+        <span className="font-body text-xs text-white/60 leading-relaxed">
+          <AceiteComLink />
+        </span>
       </label>
 
       {(estado === 'erro' || estado === 'corrigir') && (

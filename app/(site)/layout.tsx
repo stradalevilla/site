@@ -6,6 +6,7 @@ import { getConfigDoFundo } from '@/lib/config-fundo';
 import { PrepararMapa } from '@/components/preparar-mapa';
 import { AnimacoesDeEntrada } from '@/components/animacoes-de-entrada';
 import { TransicaoDePagina } from '@/components/transicao-de-pagina';
+import { BotaoConsultor } from '@/components/botao-consultor';
 import { cartaoDoLink, DESCRICAO_DO_SITE, SITE } from '@/lib/seo';
 
 const TAG_MANAGER = 'GTM-MBN9W4ZF';
@@ -103,6 +104,7 @@ export default async function RootLayout({
         <Providers>
           {children}
         </Providers>
+        <BotaoConsultor />
         <AnimacoesDeEntrada />
         <TransicaoDePagina />
       </body>

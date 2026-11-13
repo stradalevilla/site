@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/quem-somos`, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${SITE}/lotes`, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${SITE}/localizacao`, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${SITE}/politica-de-privacidade`, changeFrequency: 'yearly', priority: 0.3 },
     ...lotesDisponiveis.map((n) => ({
       url: `${SITE}/lotes/${String(n).padStart(2, '0')}`,
       changeFrequency: 'monthly' as const,

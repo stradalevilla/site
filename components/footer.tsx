@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { IconBrandInstagram, IconBrandLinkedin, IconLock } from '@tabler/icons-react';
 import { INSTAGRAM } from '@/lib/menu';
 
@@ -73,12 +74,12 @@ export function Footer() {
 
         {/* Rodapé inferior */}
         <div data-surgir="fade" className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <a
-            href="#"
+          <Link
+            href="/politica-de-privacidade"
             className="inline-flex min-h-[44px] items-center font-body text-xs text-white/60 transition-colors hover:text-white"
           >
             Política de Privacidade
-          </a>
+          </Link>
           <div className="flex items-center gap-5">
             <span className="font-body text-xs text-white/60">Desenvolvido por rfill.co</span>
             {/* Acesso discreto ao painel de gestão. Recarrega de propósito: com
