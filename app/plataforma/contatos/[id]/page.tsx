@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import { Mail, MessageCircle, Phone, type LucideIcon } from 'lucide-react';
 import { CARTAO } from '@/components/plataforma/estilos';
+import { EXPLICACAO_DA_ORIGEM, ICONE_DA_ORIGEM } from '@/components/plataforma/origens';
 import { TelaInterna } from '@/components/plataforma/tela-interna';
 import { usuarioLogado } from '@/lib/acesso';
 import { dataDoContato, resumoDaOrigem, situacaoNoCrm, telefoneNoWhatsapp, type Contato } from '@/lib/contato';
@@ -21,6 +22,25 @@ function Acao({ href, Icone, rotulo, novaAba }: { href: string; Icone: LucideIco
       <Icone size={22} strokeWidth={1.5} className="text-gold" aria-hidden />
       {rotulo}
     </a>
+  );
+}
+
+/** A origem com o desenho dela e a explicação em palavras simples, a mesma do "i" da lista */
+function Origem({ origem }: { origem: Contato['origem'] }) {
+  if (!origem) return null;
+  const Icone = ICONE_DA_ORIGEM[origem];
+  const explicacao = EXPLICACAO_DA_ORIGEM[origem];
+  return (
+    <div className="px-4 py-3">
+      <dt className="text-xs uppercase tracking-wider text-white/50">Origem</dt>
+      <dd className="mt-1">
+        <span className="flex items-center gap-2 text-base">
+          {Icone && <Icone size={18} strokeWidth={1.6} className="text-gold" aria-hidden />}
+          {ROTULO_DA_ORIGEM[origem] ?? origem}
+        </span>
+        {explicacao && <span className="mt-1 block text-sm leading-relaxed text-white/60">{explicacao.texto}</span>}
+      </dd>
+    </div>
   );
 }
 
@@ -69,7 +89,7 @@ export default async function ContatoPage({ params }: { params: Promise<{ id: st
         </dl>
 
         <dl className={`${CARTAO} divide-y divide-white/10`}>
-          <Item rotulo="Origem" valor={c.origem ? (ROTULO_DA_ORIGEM[c.origem] ?? c.origem) : null} />
+          <Origem origem={c.origem} />
           {c.origem !== 'direto' && <Item rotulo="Detalhe" valor={resumoDaOrigem(c)} />}
           <Item rotulo="Enviou em" valor={c.pagina} />
           <Item rotulo="Aparelho" valor={c.dispositivo} />
