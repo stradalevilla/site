@@ -104,7 +104,7 @@ export const imagensDoEmpreendimento: ImagemDoEmpreendimento[] = [
   {
     src: '/images/renders/academia.jpg',
     legenda: 'Casa-Clube · Academia',
-    alt: 'A academia com equipamentos Technogym alinhados ao vidro, de frente para a represa',
+    alt: 'A academia com os aparelhos alinhados ao vidro, de frente para a represa',
   },
   {
     src: '/images/renders/spa.jpg',

@@ -154,7 +154,7 @@ export const CASA_CLUBE = [
   'Playground',
   'Academia',
   'Espaço ao ar livre para prática de yoga ou funcional',
-  'Saunas seca e a vapor',
+  'Sauna a vapor',
   'Sala de massagem',
   'Hot spa com vista e acesso à área externa',
   'Cold spa',
@@ -182,9 +182,6 @@ export const INFRAESTRUTURA = [
   'Iluminação perimetral e de vias com fotocélulas',
   'Guias no formato americano',
   'Piso intertravado permeável nas vias',
-  'Poço artesiano de 250 metros',
-  'Caixa d’água de 200 mil litros para abastecimento',
-  'Infraestrutura elétrica nível T3, 125 ampères e 47\u00a0kVA (acima do que é entregue na maioria dos condomínios)',
 ];
 
 /** Croqui: o nome de cada cidade, e onde o fio dela encosta no desenho */

@@ -20,11 +20,10 @@ const amenities = [
     nome: 'Racket Club',
     lema: 'É o lugar onde a comunidade se encontra em terra.',
     texto:
-      'Tênis em quadra rápida, padel e beach tennis, no mesmo lugar. As quadras recebem jogos combinados entre vizinhos, aulas em família e finais de tarde que misturam crianças, jovens e adultos em torno do mesmo prazer de jogar.',
+      'Tênis em quadra rápida e padel, no mesmo lugar. As quadras recebem jogos combinados entre vizinhos, aulas em família e finais de tarde que misturam crianças, jovens e adultos em torno do mesmo prazer de jogar.',
     programa: [
       '2 quadras rápidas de tênis',
       '1 quadra de padel',
-      '2 quadras de beach tennis',
       'Campo de futebol society',
       'Trilha de 3 km para corrida, caminhada ou bicicleta',
       'Pista de cooper',
@@ -38,7 +37,7 @@ const amenities = [
     nome: 'Garagem Náutica',
     lema: 'O acesso do Villa Stradale à represa.',
     texto:
-      'Garagem náutica para aproximadamente 30 embarcações, conectando o dia a dia da comunidade à represa. Do píer, o caminho segue para a Casa-Clube pela água.',
+      'Garagem náutica para aproximadamente 30 embarcações, conectando o dia a dia da comunidade à represa.',
     programa: [
       'Garagem para aproximadamente 30 embarcações',
       'Apoio náutico',
@@ -88,9 +87,7 @@ export function AmenitiesSection() {
         na península
       </h3>
       <p data-surgir="subir" className="mb-14 max-w-xl font-body text-sm leading-relaxed text-navy/80 md:mb-20 md:text-base">
-        Cada estrutura foi posicionada onde a península pedia.
-        <br />
-        Aqui, uma a uma, com o programa de cada uma.
+        Cada estrutura foi desenhada a partir do contorno natural da península.
       </p>
 
       <div className="space-y-10 md:space-y-14">

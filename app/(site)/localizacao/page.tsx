@@ -2,7 +2,8 @@ import { DadosEstruturados } from '@/components/dados-estruturados';
 import { cartaoDoLink, DADOS_DA_LOCALIZACAO, PENINSULA } from '@/lib/seo';
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { IconCar, IconHelicopter, IconBrandWaze } from '@tabler/icons-react';
+import { IconBrandGoogleMaps, IconBrandWaze, IconCar, IconHelicopter } from '@tabler/icons-react';
+import { COORDENADAS_DECIMAIS, COORDENADAS_EM_GRAUS, LINK_DO_GOOGLE_MAPS, LINK_DO_WAZE } from '@/lib/como-chegar';
 import { Navbar } from '@/components/navbar';
 import { MobileNav } from '@/components/mobile-nav';
 import { PaginaHero } from '@/components/pagina-hero';
@@ -334,13 +335,20 @@ export default function Localizacao() {
                         </p>
                       </div>
 
-                      <div data-surgir="subir" className="mt-10 flex items-center gap-3">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#05c8f7] text-white">
-                          <IconBrandWaze size={22} stroke={1.5} />
-                        </span>
-                        <span className="font-body text-sm text-gray-600 md:text-base">
-                          Pino no Waze em definição.
-                        </span>
+                      {/* Waze e Google Maps: o mesmo pino */}
+                      <div data-surgir="subir" className="mt-10 flex flex-wrap gap-x-8 gap-y-4">
+                        <a href={LINK_DO_WAZE} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-[44px] items-center gap-3">
+                          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#05c8f7] text-white">
+                            <IconBrandWaze size={22} stroke={1.5} />
+                          </span>
+                          <span className="font-body text-sm text-navy underline-offset-4 group-hover:underline md:text-base">Abrir no Waze</span>
+                        </a>
+                        <a href={LINK_DO_GOOGLE_MAPS} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-[44px] items-center gap-3">
+                          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-[#34a853] ring-1 ring-navy/15">
+                            <IconBrandGoogleMaps size={22} stroke={1.5} />
+                          </span>
+                          <span className="font-body text-sm text-navy underline-offset-4 group-hover:underline md:text-base">Abrir no Google Maps</span>
+                        </a>
                       </div>
                     </div>
 
@@ -383,6 +391,11 @@ export default function Localizacao() {
                         Três spots privativos de pouso, integrados à paisagem e recuados junto à
                         marina. A linha de silêncio mantém o heliponto fora do centro de
                         convivência.
+                      </p>
+                      <p data-surgir="subir" className="mt-6 font-body text-sm md:text-base">
+                        <span className="block text-xs uppercase tracking-[0.2em] text-[#D07748]">Coordenadas</span>
+                        <span className="mt-1 block tabular-nums text-white">{COORDENADAS_EM_GRAUS}</span>
+                        <span className="block text-xs tabular-nums text-white/60">{COORDENADAS_DECIMAIS}</span>
                       </p>
                     </div>
 

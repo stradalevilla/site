@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { IconCar, IconHelicopter, IconBrandWaze } from '@tabler/icons-react';
+import { IconBrandGoogleMaps, IconBrandWaze, IconCar, IconHelicopter } from '@tabler/icons-react';
 import { DecorativeGraphic } from '@/components/decorative-graphic';
+import { COORDENADAS_DECIMAIS, COORDENADAS_EM_GRAUS, LINK_DO_GOOGLE_MAPS, LINK_DO_WAZE } from '@/lib/como-chegar';
 
 export function LocalizacaoSection() {
   return (
@@ -87,15 +88,20 @@ export function LocalizacaoSection() {
                 </p>
               </div>
 
-              {/* Waze */}
-              <div>
-                <span data-surgir="subir" className="block font-body text-sm md:text-base text-navy mb-3">Waze</span>
-                <div data-surgir="subir" className="flex items-center gap-3">
+              {/* Waze e Google Maps: o mesmo pino */}
+              <div data-surgir="subir" className="flex flex-wrap gap-x-8 gap-y-4">
+                <a href={LINK_DO_WAZE} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-[44px] items-center gap-3">
                   <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-[#05c8f7] text-white">
                     <IconBrandWaze size={22} stroke={1.5} />
                   </span>
-                  <span className="font-body text-sm md:text-base text-gray-700">Pino em definição</span>
-                </div>
+                  <span className="font-body text-sm md:text-base text-navy underline-offset-4 group-hover:underline">Abrir no Waze</span>
+                </a>
+                <a href={LINK_DO_GOOGLE_MAPS} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-[44px] items-center gap-3">
+                  <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-white text-[#34a853] ring-1 ring-navy/15">
+                    <IconBrandGoogleMaps size={22} stroke={1.5} />
+                  </span>
+                  <span className="font-body text-sm md:text-base text-navy underline-offset-4 group-hover:underline">Abrir no Google Maps</span>
+                </a>
               </div>
 
               {/* Pelo Ar */}
@@ -107,6 +113,11 @@ export function LocalizacaoSection() {
                 <p data-surgir="subir" className="font-body text-sm md:text-base text-gray-700 leading-relaxed max-w-sm">
                   Do Helicidade, em São Paulo, direto ao heliponto da península. Três spots
                   privativos de pouso, recuados do centro de convivência.
+                </p>
+                <p data-surgir="subir" className="mt-4 font-body text-sm md:text-base text-navy">
+                  <span className="block text-xs uppercase tracking-[0.2em] text-gray-500">Coordenadas</span>
+                  <span className="mt-1 block tabular-nums">{COORDENADAS_EM_GRAUS}</span>
+                  <span className="block text-xs tabular-nums text-gray-500">{COORDENADAS_DECIMAIS}</span>
                 </p>
               </div>
             </div>

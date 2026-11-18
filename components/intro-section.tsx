@@ -12,7 +12,7 @@ import { FilmeCampanha } from '@/components/filme-campanha';
 const trioDoWellness = [
   {
     src: '/images/renders/trio-academia.jpg',
-    alt: 'Academia com equipamentos Technogym e vista da represa',
+    alt: 'Academia com vista da represa',
     titulo: 'Academia',
     naGaleria: '/images/renders/academia.jpg',
   },
@@ -276,8 +276,8 @@ export function IntroSection() {
                   empreendimento se abrem grandes, em lightbox. */}
               <div className="mt-10 grid grid-cols-1 items-center gap-8 md:mt-12 md:gap-12 lg:grid-cols-[1.8fr_1fr]">
                 <p data-surgir="subir" className="font-body text-sm md:text-base text-gray-700 leading-relaxed">
-                  Academia com equipamentos Technogym. Espaço ao ar livre para yoga e funcional.
-                  Saunas seca e a vapor. Sala de massagem. Hot spa com vista. Cold spa. Área de
+                  Academia equipada. Espaço ao ar livre para yoga e funcional.
+                  Sauna a vapor. Sala de massagem. Hot spa com vista. Cold spa. Área de
                   descanso. Cada espaço foi posicionado para que o bem-estar seja parte da rotina.
                   Acordar, treinar, suar, mergulhar, descansar. Tudo no mesmo percurso, tudo com a
                   represa como cenário.

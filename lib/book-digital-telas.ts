@@ -212,7 +212,7 @@ export const TELAS: Tela[] = [
     retrato: 'moldura',
     imagens: [{ src: `${PASTA}/spa-vapor.jpg`, alt: 'Mulher descansando no spa, com o vapor da piscina aquecida', caixa: MOLDURA, foco: '45% 50%' }],
     titulo: { linhas: ['O tempo de que o corpo precisa'], cx: 1020.7, y: 855.2, emblema: true },
-    rotulo: { texto: 'Wellness • Spa • Saunas • Área de descanso', cx: 1020.5, y: 894.7 },
+    rotulo: { texto: 'Wellness • Spa • Sauna • Área de descanso', cx: 1020.5, y: 894.7 },
     linhas: [PE],
   },
   {
@@ -253,7 +253,7 @@ export const TELAS: Tela[] = [
       { src: `${PASTA}/saque.jpg`, alt: 'Saque na quadra, com a represa ao fundo', caixa: [739.4, 490, 1301.5, 810.6], foco: '45% 50%' },
     ],
     titulo: { linhas: ['E fazer do esporte um ponto de encontro'], cx: 1020.5, y: 855.2, emblema: true },
-    rotulo: { texto: 'Racket club • Tênis, padel e beach tennis', cx: 1020.5, y: 894.7 },
+    rotulo: { texto: 'Racket club • Tênis e padel', cx: 1020.5, y: 894.7 },
     linhas: [PE],
   },
 

@@ -27,14 +27,6 @@ const infraestrutura = [
       'Tubulação em PEAD Kanaflex, de maior resistência e durabilidade. Terraplenagem e drenagem executadas com a linha Black Caterpillar.',
   },
   {
-    nome: 'Poço artesiano de 250 metros',
-    texto: 'Abastecimento próprio, com caixa d’água de 200 mil litros.',
-  },
-  {
-    nome: 'Elétrica nível T3',
-    texto: '125 ampères e 47 kVA, acima do entregue na maioria dos condomínios.',
-  },
-  {
     nome: 'Cabeamento subterrâneo',
     texto:
       'Luz e internet enterradas. Iluminação perimetral e de vias com fotocélulas, sem fiação atravessando a paisagem.',
