@@ -41,7 +41,6 @@ const amenities = [
     programa: [
       'Garagem para aproximadamente 30 embarcações',
       'Apoio náutico',
-      'Píer para acesso à Casa-Clube',
     ],
     imagem: '/images/renders/nautica.jpg',
     filmes: [

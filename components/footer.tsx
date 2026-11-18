@@ -81,7 +81,14 @@ export function Footer() {
             Política de Privacidade
           </Link>
           <div className="flex items-center gap-5">
-            <span className="font-body text-xs text-white/60">Desenvolvido por rfill.co</span>
+            <a
+              href="https://www.rfill.co"
+              target="_blank"
+              rel="noopener"
+              className="inline-flex min-h-[44px] items-center font-body text-xs text-white/60 transition-colors hover:text-white"
+            >
+              Desenvolvido pela Agência Rfill
+            </a>
             {/* Acesso discreto ao painel de gestão. Recarrega de propósito: com
                 <Link> o Tag Manager que já roda no site entraria junto no painel. */}
             {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
